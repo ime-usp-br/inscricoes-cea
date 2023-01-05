@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c61ff82cbf0142a401a48a8161e1595a",
+    "content-hash": "8917bfb6d17a131b7dea49bcbd44f59d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5217,6 +5217,55 @@
             "time": "2023-01-03T09:29:04+00:00"
         },
         {
+            "name": "uspdev/laravel-usp-theme",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ayrtonnotrya/laravel-usp-theme.git",
+                "reference": "ea1b3df76a84602f631dc1c77221f48759618b88"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ayrtonnotrya/laravel-usp-theme/zipball/ea1b3df76a84602f631dc1c77221f48759618b88",
+                "reference": "ea1b3df76a84602f631dc1c77221f48759618b88",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Uspdev\\UspTheme\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "UspTheme": "Uspdev\\UspTheme\\Facades\\UspTheme"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Uspdev\\UspTheme\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Thiago Gomes Verissimo",
+                    "email": "thiago.verissimo@usp.br"
+                }
+            ],
+            "description": "usp theme for laravel",
+            "support": {
+                "source": "https://github.com/ayrtonnotrya/laravel-usp-theme/tree/master"
+            },
+            "time": "2022-11-28T15:16:00+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.5.0",
             "source": {
@@ -7716,7 +7765,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "uspdev/laravel-usp-theme": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
