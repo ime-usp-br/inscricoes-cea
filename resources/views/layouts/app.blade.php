@@ -12,6 +12,11 @@
 
 @section('javascripts_bottom')
   @parent
+  <script type="text/javascript">
+    let baseURL = "{{ env('APP_URL') }}";
+  </script>
+  <script type="text/javascript" src="{{ asset('js/app.js').'?version=1' }}"></script>
+  <script src="{{ asset('js/datepicker-pt-BR.js').'?version=1' }}"></script>
   <script>
     $( "#menulateral" ).menu();
   </script>
