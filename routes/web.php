@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\SemesterController;
 
 /*
@@ -14,8 +16,9 @@ use App\Http\Controllers\SemesterController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [MainController::class, 'index'])->name("home");
+
+Route::get('/users/loginas', [UserController::class, 'loginas'])->name("users.loginas");
+Route::resource('users', UserController::class);
 
 Route::resource("semesters", SemesterController::class);
