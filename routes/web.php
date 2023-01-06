@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\SemesterController;
+use App\Http\Controllers\ApplicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,5 @@ Route::get('/users/loginas', [UserController::class, 'loginas'])->name("users.lo
 Route::resource('users', UserController::class);
 
 Route::resource("semesters", SemesterController::class);
+
+Route::resource("applications", ApplicationController::class);

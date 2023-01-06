@@ -72,4 +72,22 @@ class Semester extends Model
         $period = Semester::where("year",$year)->max("period");
         return Semester::where(["year"=>$year,"period"=>$period])->first();
     } 
+
+    public function IsEnrollmentPeriod()
+    {
+        $today = Carbon::now();
+        $start = Carbon::createFromFormat("d/m/Y", $this->start_date_enrollments)->startOfDay();
+        $end = Carbon::createFromFormat("d/m/Y", $this->end_date_enrollments)->endOfDay();
+        return ($start <= $today and $end >= $today);
+    }
+
+    public function getStartDateEnrollments()
+    {
+        return Carbon::createFromFormat("d/m/Y", $this->start_date_enrollments)->startOfDay();
+    }
+
+    public function getEndDateEnrollments()
+    {
+        return Carbon::createFromFormat("d/m/Y", $this->end_date_enrollments)->endOfDay();
+    }
 }

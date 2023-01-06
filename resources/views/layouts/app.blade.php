@@ -17,6 +17,7 @@
   </script>
   <script type="text/javascript" src="{{ asset('js/app.js').'?version=1' }}"></script>
   <script src="{{ asset('js/datepicker-pt-BR.js').'?version=1' }}"></script>
+  <script src="https://cdn.tiny.cloud/1/fluxyozlgidop2o9xx3484rluezjjiwtcodjylbuwavcfnjg/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
   <script>
     $( "#menulateral" ).menu();
   </script>
