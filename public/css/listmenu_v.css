@@ -93,3 +93,20 @@
        padding: 2px;
    }
  
+   @media screen and (max-width:720px){
+
+    .menulist, .menulist ul {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+
+    .menulist, .menulist li {
+      float: left;
+    }
+
+    ul.menulist li.menuHeader{
+        width: 99%;
+        padding-right: 0px;
+    }
+  }

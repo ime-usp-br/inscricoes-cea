@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\DepositReceiptController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +27,7 @@ Route::resource('users', UserController::class);
 Route::resource("semesters", SemesterController::class);
 
 Route::resource("applications", ApplicationController::class);
+
+Route::get("/attachment/download/{attachment}",[AttachmentController::class, "download"])->name("attachments.download");
+
+Route::get("/receipt/download/{attachment}",[DepositReceiptController::class, "download"])->name("receipts.download");

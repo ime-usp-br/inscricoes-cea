@@ -13,7 +13,7 @@ class StoreApplicationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,42 @@ class StoreApplicationRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
+        $rules = [
+            'projectResponsible' => 'required',
+            'contactPhone' => 'required',
+            'cpf-cnpj' => 'required',
+            'email' => 'required',
+            'institution' => 'required',
+            'institutionRelationship' => 'required',
+            'mentor' => 'required',
+            'projectPurpose' => 'required|array',
+            'ppOther' => 'sometimes',
+            'fundingAgency' => 'required|array',
+            'faOther' => 'sometimes',
+            'knowledgeArea' => 'required|array',
+            'kaOther' => 'sometimes',
+            "paymentVoucher" => "required|mimes:jpeg,bmp,png,gif,svg,pdf|max:10240",
+            'bdName' => 'required',
+            'bdCpfCnpj' => 'required',
+            'bdBankName' => 'required',
+            'bdAgency' => 'required',
+            'bdAccount' => 'required',
+            'bdType' => 'required',
+            'authorization' => 'required',
+            'declaration' => 'required',
+            'projectTitle' => 'required',
+            'generalAspects' => 'required',
+            'generalObjectives' => 'required',
+            'features' => 'required',
+            'otherFeatures' => 'required',
+            'limitations' => 'required',
+            'storage' => 'required',
+            'conclusions' => 'required',
+            'expectedHelp' => 'required',
+            'anexosNovos' => "sometimes|array",
+            "anexosNovos.*.arquivo" => "required|mimes:jpeg,bmp,png,gif,svg,pdf|max:10240",
         ];
+
+        return $rules;
     }
 }

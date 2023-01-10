@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
 use App\Models\Application;
+use App\Models\Semester;
+use App\Models\Attachment;
+use App\Models\DepositReceipt;
+use Session;
 
 class ApplicationController extends Controller
 {
@@ -36,7 +40,56 @@ class ApplicationController extends Controller
      */
     public function store(StoreApplicationRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $semester = Semester::getInEnrollmentPeriod();
+
+        $validated["semesterID"] = $semester->id;
+
+        $validProtocol = False;
+
+        while(!$validProtocol){
+            $protocol = str_pad(random_int(1,999999999),9,"0",STR_PAD_LEFT);
+            $validProtocol = Application::where("protocol", $protocol)->first() ? False : True;
+        }
+
+        $validated["protocol"] = $protocol;
+
+        $validated["projectPurpose"] = implode(",", $validated["projectPurpose"]);
+        $validated["knowledgeArea"] = implode(",", $validated["knowledgeArea"]);
+        $validated["fundingAgency"] = implode(",", $validated["fundingAgency"]);
+
+        $application = Application::create($validated);
+
+        $receipt  = new DepositReceipt;
+            
+        $receipt->name = $validated["paymentVoucher"]->getClientOriginalName();
+        $receipt->path = $validated["paymentVoucher"]->store($protocol);
+
+        $application->depositReceipt()->save($receipt);
+
+        $receipt->link = route("receipts.download",$receipt);
+        $receipt->save();
+
+        $anexos = $validated["anexosNovos"] ?? [];
+        unset($validated["anexosNovos"]);
+
+        foreach($anexos as $anexo){
+            $attachment  = new Attachment;
+            
+            $attachment->name = $anexo["arquivo"]->getClientOriginalName();
+            $attachment->path = $anexo["arquivo"]->store($protocol);
+
+            $application->attachments()->save($attachment);
+
+            $attachment->link = route("attachments.download",$attachment);
+            $attachment->save();
+        }
+
+        Session::flash("alert-success", "Sua inscrição foi efetuada com sucesso! Seu número de protocolo é ".$protocol.".");
+
+        return redirect("/");
+
     }
 
     /**

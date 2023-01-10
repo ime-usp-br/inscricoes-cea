@@ -90,4 +90,8 @@ class Semester extends Model
     {
         return Carbon::createFromFormat("d/m/Y", $this->end_date_enrollments)->endOfDay();
     }
+
+    public function getInEnrollmentPeriod(){
+        return Semester::where("start_date_enrollments", "<=", now())->where("end_date_enrollments", ">=", now())->first();
+    }
 }
