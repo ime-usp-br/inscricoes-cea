@@ -54,7 +54,7 @@
                   <a href="{{ route('semesters.index') }}">Semestres</a>
               </li>
           @endcan
-          @can("visualizar fichas")
+          @can("visualizar inscrições")
               <li>
                   <a href="{{ route('applications.index') }}">Inscrições</a>
               </li>

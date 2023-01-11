@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSemesterRequest;
 use App\Http\Requests\UpdateSemesterRequest;
 use App\Models\Semester;
+use Auth;
 
 class SemesterController extends Controller
 {
@@ -15,6 +16,11 @@ class SemesterController extends Controller
      */
     public function index()
     {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
 
         $periodos = Semester::all()->sortBy(["year","period"])->reverse();
 
@@ -28,6 +34,11 @@ class SemesterController extends Controller
      */
     public function create()
     {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
 
         $periodo = new Semester;
 
@@ -42,6 +53,11 @@ class SemesterController extends Controller
      */
     public function store(StoreSemesterRequest $request)
     {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
 
         $validated = $request->validated();
 
@@ -69,6 +85,11 @@ class SemesterController extends Controller
      */
     public function edit(Semester $semester)
     {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
 
         $periodo = $semester;
 
@@ -84,7 +105,12 @@ class SemesterController extends Controller
      */
     public function update(UpdateSemesterRequest $request, Semester $semester)
     {
-
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+        
         $validated = $request->validated();
 
         $semester->update($validated);

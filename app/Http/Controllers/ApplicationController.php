@@ -9,6 +9,7 @@ use App\Models\Semester;
 use App\Models\Attachment;
 use App\Models\DepositReceipt;
 use Session;
+use Auth;
 
 class ApplicationController extends Controller
 {
@@ -19,6 +20,12 @@ class ApplicationController extends Controller
      */
     public function index()
     {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+
         $semester = Semester::getLatest();
 
         $fichas = Application::whereBelongsTo($semester)->get();
@@ -104,6 +111,12 @@ class ApplicationController extends Controller
      */
     public function show(Application $application)
     {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+
         return view("applications.show", compact("application"));
     }
 

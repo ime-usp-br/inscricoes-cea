@@ -17,10 +17,12 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         Permission::firstOrCreate(['name' => 'editar usuario']);
         Permission::firstOrCreate(['name' => 'visualizar semestres']);
+        Permission::firstOrCreate(['name' => 'visualizar inscrições']);
 
 
         Role::firstOrCreate(['name' => 'Secretaria'])
-        ->givePermissionTo('visualizar semestres');
+        ->givePermissionTo('visualizar semestres')
+        ->givePermissionTo('visualizar inscrições');
 
 
         Role::firstOrCreate(['name' => 'Administrador'])
