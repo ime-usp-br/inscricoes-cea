@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Storage;
 
 class DepositReceiptController extends Controller
 {
-    public function download(Attachment $attachment)
+    public function download(DepositReceipt $receipt)
     {
-        $tmp = explode(".",$attachment->path);
+        $tmp = explode(".",$receipt->path);
 
-        $ext = !str_contains($attachment->name, "." . end($tmp)) ? "." . end($tmp) : "";
+        $ext = !str_contains($receipt->name, "." . end($tmp)) ? "." . end($tmp) : "";
 
-        return Storage::download($attachment->path, $attachment->name . $ext);
+        return Storage::download($receipt->path, $receipt->name . $ext);
     }
 }

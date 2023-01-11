@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use app\Models\Semester;
+use App\Models\Semester;
 use App\Models\Attachment;
 use App\Models\DepositReceipt;
 
@@ -17,7 +17,7 @@ class Application extends Model
         'protocol',
         'projectResponsible',
         'contactPhone',
-        'cpf-cnpj',
+        'CPFCNPJ',
         'email',
         'institution',
         'institutionRelationship',

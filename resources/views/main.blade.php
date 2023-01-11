@@ -3,7 +3,7 @@
 @section('content')
 @parent
 
-<div id="layout_conteudo px-2">
+<div id="layout_conteudo">
     <div class="row justify-content-center">
         <div class="col-12 col-sm-11 col-md-10 col-lg-9 col-xl-8">
             @if($semester)
@@ -36,10 +36,10 @@
 
                         <div class="row custom-form-group d-flex align-items-center">
                             <div class="col-12 col-md-auto text-md-right">
-                                <label for="cpf-cnpj">CPF/CNPJ:</label>
+                                <label for="CPFCNPJ">CPF/CNPJ:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control masked" type="text" name="cpf-cnpj" id="cpf-cnpj" required>
+                                <input class="custom-form-control masked" type="text" name="CPFCNPJ" id="CPFCNPJ" required>
                             </div>
                         </div>
 

@@ -26,7 +26,7 @@ class StoreApplicationRequest extends FormRequest
         $rules = [
             'projectResponsible' => 'required',
             'contactPhone' => 'required',
-            'cpf-cnpj' => 'required',
+            'CPFCNPJ' => 'required',
             'email' => 'required',
             'institution' => 'required',
             'institutionRelationship' => 'required',

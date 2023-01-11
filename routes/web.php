@@ -30,4 +30,4 @@ Route::resource("applications", ApplicationController::class);
 
 Route::get("/attachment/download/{attachment}",[AttachmentController::class, "download"])->name("attachments.download");
 
-Route::get("/receipt/download/{attachment}",[DepositReceiptController::class, "download"])->name("receipts.download");
+Route::get("/receipt/download/{receipt}",[DepositReceiptController::class, "download"])->name("receipts.download");

@@ -19,7 +19,7 @@ class CreateApplicationsTable extends Migration
             $table->string("protocol");
             $table->string("projectResponsible");
             $table->string("contactPhone");
-            $table->string("cpf-cnpj");
+            $table->string("CPFCNPJ");
             $table->string("email");
             $table->string("institution");
             $table->string("institutionRelationship");

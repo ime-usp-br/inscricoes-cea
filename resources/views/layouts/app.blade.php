@@ -8,6 +8,13 @@
   @parent
   <link rel="stylesheet" href="{{ asset('css/app.css').'?version=1' }}" />
   <link rel="stylesheet" href="{{ asset('css/listmenu_v.css').'?version=1' }}" />
+  @if(!Auth::check())
+    <style>  
+        #layout_conteudo {
+            padding-left: 0;
+        }
+    </style>
+  @endif
 @endsection
 
 @section('javascripts_bottom')
@@ -45,6 +52,11 @@
           @can("visualizar semestres")
               <li>
                   <a href="{{ route('semesters.index') }}">Semestres</a>
+              </li>
+          @endcan
+          @can("visualizar fichas")
+              <li>
+                  <a href="{{ route('applications.index') }}">Inscrições</a>
               </li>
           @endcan
           <li>

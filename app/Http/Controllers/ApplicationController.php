@@ -19,7 +19,11 @@ class ApplicationController extends Controller
      */
     public function index()
     {
-        //
+        $semester = Semester::getLatest();
+
+        $fichas = Application::whereBelongsTo($semester)->get();
+
+        return view("applications.index", compact(["semester", "fichas"]));
     }
 
     /**
@@ -100,7 +104,7 @@ class ApplicationController extends Controller
      */
     public function show(Application $application)
     {
-        //
+        return view("applications.show", compact("application"));
     }
 
     /**
