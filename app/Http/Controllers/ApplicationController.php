@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
+use Ismaelw\LaraTeX\LaraTeX;
 use App\Models\Application;
 use App\Models\Semester;
 use App\Models\Attachment;
@@ -152,5 +153,22 @@ class ApplicationController extends Controller
     public function destroy(Application $application)
     {
         //
+    }
+
+    public function downloadAsPDF($protocol)
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+        
+        $application = Application::where("protocol", $protocol)->first();
+
+
+        return (new LaraTeX('applications.latex'))->with([
+            'application' => $application,
+        ])->download($protocol.'.pdf');
+
     }
 }

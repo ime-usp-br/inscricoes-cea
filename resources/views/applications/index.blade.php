@@ -36,13 +36,20 @@
                             <td>{{ $ficha->protocol }}</td>
                             <td>{{ $ficha->projectResponsible }}</td>
                             <td>{{ $ficha->email }}</td>
-                            <td>
+                            <td style="white-space:nowrap">
                                 <a class="btn btn-outline-dark btn-sm"
                                     data-toggle="tooltip" data-placement="top"
                                     title="Visualizar"
                                     href="{{ route('applications.show', $ficha) }}"
                                 >
-                                    Visualizar Ficha Completa
+                                    Visualizar
+                                </a>
+                                <a class="btn btn-outline-dark btn-sm"
+                                    data-toggle="tooltip" data-placement="top"
+                                    title="Visualizar"
+                                    href="{{ route('applications.downloadAsPDF', $ficha->protocol) }}"
+                                >
+                                    Download
                                 </a>
                             </td>
                         </tr>

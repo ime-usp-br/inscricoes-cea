@@ -26,6 +26,7 @@ Route::resource('users', UserController::class);
 
 Route::resource("semesters", SemesterController::class);
 
+Route::get("applications/{protocol}/aspdf",[ApplicationController::class, "downloadAsPDF"])->name("applications.downloadAsPDF");
 Route::resource("applications", ApplicationController::class);
 
 Route::get("/attachment/download/{attachment}",[AttachmentController::class, "download"])->name("attachments.download");
