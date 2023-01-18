@@ -7,6 +7,7 @@ use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\DepositReceiptController;
+use App\Http\Controllers\MailTemplateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +33,8 @@ Route::resource("applications", ApplicationController::class);
 Route::get("/attachment/download/{attachment}",[AttachmentController::class, "download"])->name("attachments.download");
 
 Route::get("/receipt/download/{receipt}",[DepositReceiptController::class, "download"])->name("receipts.download");
+
+Route::post('/mailtemplates/test', [MailTemplateController::class, 'test'])->name('mailtemplates.test');
+Route::get('/mailtemplates/activate/{mailtemplate}', [MailTemplateController::class, 'activate'])->name('mailtemplates.activate');
+Route::get('/mailtemplates/deactivate/{mailtemplate}', [MailTemplateController::class, 'deactivate'])->name('mailtemplates.deactivate');
+Route::resource('mailtemplates', MailTemplateController::class);

@@ -59,6 +59,11 @@
                   <a href="{{ route('applications.index') }}">Inscrições</a>
               </li>
           @endcan
+          @can("Editar E-mails")
+              <li>
+                  <a href="{{ route('mailtemplates.index') }}">E-mails</a>
+              </li>
+          @endcan
           <li>
               <form style="padding:0px;" action="{{ route('logout') }}" method="POST" id="logout_form2">
                   @csrf

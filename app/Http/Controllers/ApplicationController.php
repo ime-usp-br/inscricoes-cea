@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
+use App\Mail\NotifyCEAAboutApplication;
+use Illuminate\Support\Facades\Mail;
 use Ismaelw\LaraTeX\LaraTeX;
 use App\Models\Application;
 use App\Models\Semester;
 use App\Models\Attachment;
 use App\Models\DepositReceipt;
+use App\Models\MailTemplate;
 use Session;
 use Auth;
 
@@ -96,6 +99,16 @@ class ApplicationController extends Controller
 
             $attachment->link = route("attachments.download",$attachment);
             $attachment->save();
+        }
+
+        $mailtemplate = MailTemplate::where([
+            "mail_class"=>"NotifyCEAAboutApplication",
+            "sending_frequency"=>"A cada inscrição",
+            "active"=>true
+            ])->first();
+
+        if($mailtemplate){
+            Mail::to(env("MAIL_CEA"))->send(new NotifyCEAAboutApplication($application, $mailtemplate));
         }
 
         Session::flash("alert-success", "Sua inscrição foi efetuada com sucesso! Seu número de protocolo é ".$protocol.".");
