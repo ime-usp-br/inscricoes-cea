@@ -37,7 +37,7 @@ class StoreApplicationRequest extends FormRequest
             'faOther' => 'sometimes',
             'knowledgeArea' => 'required|array',
             'kaOther' => 'sometimes',
-            "paymentVoucher" => "required|mimes:jpeg,bmp,png,gif,svg,pdf|max:10240",
+            "paymentVoucher" => "required|max:10240",
             'bdName' => 'required',
             'bdCpfCnpj' => 'required',
             'bdBankName' => 'required',
@@ -56,7 +56,7 @@ class StoreApplicationRequest extends FormRequest
             'conclusions' => 'required',
             'expectedHelp' => 'required',
             'anexosNovos' => "sometimes|array",
-            "anexosNovos.*.arquivo" => "required|mimes:jpeg,bmp,png,gif,svg,pdf|max:10240",
+            "anexosNovos.*.arquivo" => "required|max:10240",
         ];
 
         return $rules;
