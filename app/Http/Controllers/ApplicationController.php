@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
 use App\Mail\NotifyCEAAboutApplication;
+use App\Mail\NotifyCEAAboutRefundReceipt;
 use Illuminate\Support\Facades\Mail;
 use Ismaelw\LaraTeX\LaraTeX;
 use App\Models\Application;
@@ -111,6 +112,16 @@ class ApplicationController extends Controller
 
         if($mailtemplate){
             Mail::to(env("MAIL_CEA"))->send(new NotifyCEAAboutApplication($application, $mailtemplate));
+        }
+
+        $mailtemplate = MailTemplate::where([
+            "mail_class"=>"NotifyCEAAboutRefundReceipt",
+            "sending_frequency"=>"A cada inscrição",
+            "active"=>true
+            ])->first();
+
+        if($mailtemplate){
+            Mail::to(env("MAIL_CEA"))->send(new NotifyCEAAboutRefundReceipt($application, $mailtemplate));
         }
 
         Session::flash("alert-success", "Sua inscrição foi efetuada com sucesso! Seu número de protocolo é ".$protocol.".");

@@ -20,6 +20,7 @@
 
             @foreach ([
                         "E-mail enviado a secretaria do CEA a cada inscrição"=>"NotifyCEAAboutApplication",
+                        "E-mail enviado a secretaria do CEA quando solicitado recibo de reembolso"=>"NotifyCEAAboutRefundReceipt",
                      ] as $key=>$value)
                 <option value='{"description":"{{$key}}","mail_class":"{{$value}}"}' {{ ( $mailtemplate->mail_class === $value) ? 'selected' : ''}}>{{ $key }}</option>
             @endforeach
