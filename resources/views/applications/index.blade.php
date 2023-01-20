@@ -26,6 +26,7 @@
                 <table class="table table-bordered table-striped table-hover" style="font-size:15px;">
                     <tr>
                         <th>Protocolo</th>
+                        <th>Modalidade</th>
                         <th>Responsável(is) pelo projeto</th>
                         <th>E-mail</th>
                         <th></th>
@@ -34,6 +35,7 @@
                     @foreach($fichas as $ficha)
                         <tr class="text-center">
                             <td>{{ $ficha->protocol }}</td>
+                            <td>{{ $ficha->serviceType }}</td>
                             <td>{{ $ficha->projectResponsible }}</td>
                             <td>{{ $ficha->email }}</td>
                             <td style="white-space:nowrap">

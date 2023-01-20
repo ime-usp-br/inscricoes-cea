@@ -12,10 +12,19 @@
 
             <div class="row custom-form-group d-flex align-items-center">
                 <div class="col-12 col-md-auto text-md-right">
-                    <label for="projectResponsible">Protolo:</label>
+                    <label for="protocol">Protolo:</label>
                 </div>
                 <div class="col-12 col-md">
                     {{ $application->protocol }}
+                </div>        
+            </div>
+
+            <div class="row custom-form-group d-flex align-items-center">
+                <div class="col-12 col-md-auto text-md-right">
+                    <label for="serviceType">Modalidade do serviço solicitado:</label>
+                </div>
+                <div class="col-12 col-md">
+                    {{ $application->serviceType }}
                 </div>        
             </div>
 
@@ -118,6 +127,24 @@
                 </div>        
             </div>
 
+            <div class="row custom-form-group d-flex align-items-center">
+                <div class="col-12 col-md-auto text-md-right">
+                    <label for="refundReceipt">Recibo para reembolso:</label>
+                </div>
+                <div class="col-12 col-md">
+                    {{ $application->refundReceipt }}
+                </div>
+            </div>
+
+            @if($application->refundReceipt == "Sim")
+                <div class="custom-form-group">
+                    <label class="text-justify" for="otherFeatures">Dados que devem constar no recibo:</label>
+                    <div class="col-12 col-md text-justify">
+                        {!! nl2br($application->refundReceiptData) !!}
+                    </div>
+                </div>
+            @endif
+
             <hr class="my-5">
 
             <div class="col my-5 text-justify">
@@ -192,14 +219,14 @@
             <div class="custom-form-group mt-5">
                 <label for="generalAspects">2. Aspectos gerais da área de concentração, com ênfase naqueles que motivaram o projeto:</label>
                 <div class="col-12 col-md text-justify">
-                    {{ $application->generalAspects }}
+                    {!! nl2br($application->generalAspects) !!}
                 </div>
             </div>
 
             <div class="custom-form-group mt-5">
                 <label for="generalObjectives">3. Objetivos gerais:</label>
                 <div class="col-12 col-md text-justify">
-                    {{ $application->generalObjectives }}
+                    {!! nl2br($application->generalObjectives) !!}
                 </div>
             </div>
 
@@ -208,7 +235,7 @@
                     foram ou serão efetuadas as medidas dessas características (ou variáveis)? Quais as unidades
                     de medida?</label>
                 <div class="col-12 col-md text-justify">
-                    {{ $application->features }}
+                    {!! nl2br($application->features) !!}
                 </div>
             </div>
 
@@ -216,7 +243,7 @@
                 <label class="text-justify" for="otherFeatures">5. Que outras características (ou variáveis) poderiam influenciar essas medidas? Existe possibilidade
                     destas serem controladas?</label>
                 <div class="col-12 col-md text-justify">
-                    {{ $application->otherFeatures }}
+                    {!! nl2br($application->otherFeatures) !!}
                 </div>
             </div>
 
@@ -225,7 +252,7 @@
                     Quais as restrições que foram ou serão naturalmente impostas à coleta de dados? Quantas
                     unidades amostrais* foram ou serão analisadas? Indique as limitações de tempo e custo.</label>
                 <div class="col-12 col-md text-justify">
-                    {{ $application->limitations }}
+                    {!! nl2br($application->limitations) !!}
                 </div>
             </div>
 
@@ -233,7 +260,7 @@
                 <label class="text-justify" for="storage">7. Como os dados estão ou serão armazenados? Existe a possibilidade de apresentá-los em mídia
                     eletrônica (CD, DVD, etc)?</label>
                 <div class="col-12 col-md text-justify">
-                    {{ $application->storage }}
+                    {!! nl2br($application->storage) !!}
                 </div>
             </div>
 
@@ -242,14 +269,14 @@
                     conclusões que seriam satisfatórias, tendo em vista seu comentário no item 3. Simule resultados
                     possíveis e comente-os.</label>
                 <div class="col-12 col-md text-justify">
-                    {{ $application->conclusions }}
+                    {!! nl2br($application->conclusions) !!}
                 </div>
             </div>
 
             <div class="custom-form-group mt-5">
                 <label for="expectedHelp">9. Que tipo de ajuda você espera do CEA?</label>
                 <div class="col-12 col-md text-justify">
-                    {{ $application->expectedHelp }}
+                    {!! nl2br($application->expectedHelp) !!}
                 </div>
             </div>
 

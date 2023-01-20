@@ -18,6 +18,22 @@
 
                         <div class="row custom-form-group d-flex align-items-center">
                             <div class="col-12 col-md-auto text-md-right">
+                                <label id="serviceType">Modalidade do serviço solicitado:</label>
+                            </div>
+                            <div class="col-12 col-md">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="serviceType" value="Consultoria" required>
+                                    <label class="font-weight-normal">Consultoria</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="serviceType" value="Projeto" required>
+                                    <label class="font-weight-normal">Projeto</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row custom-form-group d-flex align-items-center">
+                            <div class="col-12 col-md-auto text-md-right">
                                 <label for="projectResponsible">Responsável(is) pelo projeto:</label>
                             </div>
                             <div class="col-12 col-md">
@@ -169,6 +185,26 @@
                             <div class="col-12 col-md">
                                 <input class="custom-form-input btn-sm" id="paymentVoucher" name="paymentVoucher" type="file" required>
                             </div>        
+                        </div>
+
+                        <div class="row custom-form-group d-flex align-items-center">
+                            <div class="col-12 col-md-auto text-md-right">
+                                <label id="refundReceipt">Recibo para reembolso:</label>
+                            </div>
+                            <div class="col-12 col-md">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="rdrrSim" name="refundReceipt" value="Sim" onClick="rdChange(this)" required>
+                                    <label class="font-weight-normal">Sim</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="refundReceipt" value="Não" onClick="rdChange(this)" required>
+                                    <label class="font-weight-normal">Não</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="custom-form-group">
+                            <textarea class="custom-form-control" type="text" name="refundReceiptData" id="refundReceiptData" placeholder="Informe os dados que devem constar no recibo" hidden>{{ old('refundReceiptData') ?? ''}}</textarea>
                         </div>
 
                         <hr class="my-5">
@@ -375,6 +411,18 @@
 @section('javascripts_bottom')
  @parent
 <script>
+    function rdChange(ckType){
+        if(ckType.name == "refundReceipt"){
+            var textarea = document.getElementById("refundReceiptData");
+            if(ckType.value == "Sim"){
+                textarea.hidden = false;
+                textarea.required = true;
+            }else{
+                textarea.hidden = true;
+                textarea.required = false;
+            }
+        }
+    }
     function ckChange(ckType){
         var checked = document.getElementById(ckType.id);
 
@@ -451,6 +499,17 @@
                 ck.required = true;
             });
         } 
+
+        var rdrr = document.getElementById("rdrrSim");
+
+        if(rdrr.checked){
+            var textarea = document.getElementById("refundReceiptData");
+            textarea.hidden = false;
+            textarea.required = true;
+        }
+
+
+
     });
     function removeAnexo(id){   
         document.getElementById("anexo-"+id).remove();

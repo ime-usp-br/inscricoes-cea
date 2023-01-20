@@ -15,6 +15,7 @@ class Application extends Model
     protected $fillable = [
         'semesterID',
         'protocol',
+        'serviceType',
         'projectResponsible',
         'contactPhone',
         'CPFCNPJ',
@@ -28,6 +29,8 @@ class Application extends Model
         'faOther',
         'knowledgeArea',
         'kaOther',
+        'refundReceipt',
+        'refundReceiptData',
         'bdName',
         'bdCpfCnpj',
         'bdBankName',

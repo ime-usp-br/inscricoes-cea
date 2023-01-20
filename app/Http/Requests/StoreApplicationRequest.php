@@ -24,6 +24,7 @@ class StoreApplicationRequest extends FormRequest
     public function rules()
     {
         $rules = [
+            'serviceType' => 'required',
             'projectResponsible' => 'required',
             'contactPhone' => 'required',
             'CPFCNPJ' => 'required',
@@ -38,6 +39,8 @@ class StoreApplicationRequest extends FormRequest
             'knowledgeArea' => 'required|array',
             'kaOther' => 'sometimes',
             "paymentVoucher" => "required|max:10240",
+            'refundReceipt' => 'required',
+            'refundReceiptData' => 'required_if:refundReceipt,Sim',
             'bdName' => 'required',
             'bdCpfCnpj' => 'required',
             'bdBankName' => 'required',
@@ -56,7 +59,7 @@ class StoreApplicationRequest extends FormRequest
             'conclusions' => 'required',
             'expectedHelp' => 'required',
             'anexosNovos' => "sometimes|array",
-            "anexosNovos.*.arquivo" => "required|max:10240",
+            "anexosNovos.*.arquivo" => "required",
         ];
 
         return $rules;
