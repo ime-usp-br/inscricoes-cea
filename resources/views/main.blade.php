@@ -22,11 +22,11 @@
                             </div>
                             <div class="col-12 col-md">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="serviceType" value="Consultoria" required>
+                                    <input class="form-check-input" type="radio" name="serviceType" value="Consultoria" required {{ old("serviceType")=="Consultoria" ? "checked" : "" }}>
                                     <label class="font-weight-normal">Consultoria</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="serviceType" value="Projeto" required>
+                                    <input class="form-check-input" type="radio" name="serviceType" value="Projeto" required {{ old("serviceType")=="Projeto" ? "checked" : "" }}>
                                     <label class="font-weight-normal">Projeto</label>
                                 </div>
                             </div>
@@ -37,7 +37,7 @@
                                 <label for="projectResponsible">Responsável(is) pelo projeto:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="projectResponsible" id="projectResponsible" required>
+                                <input class="custom-form-control" type="text" name="projectResponsible" id="projectResponsible" required value={{ old("projectResponsible") ?? '' }}>
                             </div>        
                         </div>
 
@@ -46,7 +46,7 @@
                                 <label for="contactPhone">Telefones para contato:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="contactPhone" id="contactPhone" required>
+                                <input class="custom-form-control" type="text" name="contactPhone" id="contactPhone" required value={{ old("contactPhone") ?? '' }}>
                             </div>
                         </div>
 
@@ -55,7 +55,7 @@
                                 <label for="CPFCNPJ">CPF/CNPJ:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control masked" type="text" name="CPFCNPJ" id="CPFCNPJ" required>
+                                <input class="custom-form-control masked" type="text" name="CPFCNPJ" id="CPFCNPJ" required value={{ old("CPFCNPJ") ?? '' }}>
                             </div>
                         </div>
 
@@ -64,7 +64,7 @@
                                 <label for="email">E-mail:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="email" id="email" required>
+                                <input class="custom-form-control" type="text" name="email" id="email" required value={{ old("email") ?? '' }}>
                             </div>
                         </div>
 
@@ -73,7 +73,7 @@
                                 <label for="institution">Instituição:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="institution" id="institution" required>
+                                <input class="custom-form-control" type="text" name="institution" id="institution" required value={{ old("institution") ?? '' }}>
                             </div>
                         </div>
 
@@ -82,7 +82,7 @@
                                 <label for="institutionRelationship">Vínculo com a Instituição:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="institutionRelationship" id="institutionRelationship" required>
+                                <input class="custom-form-control" type="text" name="institutionRelationship" id="institutionRelationship" required value={{ old("institutionRelationship") ?? '' }}>
                             </div>
                         </div>
 
@@ -91,7 +91,7 @@
                                 <label for="mentor">Colaborador(es) ou orientador:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="mentor" id="mentor"/>
+                                <input class="custom-form-control" type="text" name="mentor" id="mentor" required  value={{ old("mentor") ?? '' }}>
                             </div>
                         </div>
 
@@ -101,25 +101,25 @@
                             </div>
                             <div class="col-12 col-md">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckppMestrado" name="projectPurpose[]" value="Mestrado" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckppMestrado" name="projectPurpose[]" value="Mestrado" onClick="ckChange(this)" {{ (is_array(old("projectPurpose")) and in_array("Mestrado", old("projectPurpose"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Mestrado</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckppDoutorado" name="projectPurpose[]" value="Doutorado" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckppDoutorado" name="projectPurpose[]" value="Doutorado" onClick="ckChange(this)" {{ (is_array(old("projectPurpose")) and in_array("Doutorado", old("projectPurpose"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Doutorado</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckppLivreDocencia" name="projectPurpose[]" value="Livre Docência" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckppLivreDocencia" name="projectPurpose[]" value="Livre Docência" onClick="ckChange(this)" {{ (is_array(old("projectPurpose")) and in_array("Livre Docência", old("projectPurpose"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Livre Docência</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckppPublicacao" name="projectPurpose[]" value="Publicação" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckppPublicacao" name="projectPurpose[]" value="Publicação" onClick="ckChange(this)" {{ (is_array(old("projectPurpose")) and in_array("Publicação", old("projectPurpose"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Publicação</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckppOther" name="projectPurpose[]" value="Outra" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckppOther" name="projectPurpose[]" value="Outra" onClick="ckChange(this)" {{ (is_array(old("projectPurpose")) and in_array("Outra", old("projectPurpose"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Outra</label>
-                                    <input class="custom-form-control ml-2" type="text" name="ppOther" id="ppOther" placeholder="Especifique" disabled>
+                                    <input class="custom-form-control ml-2" type="text" name="ppOther" id="ppOther" placeholder="Especifique" {{ (is_array(old("projectPurpose")) and in_array("Outra", old("projectPurpose"))) ? '' : 'disabled' }} value={{ old("ppOther") ?? '' }}>
                                 </div>
                             </div>
                         </div>
@@ -130,21 +130,21 @@
                             </div>
                             <div class="col-12 col-md">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckfaFAPESP" name="fundingAgency[]" value="FAPESP" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckfaFAPESP" name="fundingAgency[]" value="FAPESP" onClick="ckChange(this)" {{ (is_array(old("fundingAgency")) and in_array("FAPESP", old("fundingAgency"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">FAPESP</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckfaFINEP" name="fundingAgency[]" value="FINEP" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckfaFINEP" name="fundingAgency[]" value="FINEP" onClick="ckChange(this)" {{ (is_array(old("fundingAgency")) and in_array("FINEP", old("fundingAgency"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">FINEP</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckfaCNPq" name="fundingAgency[]" value="CNPq" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckfaCNPq" name="fundingAgency[]" value="CNPq" onClick="ckChange(this)" {{ (is_array(old("fundingAgency")) and in_array("CNPq", old("fundingAgency"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">CNPq</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckfaOther" name="fundingAgency[]" value="Outra" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckfaOther" name="fundingAgency[]" value="Outra" onClick="ckChange(this)" {{ (is_array(old("fundingAgency")) and in_array("Outra", old("fundingAgency"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Outra</label>
-                                    <input class="custom-form-control ml-2" type="text" name="faOther" id="faOther" placeholder="Especifique" disabled>
+                                    <input class="custom-form-control ml-2" type="text" name="faOther" id="faOther" placeholder="Especifique" {{ (is_array(old("fundingAgency")) and in_array("Outra", old("fundingAgency"))) ? '' : 'disabled' }} value={{ old("faOther") ?? '' }}>
                                 </div>
                             </div>
                         </div>
@@ -155,25 +155,25 @@
                             </div>
                             <div class="col-12 col-md">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckkaTec" name="knowledgeArea[]" value="Tecnológica" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckkaTec" name="knowledgeArea[]" value="Tecnológica" onClick="ckChange(this)" {{ (is_array(old("knowledgeArea")) and in_array("Tecnológica", old("knowledgeArea"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Tecnológica</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckkaMedBio" name="knowledgeArea[]" value="Médica ou Biológica" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckkaMedBio" name="knowledgeArea[]" value="Médica ou Biológica" onClick="ckChange(this)" {{ (is_array(old("knowledgeArea")) and in_array("Médica ou Biológica", old("knowledgeArea"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Médica ou Biológica</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckkaSocHum" name="knowledgeArea[]" value="Social ou Humana" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckkaSocHum" name="knowledgeArea[]" value="Social ou Humana" onClick="ckChange(this)" {{ (is_array(old("knowledgeArea")) and in_array("Social ou Humana", old("knowledgeArea"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Social ou Humana</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckkaEco" name="knowledgeArea[]" value="Econômica" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckkaEco" name="knowledgeArea[]" value="Econômica" onClick="ckChange(this)" {{ (is_array(old("knowledgeArea")) and in_array("Econômica", old("knowledgeArea"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Econômica</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ckkaOther" name="knowledgeArea[]" value="Outra" onClick="ckChange(this)">
+                                    <input class="form-check-input" type="checkbox" id="ckkaOther" name="knowledgeArea[]" value="Outra" onClick="ckChange(this)" {{ (is_array(old("knowledgeArea")) and in_array("Outra", old("knowledgeArea"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Outra</label>
-                                    <input class="custom-form-control ml-2" type="text" name="kaOther" id="kaOther" placeholder="Especifique" disabled>
+                                    <input class="custom-form-control ml-2" type="text" name="kaOther" id="kaOther" placeholder="Especifique" {{ (is_array(old("knowledgeArea")) and in_array("Outra", old("knowledgeArea"))) ? '' : 'disabled' }} value={{ old("kaOther") ?? '' }}>
                                 </div>
                             </div>
                         </div>
@@ -193,11 +193,11 @@
                             </div>
                             <div class="col-12 col-md">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="rdrrSim" name="refundReceipt" value="Sim" onClick="rdChange(this)" required>
+                                    <input class="form-check-input" type="radio" id="rdrrSim" name="refundReceipt" value="Sim" onClick="rdChange(this)" required {{ old("refundReceipt")=="Sim" ? "checked" : "" }}>
                                     <label class="font-weight-normal">Sim</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="refundReceipt" value="Não" onClick="rdChange(this)" required>
+                                    <input class="form-check-input" type="radio" name="refundReceipt" value="Não" onClick="rdChange(this)" required {{ old("refundReceipt")=="Não" ? "checked" : "" }}>
                                     <label class="font-weight-normal">Não</label>
                                 </div>
                             </div>
@@ -220,7 +220,7 @@
                                 <label for="projectResponsible">Nome completo:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="bdName" id="bdName" required>
+                                <input class="custom-form-control" type="text" name="bdName" id="bdName" required value={{ old("bdName") ?? '' }}>
                             </div>        
                         </div>
 
@@ -229,7 +229,7 @@
                                 <label for="cpf-cnpj">CPF/CNPJ:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control masked" type="text" name="bdCpfCnpj" id="bdCpfCnpj" required>
+                                <input class="custom-form-control masked" type="text" name="bdCpfCnpj" id="bdCpfCnpj" required value={{ old("bdCpfCnpj") ?? '' }}>
                             </div>
                         </div>
 
@@ -238,7 +238,7 @@
                                 <label for="projectResponsible">Nome do Banco:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="bdBankName" id="bdBankName" required>
+                                <input class="custom-form-control" type="text" name="bdBankName" id="bdBankName" required value={{ old("bdBankName") ?? '' }}>
                             </div>        
                         </div>
 
@@ -247,7 +247,7 @@
                                 <label for="projectResponsible">Número da Agência:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="bdAgency" id="bdAgency" required>
+                                <input class="custom-form-control" type="text" name="bdAgency" id="bdAgency" required value={{ old("bdAgency") ?? '' }}>
                             </div>        
                         </div>
 
@@ -256,7 +256,7 @@
                                 <label for="projectResponsible">Número da Conta:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="bdAccount" id="bdAccount" required>
+                                <input class="custom-form-control" type="text" name="bdAccount" id="bdAccount" required value={{ old("bdAccount") ?? '' }}>
                             </div>        
                         </div>
 
@@ -266,11 +266,11 @@
                             </div>
                             <div class="col-12 col-md">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="bdCorrente" name="bdType" value="Corrente" required>
+                                    <input class="form-check-input" type="radio" id="bdCorrente" name="bdType" value="Corrente" required {{ old("bdType")=="Corrente" ? "checked" : "" }}>
                                     <label class="font-weight-normal">Conta Corrente</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="bdPoupanca" name="bdType" value="Poupança" required>
+                                    <input class="form-check-input" type="radio" id="bdPoupanca" name="bdType" value="Poupança" required {{ old("bdType")=="Poupança" ? "checked" : "" }}>
                                     <label class="font-weight-normal">Poupança</label>
                                 </div>
                             </div>
@@ -280,7 +280,7 @@
 
                         <div class="custom-form-group d-flex align-items-center">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input mr-3" type="checkbox" name="authorization" value="1" required>
+                                <input class="form-check-input mr-3" type="checkbox" name="authorization" value="1" required {{ old("authorization") ? "checked" : "" }}>
                                 <label class="text-justify" >
                                     Autorizo a utilização dos dados para fins didáticos e/ou ilustração de métodos estatísticos em
                                     artigos científicos, desde que sejam apresentados em simpósios ou publicações com maior
@@ -294,7 +294,7 @@
 
                         <div class="custom-form-group d-flex align-items-center">
                             <div class="form-check form-check-inline d-flex align-items-center">
-                                <input class="form-check-input mr-3" type="checkbox" name="declaration" value="1" required>
+                                <input class="form-check-input mr-3" type="checkbox" name="declaration" value="1" required {{ old("declaration") ? "checked" : "" }}>
                                 <label class="text-justify" >
                                     Declaro que estou ciente de que o(a) meu/minha orientador(a) deverá estar presente na entrevista.
                                 </label>
@@ -313,7 +313,7 @@
 
                         <div class="custom-form-group">
                             <label for="projectTitle">1. Título do projeto, mesmo sendo provisório:</label>
-                            <input class="custom-form-control" type="text" name="projectTitle" id="projectTitle" required>
+                            <input class="custom-form-control" type="text" name="projectTitle" id="projectTitle" required value={{ old("projectTitle") ?? '' }}>
                         </div>
 
                         <div class="custom-form-group mt-5">
@@ -458,29 +458,21 @@
         }    
 
         cks = document.getElementsByName(ckType.name);
-        if ($('[name="'+ckType.name+'"]').is(':checked')) {
-            $.each(cks, function(index, ck){
-                ck.required = false;
-            });
-        }else {
-            $.each(cks, function(index, ck){
-                ck.required = true;
-            });
-        } 
+        if(ckType.name != "fundingAgency[]"){
+            if ($('[name="'+ckType.name+'"]').is(':checked')) {
+                $.each(cks, function(index, ck){
+                    ck.required = false;
+                });
+            }else {
+                $.each(cks, function(index, ck){
+                    ck.required = true;
+                });
+            } 
+        }
     }
     $(window).on('load', function() {
         cks = document.getElementsByName("projectPurpose[]");
         if ($('[name="projectPurpose[]"]').is(':checked')) {
-            $.each(cks, function(index, ck){
-                ck.required = false;
-            });
-        }else {
-            $.each(cks, function(index, ck){
-                ck.required = true;
-            });
-        } 
-        cks = document.getElementsByName("fundingAgency");
-        if ($('[name="fundingAgency[]"]').is(':checked')) {
             $.each(cks, function(index, ck){
                 ck.required = false;
             });

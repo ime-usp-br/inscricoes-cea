@@ -34,7 +34,7 @@ class StoreApplicationRequest extends FormRequest
             'mentor' => 'required',
             'projectPurpose' => 'required|array',
             'ppOther' => 'sometimes',
-            'fundingAgency' => 'required|array',
+            'fundingAgency' => 'sometimes|array',
             'faOther' => 'sometimes',
             'knowledgeArea' => 'required|array',
             'kaOther' => 'sometimes',

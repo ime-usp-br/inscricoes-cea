@@ -72,7 +72,9 @@ class ApplicationController extends Controller
 
         $validated["projectPurpose"] = implode(",", $validated["projectPurpose"]);
         $validated["knowledgeArea"] = implode(",", $validated["knowledgeArea"]);
-        $validated["fundingAgency"] = implode(",", $validated["fundingAgency"]);
+        if(array_key_exists("fundingAgency", $validated)){
+            $validated["fundingAgency"] = implode(",", $validated["fundingAgency"]);
+        }
 
         $application = Application::create($validated);
 
