@@ -488,6 +488,10 @@
     }, "Invalid number");
     $("#form-inscricao").validate({
         rules : {
+            bdCpfCnpj : {
+                required: true,
+                validateCPFCNPJ : true
+            },
             CPFCNPJ : {
                 required: true,
                 validateCPFCNPJ : true
@@ -515,6 +519,27 @@
         }
     });
 
+    $("#bdCpfCnpj").keydown(function(){
+        try {
+            $("#bdCpfCnpj").unmask();
+        } catch (e) {}
+
+        var tamanho = $("#bdCpfCnpj").val().replace(/[^0-9]/g, '').length;
+
+        if(tamanho < 11){
+            $("#bdCpfCnpj").mask("999.999.999-99");
+        } else {
+            $("#bdCpfCnpj").mask("99.999.999/9999-99");
+        }
+
+        var elem = this;
+        setTimeout(function(){
+            elem.selectionStart = elem.selectionEnd = 10000;
+        }, 0);
+        var currentValue = $(this).val();
+        $(this).val('');
+        $(this).val(currentValue);
+    });
     $("#CPFCNPJ").keydown(function(){
         try {
             $("#CPFCNPJ").unmask();
