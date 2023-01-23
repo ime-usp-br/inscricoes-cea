@@ -410,7 +410,132 @@
 
 @section('javascripts_bottom')
  @parent
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
 <script>
+    jQuery.validator.addMethod("validateCPFCNPJ", function(value, element) {
+        var valor = value.replace(/[^0-9]/g, '');
+        if(valor.length == 11){
+            var cpf = valor;
+            var soma;
+            var resto;
+            soma = 0;
+            if(cpf == "00000000000"){
+                return false;
+            }
+            for(i=1; i<=9; i++){
+                soma = soma + parseInt(cpf.substring(i-1, i)) * (11 - i); 
+            }
+            resto = (soma * 10) % 11;
+            if((resto == 10) || (resto == 11)){
+                resto = 0;
+            }
+            if(resto != parseInt(cpf.substring(9, 10))){
+                return false;
+            }
+            soma = 0;
+            for(i=1; i<=10; i++){
+                soma = soma + parseInt(cpf.substring(i-1, i)) * (12 - i);
+            }
+            resto = (soma * 10) % 11;
+            if((resto == 10) || (resto == 11)){
+                resto = 0;
+            }
+            if(resto != parseInt(cpf.substring(10, 11))){
+                return false;
+            }
+            return true;
+        }else if(valor.length == 14){
+            var cnpj = valor;
+            var soma;
+            var resto;
+            soma = 0;
+            for(i=1; i<=4; i++){
+                soma = soma + parseInt(cnpj.substring(i-1, i)) * (6 - i); 
+            }
+            for(i=5; i<=12; i++){
+                soma = soma + parseInt(cnpj.substring(i-1, i)) * (14 - i); 
+            }
+            resto = soma % 11;
+            if((resto == 0) || (resto == 1)){
+                if(parseInt(cnpj.substring(12, 13)) != 0){
+                    return false;
+                }
+            }else{
+                if(parseInt(cnpj.substring(12, 13)) != (11 - resto)){
+                    return false;
+                }
+            }
+            soma = 0;
+            for(i=1; i<=5; i++){
+                soma = soma + parseInt(cnpj.substring(i-1, i)) * (7 - i); 
+            }
+            for(i=6; i<=13; i++){
+                soma = soma + parseInt(cnpj.substring(i-1, i)) * (15 - i); 
+            }
+            resto = soma % 11;
+            if((resto == 0) || (resto == 1)){
+                if(parseInt(cnpj.substring(13, 14)) != 0){
+                    return false;
+                }
+            }else{
+                if(parseInt(cnpj.substring(13, 14)) != (11 - resto)){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }, "Invalid number");
+    $("#form-inscricao").validate({
+        rules : {
+            CPFCNPJ : {
+                required: true,
+                validateCPFCNPJ : true
+            }
+        },
+        messages : {
+            "knowledgeArea[]": {
+                required : "Select at least one option"
+            },
+            "projectPurpose[]": {
+                required : "Select at least one option"
+            },
+        },
+        errorPlacement: function(error,element){ 
+            element.attr("data-toggle", "tooltip");
+            element.attr("data-placement", "top");
+            element.attr("title", error.text());
+            $('[data-toggle="tooltip"]').tooltip();          
+        },
+        success: function(label,element){
+            element.removeAttribute("data-toggle");
+            element.removeAttribute("data-placement");
+            element.removeAttribute("title");     
+            element.removeAttribute("data-original-title");       
+        }
+    });
+
+    $("#CPFCNPJ").keydown(function(){
+        try {
+            $("#CPFCNPJ").unmask();
+        } catch (e) {}
+
+        var tamanho = $("#CPFCNPJ").val().replace(/[^0-9]/g, '').length;
+
+        if(tamanho < 11){
+            $("#CPFCNPJ").mask("999.999.999-99");
+        } else {
+            $("#CPFCNPJ").mask("99.999.999/9999-99");
+        }
+
+        var elem = this;
+        setTimeout(function(){
+            elem.selectionStart = elem.selectionEnd = 10000;
+        }, 0);
+        var currentValue = $(this).val();
+        $(this).val('');
+        $(this).val(currentValue);
+    });
     function rdChange(ckType){
         if(ckType.name == "refundReceipt"){
             var textarea = document.getElementById("refundReceiptData");

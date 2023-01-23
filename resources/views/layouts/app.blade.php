@@ -6,7 +6,7 @@
 
 @section('styles')
   @parent
-  <link rel="stylesheet" href="{{ asset('css/app.css').'?version=1' }}" />
+  <link rel="stylesheet" href="{{ asset('css/app.css').'?version=2' }}" />
   <link rel="stylesheet" href="{{ asset('css/listmenu_v.css').'?version=1' }}" />
   @if(!Auth::check())
     <style>  
