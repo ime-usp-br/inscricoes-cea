@@ -9,6 +9,7 @@
             <h4 class='text-center pb-4'>{{ $semester->period }} de {{ $semester->year }}</h4>
 
             @include('applications.modals.chooseSemester')
+            @include('applications.modals.scheduleTriageModal')
 
             <p class="text-right">
                 <a  id="btn-chooseSemesterModal"
@@ -29,6 +30,7 @@
                         <th>Modalidade</th>
                         <th>Responsável(is) pelo projeto</th>
                         <th>E-mail</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
 
@@ -38,6 +40,20 @@
                             <td>{{ $ficha->serviceType }}</td>
                             <td>{{ $ficha->projectResponsible }}</td>
                             <td>{{ $ficha->email }}</td>
+                            <td>
+                                {{ $ficha->status }}
+                                @if($ficha->status == "Aguardando agendamento da triagem")
+                                    <a class="text-dark text-decoration-none"
+                                        data-toggle="modal"
+                                        data-target="#scheduleTriageModal"
+                                        data-id="{{ $ficha->id }}"
+                                        title="Agendar Triagem"
+                                        href="{{ route('triages.store') }}"
+                                    >
+                                        <i class="fas fa-calendar-plus"></i>
+                                    </a>
+                                @endif
+                            </td>
                             <td style="white-space:nowrap">
                                 <a class="btn btn-outline-dark btn-sm"
                                     data-toggle="tooltip" data-placement="top"
@@ -64,4 +80,47 @@
     </div>
 </div>
 
+@endsection
+
+@section('javascripts_bottom')
+ @parent
+<script>
+    $('#scheduleTriageModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var routePath = button.attr('href');
+        $(this).find('.modal-content form').attr('action', routePath);
+        $("input:radio[name='meetingMode']").each(function(i) {
+            this.checked = false;
+        });
+        $('#div-reuniao').empty();
+        $("#hiddenApplicationID").val(button.attr('data-id'));
+    });
+    function rdChange(ckType){
+        if(ckType.value == "Online"){
+            var html = [
+                '<div class="row custom-form-group d-flex align-items-center">',
+                    '<div class="col-12 col-md-5 text-md-right">',
+                        '<label>Link:</label>',
+                    '</div>',
+                    '<div class="col-12 col-md-7">',
+                        '<input class="custom-form-control" type="text" name="link" required>',
+                    '</div>',
+                '</div>'
+            ].join("\n");
+            $('#div-reuniao').html(html);
+        }else if (ckType.value == "Presencial"){
+            var html = [
+                '<div class="row custom-form-group d-flex align-items-center">',
+                    '<div class="col-12 col-md-5 text-md-right">',
+                        '<label>Local:</label>',
+                    '</div>',
+                    '<div class="col-12 col-md-7">',
+                        '<input class="custom-form-control" type="text" name="local" required>',
+                    '</div>',
+                '</div>'
+            ].join("\n");
+            $('#div-reuniao').html(html);
+        }
+    }
+</script>
 @endsection

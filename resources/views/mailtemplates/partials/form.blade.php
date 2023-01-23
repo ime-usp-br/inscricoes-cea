@@ -21,6 +21,7 @@
             @foreach ([
                         "E-mail enviado a secretaria do CEA a cada inscrição"=>"NotifyCEAAboutApplication",
                         "E-mail enviado a secretaria do CEA quando solicitado recibo de reembolso"=>"NotifyCEAAboutRefundReceipt",
+                        "E-mail enviado ao inscrito quando a triagem é agendada"=>"NotifyAboutTriageSchedule",
                      ] as $key=>$value)
                 <option value='{"description":"{{$key}}","mail_class":"{{$value}}"}' {{ ( $mailtemplate->mail_class === $value) ? 'selected' : ''}}>{{ $key }}</option>
             @endforeach
@@ -43,6 +44,7 @@
                             "Única",
                             "Mensal",
                             "A cada inscrição",
+                            "A cada agendamento de triagem",
                         ] as $frequency)
                     <option value='{{$frequency}}' {{ ( $mailtemplate->sending_frequency === $frequency) ? 'selected' : ''}}>{{ $frequency }}</option>
                 @endforeach

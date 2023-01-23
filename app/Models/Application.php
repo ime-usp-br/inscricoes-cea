@@ -16,6 +16,7 @@ class Application extends Model
         'semesterID',
         'protocol',
         'serviceType',
+        'status',
         'projectResponsible',
         'contactPhone',
         'CPFCNPJ',

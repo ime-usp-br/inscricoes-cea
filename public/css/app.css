@@ -227,3 +227,7 @@ input[type=file].custom-form-input::file-selector-button {
       padding-top: 40px;
     }
   }
+
+  a:hover {
+    cursor:pointer;
+   }

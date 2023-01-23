@@ -8,6 +8,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\DepositReceiptController;
 use App\Http\Controllers\MailTemplateController;
+use App\Http\Controllers\TriageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,5 @@ Route::post('/mailtemplates/test', [MailTemplateController::class, 'test'])->nam
 Route::get('/mailtemplates/activate/{mailtemplate}', [MailTemplateController::class, 'activate'])->name('mailtemplates.activate');
 Route::get('/mailtemplates/deactivate/{mailtemplate}', [MailTemplateController::class, 'deactivate'])->name('mailtemplates.deactivate');
 Route::resource('mailtemplates', MailTemplateController::class);
+
+Route::resource('triages', TriageController::class);

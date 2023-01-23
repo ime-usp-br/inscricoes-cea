@@ -244,7 +244,7 @@
 
                         <div class="row custom-form-group d-flex align-items-center">
                             <div class="col-12 col-md-auto text-md-right">
-                                <label for="projectResponsible">Número da Agência:</label>
+                                <label for="projectResponsible">Número da Agência (sem DV):</label>
                             </div>
                             <div class="col-12 col-md">
                                 <input class="custom-form-control" type="text" name="bdAgency" id="bdAgency" required value={{ old("bdAgency") ?? '' }}>
