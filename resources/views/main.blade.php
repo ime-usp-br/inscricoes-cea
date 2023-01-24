@@ -378,8 +378,21 @@
                                         <i class="fas fa-plus-circle"></i>
                                     </a>
                             </div>
+                        </div> 
+
+                        <hr class="my-5">
+
+                        <div class="custom-form-group mt-5">
+                            <div class="col-12">
+                                <canvas id="canvas" style="width: 220px;height: 88px;"></canvas>
+                            </div>
+                            <div class="col-12">
+                                <label>Digite os 4 caracteres acima:</label>
+                            </div>
+                            <div class="col-12">
+                                <input name="captchafield" style="width:220px;" required/>
+                            </div>
                         </div>
- 
 
                         <div class="row custom-form-group justify-content-center mt-5">
                             <button type="submit" class="btn btn-outline-dark">
@@ -409,9 +422,14 @@
 @endsection
 
 @section('javascripts_bottom')
- @parent
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+@parent
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+<script src="{{ asset('js/jquery-captcha.min.js').'?version=1' }}"></script>
 <script>
+    const captcha = new Captcha($('#canvas'),{autoRefresh: false});
+    jQuery.validator.addMethod("validatedCaptcha", function(value, element) {
+        return captcha.valid(value);
+    }, "Wrong sequence");
     jQuery.validator.addMethod("validateCPFCNPJ", function(value, element) {
         var valor = value.replace(/[^0-9]/g, '');
         if(valor.length == 11){
@@ -495,6 +513,10 @@
             CPFCNPJ : {
                 required: true,
                 validateCPFCNPJ : true
+            },
+            captchafield: {
+                required: true,
+                validatedCaptcha: true
             }
         },
         messages : {
