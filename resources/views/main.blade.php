@@ -91,7 +91,7 @@
                                 <label for="mentor">Colaborador(es) ou orientador:</label>
                             </div>
                             <div class="col-12 col-md">
-                                <input class="custom-form-control" type="text" name="mentor" id="mentor" required  value={{ old("mentor") ?? '' }}>
+                                <input class="custom-form-control" id="mentor" type="text" name="mentor" id="mentor" value={{ old("mentor") ?? '' }}>
                             </div>
                         </div>
 
@@ -100,6 +100,10 @@
                                 <label id="ppLabel">Finalidade do projeto:</label>
                             </div>
                             <div class="col-12 col-md">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="ckppIniCientifica" name="projectPurpose[]" value="Iniciação Científica" onClick="ckChange(this)" {{ (is_array(old("projectPurpose")) and in_array("Iniciação Científica", old("projectPurpose"))) ? "checked" : '' }}>
+                                    <label class="font-weight-normal">Iniciação Científica</label>
+                                </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="ckppMestrado" name="projectPurpose[]" value="Mestrado" onClick="ckChange(this)" {{ (is_array(old("projectPurpose")) and in_array("Mestrado", old("projectPurpose"))) ? "checked" : '' }}>
                                     <label class="font-weight-normal">Mestrado</label>
@@ -294,7 +298,7 @@
 
                         <div class="custom-form-group d-flex align-items-center">
                             <div class="form-check form-check-inline d-flex align-items-center">
-                                <input class="form-check-input mr-3" type="checkbox" name="declaration" value="1" required {{ old("declaration") ? "checked" : "" }}>
+                                <input class="form-check-input mr-3" id="ckDeclaration" type="checkbox" name="declaration" value="1" {{ old("declaration") ? "checked" : "" }}>
                                 <label class="text-justify" >
                                     Declaro que estou ciente de que o(a) meu/minha orientador(a) deverá estar presente na entrevista.
                                 </label>
@@ -629,6 +633,20 @@
             }
         }    
 
+        var ckppIniCientifica = document.getElementById("ckppIniCientifica");
+        var ckppMestrado = document.getElementById("ckppMestrado");
+        var ckppDoutorado = document.getElementById("ckppDoutorado");
+        var mentor = document.getElementById("mentor");
+        var declaration = document.getElementById("ckDeclaration");
+
+        if((ckppIniCientifica.checked) || (ckppMestrado.checked) || (ckppDoutorado.checked)){
+            mentor.required = true;
+            declaration.required = true;
+        }else{
+            mentor.required = false;
+            declaration.required = false;
+        }
+
         cks = document.getElementsByName(ckType.name);
         if(ckType.name != "fundingAgency[]"){
             if ($('[name="'+ckType.name+'"]').is(':checked')) {
@@ -672,8 +690,19 @@
             textarea.required = true;
         }
 
+        var ckppIniCientifica = document.getElementById("ckppIniCientifica");
+        var ckppMestrado = document.getElementById("ckppMestrado");
+        var ckppDoutorado = document.getElementById("ckppDoutorado");
+        var mentor = document.getElementById("mentor");
+        var declaration = document.getElementById("ckDeclaration");
 
-
+        if((ckppIniCientifica.checked) || (ckppMestrado.checked) || (ckppDoutorado.checked)){
+            mentor.required = true;
+            declaration.required = true;
+        }else{
+            mentor.required = false;
+            declaration.required = false;
+        }
     });
     function removeAnexo(id){   
         document.getElementById("anexo-"+id).remove();

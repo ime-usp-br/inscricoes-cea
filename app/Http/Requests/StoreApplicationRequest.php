@@ -31,7 +31,6 @@ class StoreApplicationRequest extends FormRequest
             'email' => 'required',
             'institution' => 'required',
             'institutionRelationship' => 'required',
-            'mentor' => 'required',
             'projectPurpose' => 'required|array',
             'ppOther' => 'sometimes',
             'fundingAgency' => 'sometimes|array',
@@ -48,7 +47,6 @@ class StoreApplicationRequest extends FormRequest
             'bdAccount' => 'required',
             'bdType' => 'required',
             'authorization' => 'required',
-            'declaration' => 'required',
             'projectTitle' => 'required',
             'generalAspects' => 'required',
             'generalObjectives' => 'required',
@@ -61,6 +59,19 @@ class StoreApplicationRequest extends FormRequest
             'anexosNovos' => "sometimes|array",
             "anexosNovos.*.arquivo" => "required",
         ];
+
+        if(isset(request()->projectPurpose))
+        {
+          if((in_array('Iniciação Científica',request()->projectPurpose)) or (in_array('Mestrado',request()->projectPurpose)) or (in_array('Doutorado',request()->projectPurpose)))
+          {
+            $additionalRules = [
+            'mentor' => 'required',
+            'declaration' => 'required',
+            ];
+            $rules = $rules+$additionalRules;
+          }
+        }
+
 
         return $rules;
     }
