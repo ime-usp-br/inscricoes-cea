@@ -430,6 +430,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
 <script src="{{ asset('js/jquery-captcha.min.js').'?version=1' }}"></script>
 <script>
+    $.validator.addMethod('filesize', function (value, element, param) {
+        var soma = 0;
+        $("input[type=file]").each(function(index, elem){
+            soma = soma + elem.files[0].size
+        });
+        return soma <= param * 1000000;
+    }, 'A soma do tamanho dos arquivos não deve ultrapassar {0} MB');
     const captcha = new Captcha($('#canvas'),{autoRefresh: false});
     jQuery.validator.addMethod("validatedCaptcha", function(value, element) {
         return captcha.valid(value);
@@ -521,6 +528,9 @@
             captchafield: {
                 required: true,
                 validatedCaptcha: true
+            },
+            paymentVoucher:{
+                filesize: 8
             }
         },
         messages : {
@@ -705,6 +715,7 @@
         }
     });
     function removeAnexo(id){   
+        $('#anexoNovo'+id).rules("remove")
         document.getElementById("anexo-"+id).remove();
     }
     $('#btn-addAttachment').on('click', function(e) {
@@ -720,10 +731,11 @@
           '>',
           '    <i class="fas fa-trash-alt"></i>',
           '</a>',
-          '<input class="custom-form-input btn-sm" id="anexosNovos[new'+id+'][arquivo]" name="anexosNovos[new'+id+'][arquivo]" type="file" >',
+          '<input class="custom-form-input btn-sm" id="anexoNovo'+id+'" name="anexosNovos[new'+id+'][arquivo]" type="file" >',
           '<br/>',
       '</div></div>'].join("\n");
       $('#novos-anexos').append(html);
+      $('#anexoNovo'+id).rules("add",{filesize:8})
     });
 </script>
 @endsection
