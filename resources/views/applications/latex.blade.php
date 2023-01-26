@@ -11,6 +11,7 @@
 \usepackage[a4paper,inner=1.5cm,outer=1.5cm,top=1cm,bottom=1cm, headheight=4cm, footskip=2cm]{geometry}
 \usepackage{blindtext}
 \usepackage{pdflscape}
+\usepackage{spverbatim}
 \geometry{textwidth=\paperwidth, textheight=\paperheight, includehead, nomarginpar, includefoot}
 
 \renewcommand{\familydefault}{\sfdefault}
@@ -49,7 +50,7 @@
 \begin{document}
 \pagestyle{fancy}
 
-  \textbf{Protocolo:} {!! $application->protocol !!}
+  \textbf{Protocolo:} {!! str_replace("_", "\_", $application->protocol) !!}
 
   \vspace{5pt}
 
@@ -57,11 +58,11 @@
 
   \vspace{5pt}
 
-  \textbf{Responsável(is) pelo projeto:} {!! $application->projectResponsible !!}
+  \textbf{Responsável(is) pelo projeto:} {!! str_replace("_", "\_", $application->projectResponsible) !!}
 
   \vspace{5pt}
 
-  \textbf{Telefones para contato:} {!! $application->contactPhone !!}
+  \textbf{Telefones para contato:} {!! str_replace("_", "\_", $application->contactPhone) !!}
 
   \vspace{5pt}
 
@@ -69,31 +70,31 @@
 
   \vspace{5pt}
 
-  \textbf{E-mail:} {!! $application->email !!}
+  \textbf{E-mail:} {!! str_replace("_", "\_", $application->email) !!}
 
   \vspace{5pt}
 
-  \textbf{Instituição:} {!! $application->institution !!}
+  \textbf{Instituição:} {!! str_replace("_", "\_", $application->institution) !!}
 
   \vspace{5pt}
 
-  \textbf{Vínculo com a Instituição:} {!! $application->institutionRelationship !!}
+  \textbf{Vínculo com a Instituição:} {!! str_replace("_", "\_", $application->institutionRelationship) !!}
 
   \vspace{5pt}
 
-  \textbf{Colaborador(es) ou orientador:} {!! $application->mentor !!}
+  \textbf{Colaborador(es) ou orientador:} {!! str_replace("_", "\_", $application->mentor) !!}
 
   \vspace{5pt}
 
-  \textbf{Finalidade do projeto:} {!! str_replace(",", ", ", $application->projectPurpose) !!} {!! $application->ppOther ? " - ".$application->ppOther : "" !!}
+  \textbf{Finalidade do projeto:} {!! str_replace(",", ", ", $application->projectPurpose) !!} {!! $application->ppOther ? " - ".str_replace("_", "\_", $application->ppOther) : "" !!}
 
   \vspace{5pt}
 
-\textbf{Agência financiadora do projeto:} {!! str_replace(",", ", ", $application->fundingAgency) !!} {!! $application->faOther ? " - ".$application->faOther : "" !!}
+\textbf{Agência financiadora do projeto:} {!! str_replace(",", ", ", $application->fundingAgency) !!} {!! $application->faOther ? " - ".str_replace("_", "\_", $application->faOther) : "" !!}
 
 \vspace{5pt}
 
-\textbf{Área de conhecimento:} {!! str_replace(",", ", ", $application->knowledgeArea) !!} {!! $application->kaOther ? " - ".$application->kaOther : "" !!}
+\textbf{Área de conhecimento:} {!! str_replace(",", ", ", $application->knowledgeArea) !!} {!! $application->kaOther ? " - ".str_replace("_", "\_", $application->kaOther) : "" !!}
 
 \vspace{30pt}
 
@@ -105,7 +106,7 @@
 
 \vspace{10pt}
 
-\textbf{Nome completo:} {!! $application->bdName !!}
+\textbf{Nome completo:} {!! str_replace("_", "\_", $application->bdName) !!}
 
 \vspace{5pt}
 
@@ -113,15 +114,15 @@
 
 \vspace{5pt}
 
-\textbf{Nome do Banco:} {!! $application->bdBankName !!}
+\textbf{Nome do Banco:} {!! str_replace("_", "\_", $application->bdBankName) !!}
 
 \vspace{5pt}
 
-\textbf{Número da Agência:} {!! $application->bdAgency !!}
+\textbf{Número da Agência:} {!! str_replace("_", "\_", $application->bdAgency) !!}
 
 \vspace{5pt}
 
-\textbf{Número da Conta:} {!! $application->bdAccount !!}
+\textbf{Número da Conta:} {!! str_replace("_", "\_", $application->bdAccount) !!}
 
 \vspace{5pt}
 
@@ -149,52 +150,52 @@
 
 \pagebreak
 
-\textbf{1. Título do projeto, mesmo sendo provisório:}\\
-{!! $application->projectTitle !!}
+\textbf{1. Título do projeto, mesmo sendo provisório:}
+\begin{spverbatim}{!! $application->projectTitle !!}\end{spverbatim}
 
 \vspace{15pt}
 
-\textbf{2. Aspectos gerais da área de concentração, com ênfase naqueles que motivaram o projeto:}\\
-{!! $application->generalAspects !!}
+\textbf{2. Aspectos gerais da área de concentração, com ênfase naqueles que motivaram o projeto:}
+\begin{spverbatim}{!! $application->generalAspects !!}\end{spverbatim}
 
 \vspace{15pt}
 
-\textbf{3. Objetivos gerais:}\\
-{!! $application->generalObjectives !!}
+\textbf{3. Objetivos gerais:}
+\begin{spverbatim}{!! $application->generalObjectives !!}\end{spverbatim}
 
 \vspace{15pt}
 
-\textbf{4. Que características (ou variáveis) foram ou serão observadas para atingir os objetivos? Como foram ou serão efetuadas as medidas dessas características (ou variáveis)? Quais as unidades de medida?}\\
-{!! $application->features !!}
+\textbf{4. Que características (ou variáveis) foram ou serão observadas para atingir os objetivos? Como foram ou serão efetuadas as medidas dessas características (ou variáveis)? Quais as unidades de medida?}
+\begin{spverbatim}{!! $application->features !!}\end{spverbatim}
 
 \vspace{15pt}
 
-\textbf{5. Que outras características (ou variáveis) poderiam influenciar essas medidas? Existe possibilidade destas serem controladas?}\\
-{!! $application->otherFeatures !!}
+\textbf{5. Que outras características (ou variáveis) poderiam influenciar essas medidas? Existe possibilidade destas serem controladas?}
+\begin{spverbatim}{!! $application->otherFeatures !!}\end{spverbatim}
 
 \vspace{15pt}
 
-\textbf{6. Como foi (ou será) conduzida a investigação para que os objetivos do item 3 sejam atingidos? Quais as restrições que foram ou serão naturalmente impostas à coleta de dados? Quantas unidades amostrais* foram ou serão analisadas? Indique as limitações de tempo e custo.}\\
-{!! $application->limitations !!}
+\textbf{6. Como foi (ou será) conduzida a investigação para que os objetivos do item 3 sejam atingidos? Quais as restrições que foram ou serão naturalmente impostas à coleta de dados? Quantas unidades amostrais* foram ou serão analisadas? Indique as limitações de tempo e custo.}
+\begin{spverbatim}{!! $application->limitations !!}\end{spverbatim}
 
 \vspace{15pt}
 
-\textbf{7. Como os dados estão ou serão armazenados? Existe a possibilidade de apresentá-los em mídia eletrônica (CD, DVD, etc)?}\\
-{!! $application->storage !!}
+\textbf{7. Como os dados estão ou serão armazenados? Existe a possibilidade de apresentá-los em mídia eletrônica (CD, DVD, etc)?}
+\begin{spverbatim}{!! $application->storage !!}\end{spverbatim}
 
 \vspace{15pt}
 
-\textbf{8. Supondo que os dados já tivessem sido analisados de forma apropriada, indique o tipo de conclusões que seriam satisfatórias, tendo em vista seu comentário no item 3. Simule resultados possíveis e comente-os.}\\
-{!! $application->conclusions !!}
+\textbf{8. Supondo que os dados já tivessem sido analisados de forma apropriada, indique o tipo de conclusões que seriam satisfatórias, tendo em vista seu comentário no item 3. Simule resultados possíveis e comente-os.}
+\begin{spverbatim}{!! $application->conclusions !!}\end{spverbatim}
 
 \vspace{15pt}
 
-\textbf{9. Que tipo de ajuda você espera do CEA?}\\
-{!! $application->expectedHelp !!}
+\textbf{9. Que tipo de ajuda você espera do CEA?}
+\begin{spverbatim}{!! $application->expectedHelp !!}\end{spverbatim}
 
 \vspace{15pt}
 
-\textbf{10. Caso seja pertinente, anexe a esta ficha de inscrição algum plano de pesquisa, relatório, resumo ou trabalho publicado que se relacione com este projeto.}\\
+\textbf{10. Caso seja pertinente, anexe a esta ficha de inscrição algum plano de pesquisa, relatório, resumo ou trabalho publicado que se relacione com este projeto.}
 
 \vspace{5pt}
 

@@ -58,9 +58,13 @@ class NotifyCEAAboutApplication extends Mailable
         $mail = $this->html($cssToInlineStyles->convert($body, $css))->subject($subject)
             ->attachFromStorage($this->application->depositReceipt->path, $this->application->depositReceipt->name);
 
-        $mail->attachData(
-            (new LaraTeX('applications.latex'))->with(['application' => $this->application,])->content(), 
-            'ficha-de-inscricao-'.$this->application->protocol.'.pdf');
+        try{
+            $mail->attachData(
+                (new LaraTeX('applications.latex'))->with(['application' => $this->application,])->content(), 
+                'ficha-de-inscricao-'.$this->application->protocol.'.pdf');
+        } catch (\Exception $e){
+            //
+        }
 
         foreach($this->application->attachments as $attachment){
             $mail->attachFromStorage($attachment->path, $attachment->name);

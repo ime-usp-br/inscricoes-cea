@@ -114,14 +114,16 @@ class ApplicationController extends Controller
             Mail::to(env("MAIL_CEA"))->send(new NotifyCEAAboutApplication($application, $mailtemplate));
         }
 
-        $mailtemplate = MailTemplate::where([
-            "mail_class"=>"NotifyCEAAboutRefundReceipt",
-            "sending_frequency"=>"A cada inscrição",
-            "active"=>true
-            ])->first();
-
-        if($mailtemplate){
-            Mail::to(env("MAIL_CEA"))->send(new NotifyCEAAboutRefundReceipt($application, $mailtemplate));
+        if($application->refundReceipt == "Sim"){
+            $mailtemplate = MailTemplate::where([
+                "mail_class"=>"NotifyCEAAboutRefundReceipt",
+                "sending_frequency"=>"A cada inscrição",
+                "active"=>true
+                ])->first();
+    
+            if($mailtemplate){
+                Mail::to(env("MAIL_CEA"))->send(new NotifyCEAAboutRefundReceipt($application, $mailtemplate));
+            }
         }
 
         Session::flash("alert-success", "Sua inscrição foi efetuada com sucesso! Seu número de protocolo é ".$protocol.".");
