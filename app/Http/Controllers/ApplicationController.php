@@ -59,7 +59,12 @@ class ApplicationController extends Controller
     {
         $validated = $request->validated();
 
-        $semester = Semester::getInEnrollmentPeriod();
+        $semester = Semester::getLatest();
+
+        if($validated["serviceType"] == "Projeto" and !$semester->IsEnrollmentPeriod()){
+            Session::flash("alert-warning", "Fora do período de inscrição para projetos.");    
+            return redirect("/");
+        }
 
         $validated["semesterID"] = $semester->id;
 
