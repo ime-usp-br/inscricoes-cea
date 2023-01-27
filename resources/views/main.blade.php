@@ -69,6 +69,15 @@
                         </div>
 
                         <div class="row custom-form-group d-flex align-items-center">
+                            <div class="col-12 col-md-auto text-md-right">
+                                <label for="emailConfirmation">Repitir e-mail:</label>
+                            </div>
+                            <div class="col-12 col-md">
+                                <input class="custom-form-control" type="text" name="emailConfirmation" id="emailConfirmation">
+                            </div>
+                        </div>
+
+                        <div class="row custom-form-group d-flex align-items-center">
                             <div class="col-12 col-md-auto text-md-left">
                                 <label for="institution">Instituição:</label>
                             </div>
@@ -439,7 +448,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
 <script src="{{ asset('js/jquery-captcha.min.js').'?version=1' }}"></script>
 <script>
-    $.validator.addMethod('filesize', function (value, element, param) {
+    jQuery.validator.addMethod("confirmacaoEmail", function(value, element) {
+        return value == document.getElementById("email").value;
+    }, "E-mails não conferem.");
+    jQuery.validator.addMethod("validateEmail", function(value, element) {
+        var filter = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return filter.test(value);
+    }, "E-mail invalido.");
+    jQuery.validator.addMethod('filesize', function (value, element, param) {
         var soma = 0;
         $("input[type=file]").each(function(index, elem){
             soma = soma + elem.files[0].size
@@ -526,6 +542,12 @@
     }, "Invalid number");
     $("#form-inscricao").validate({
         rules : {
+            email: {
+                validateEmail: true,
+            },
+            emailConfirmation: {
+                confirmacaoEmail: true
+            },
             bdCpfCnpj : {
                 required: true,
                 validateCPFCNPJ : true
