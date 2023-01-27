@@ -64,7 +64,7 @@ class TriageController extends Controller
             ])->first();
 
         if($mailtemplate){
-            Mail::to($application->email)->send(new NotifyAboutTriageSchedule($triage, $mailtemplate));
+            Mail::to($application->email)->cc(env("MAIL_CEA"))->queue(new NotifyAboutTriageSchedule($triage, $mailtemplate));
         }
 
         Session::flash("alert-success", "Triagem agendada com sucesso.");

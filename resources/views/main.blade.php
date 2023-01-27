@@ -371,7 +371,7 @@
 
                         <div class="custom-form-group mt-5">
                             <label class="text-justify">10. Caso seja pertinente, anexe a esta ficha de inscrição algum plano de pesquisa, relatório, 
-                                resumo ou trabalho publicado que se relacione com este projeto.</label>
+                                resumo ou trabalho publicado que se relacione com este projeto.(Max 8 MB total)</label>
 
                             <div class="col-lg pt-2">
                                 <div id="novos-anexos"></div>

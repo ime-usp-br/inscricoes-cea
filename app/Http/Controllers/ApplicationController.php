@@ -6,6 +6,7 @@ use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
 use App\Mail\NotifyCEAAboutApplication;
 use App\Mail\NotifyCEAAboutRefundReceipt;
+use App\Mail\NotifyInscribedAboutApplication;
 use Illuminate\Support\Facades\Mail;
 use Ismaelw\LaraTeX\LaraTeX;
 use App\Models\Application;
@@ -111,7 +112,17 @@ class ApplicationController extends Controller
             ])->first();
 
         if($mailtemplate){
-            Mail::to(env("MAIL_CEA"))->send(new NotifyCEAAboutApplication($application, $mailtemplate));
+            Mail::to(env("MAIL_CEA"))->queue(new NotifyCEAAboutApplication($application, $mailtemplate));
+        }
+
+        $mailtemplate = MailTemplate::where([
+            "mail_class"=>"NotifyInscribedAboutApplication",
+            "sending_frequency"=>"A cada inscrição",
+            "active"=>true
+            ])->first();
+
+        if($mailtemplate){
+            Mail::to($application->email)->queue(new NotifyInscribedAboutApplication($application, $mailtemplate));
         }
 
         if($application->refundReceipt == "Sim"){
@@ -122,7 +133,7 @@ class ApplicationController extends Controller
                 ])->first();
     
             if($mailtemplate){
-                Mail::to(env("MAIL_CEA"))->send(new NotifyCEAAboutRefundReceipt($application, $mailtemplate));
+                Mail::to(env("MAIL_CEA"))->queue(new NotifyCEAAboutRefundReceipt($application, $mailtemplate));
             }
         }
 

@@ -20,6 +20,7 @@
 
             @foreach ([
                         "E-mail enviado a secretaria do CEA a cada inscrição"=>"NotifyCEAAboutApplication",
+                        "E-mail enviado ao inscrito a cada inscrição"=>"NotifyInscribedAboutApplication",
                         "E-mail enviado a secretaria do CEA quando solicitado recibo de reembolso"=>"NotifyCEAAboutRefundReceipt",
                         "E-mail enviado ao inscrito quando a triagem é agendada"=>"NotifyAboutTriageSchedule",
                      ] as $key=>$value)
