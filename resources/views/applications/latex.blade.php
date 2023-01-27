@@ -78,6 +78,10 @@
 
   \vspace{5pt}
 
+  \textbf{Curso:} {!! str_replace("_", "\_", $application->course) !!}
+
+  \vspace{5pt}
+
   \textbf{Vínculo com a Instituição:} {!! str_replace("_", "\_", $application->institutionRelationship) !!}
 
   \vspace{5pt}

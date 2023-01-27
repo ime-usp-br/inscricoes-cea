@@ -22,6 +22,7 @@ class Application extends Model
         'CPFCNPJ',
         'email',
         'institution',
+        'course',
         'institutionRelationship',
         'mentor',
         'projectPurpose',

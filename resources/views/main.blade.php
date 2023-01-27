@@ -78,6 +78,15 @@
                         </div>
 
                         <div class="row custom-form-group d-flex align-items-center">
+                            <div class="col-12 col-md-auto text-md-left">
+                                <label for="course">Curso:</label>
+                            </div>
+                            <div class="col-12 col-md">
+                                <input class="custom-form-control" type="text" name="course" id="course" value={{ old("course") ?? '' }}>
+                            </div>
+                        </div>
+
+                        <div class="row custom-form-group d-flex align-items-center">
                             <div class="col-12 col-md-auto text-md-right">
                                 <label for="institutionRelationship">Vínculo com a Instituição:</label>
                             </div>
@@ -215,7 +224,7 @@
 
                         <div class="col my-5 text-justify">
                             <h5>
-                                Dados bancarios para devolução da taxa em caso de não poder ser feita a consulta ou o projeto.
+                                Dados bancarios para devolução da taxa em caso de não poder ser feita a consulta.
                             </h5>
                         </div>
 

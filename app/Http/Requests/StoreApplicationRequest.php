@@ -30,6 +30,7 @@ class StoreApplicationRequest extends FormRequest
             'CPFCNPJ' => 'required',
             'email' => 'required',
             'institution' => 'required',
+            'course' => 'sometimes',
             'institutionRelationship' => 'required',
             'projectPurpose' => 'required|array',
             'ppOther' => 'sometimes',

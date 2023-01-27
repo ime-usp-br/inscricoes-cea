@@ -74,6 +74,15 @@
             </div>
 
             <div class="row custom-form-group d-flex align-items-center">
+                <div class="col-12 col-md-auto text-md-left">
+                    <label for="course">Curso:</label>
+                </div>
+                <div class="col-12 col-md">
+                    {{ $application->course }}
+                </div>
+            </div>
+
+            <div class="row custom-form-group d-flex align-items-center">
                 <div class="col-12 col-md-auto text-md-right">
                     <label for="institutionRelationship">Vínculo com a Instituição:</label>
                 </div>
