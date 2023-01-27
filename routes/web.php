@@ -9,6 +9,8 @@ use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\DepositReceiptController;
 use App\Http\Controllers\MailTemplateController;
 use App\Http\Controllers\TriageController;
+use App\Http\Controllers\FillPDFController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +31,8 @@ Route::resource('users', UserController::class);
 Route::resource("semesters", SemesterController::class);
 
 Route::get("applications/{protocol}/aspdf",[ApplicationController::class, "downloadAsPDF"])->name("applications.downloadAsPDF");
+Route::get("applications/{protocol}/fillpdf",[FillPDFController::class, "process"])->name("applications.fillpdf");
+
 Route::resource("applications", ApplicationController::class);
 
 Route::get("/attachment/download/{attachment}",[AttachmentController::class, "download"])->name("attachments.download");

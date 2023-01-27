@@ -69,6 +69,17 @@
                                 >
                                     Download
                                 </a>
+
+                                <a class="btn btn-outline-dark btn-sm"
+                                    data-toggle="tooltip" data-placement="top"
+                                    title="Visualizar"
+                                    href="{{ route('applications.fillpdf', $ficha->protocol) }}"
+                                    target="_blank"
+                                >
+                                    Download FPDF
+                                </a>
+
+
                             </td>
                         </tr>
                     @endforeach
