@@ -54,7 +54,7 @@
 
   \vspace{5pt}
 
-  \textbf{Data da inscrição:} {!! \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $application->created_at)->format("d/m/Y H:m") !!}
+  \textbf{Data da inscrição:} {!! \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $application->created_at)->format("d/m/Y H:i") !!}
 
   \vspace{5pt}
 
