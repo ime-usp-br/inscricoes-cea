@@ -59,6 +59,11 @@
                   <a href="{{ route('applications.index') }}">Inscrições</a>
               </li>
           @endcan
+          @can("visualizar triagens")
+              <li>
+                  <a href="{{ route('triages.index') }}">Triagens</a>
+              </li>
+          @endcan
           @can("Editar E-mails")
               <li>
                   <a href="{{ route('mailtemplates.index') }}">E-mails</a>

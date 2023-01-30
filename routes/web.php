@@ -40,4 +40,6 @@ Route::get('/mailtemplates/activate/{mailtemplate}', [MailTemplateController::cl
 Route::get('/mailtemplates/deactivate/{mailtemplate}', [MailTemplateController::class, 'deactivate'])->name('mailtemplates.deactivate');
 Route::resource('mailtemplates', MailTemplateController::class);
 
+Route::patch('/triages/{triage}/informdecision', [TriageController::class, "informDecision"])->name("triages.informdecision");
+Route::patch('/triages/{triage}/reschedule', [TriageController::class, "reschedule"])->name("triages.reschedule");
 Route::resource('triages', TriageController::class);
