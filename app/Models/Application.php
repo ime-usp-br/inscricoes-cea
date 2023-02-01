@@ -39,6 +39,7 @@ class Application extends Model
         'bdAgency',
         'bdAccount',
         'bdType',
+        'dataCollect',
         'projectTitle',
         'generalAspects',
         'generalObjectives',

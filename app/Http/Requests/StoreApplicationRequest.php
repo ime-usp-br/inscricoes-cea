@@ -48,6 +48,7 @@ class StoreApplicationRequest extends FormRequest
             'bdAccount' => 'required',
             'bdType' => 'required',
             'authorization' => 'required',
+            'dataCollect' => 'required',
             'projectTitle' => 'required',
             'generalAspects' => 'required',
             'generalObjectives' => 'required',

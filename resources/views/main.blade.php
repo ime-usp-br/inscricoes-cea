@@ -334,6 +334,21 @@
                         área de concentração devem ser explicados</h5>
                     </div>
 
+                    <div class="row custom-form-group d-flex align-items-center mb-5">
+                        <div class="col-12 col-md-auto text-md-right">
+                            <label>Os dados já foram coletados:</label>
+                        </div>
+                        <div class="col-12 col-md">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="dataCollect" value="Sim" onClick="rdChange(this)" required {{ old("dataCollect")=="Sim" ? "checked" : "" }}>
+                                <label class="font-weight-normal">Sim</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="dataCollect" value="Não" onClick="rdChange(this)" required {{ old("dataCollect")=="Não" ? "checked" : "" }}>
+                                <label class="font-weight-normal">Não</label>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="custom-form-group">
                         <label for="projectTitle">1. Título do projeto, mesmo sendo provisório:</label>
@@ -636,8 +651,18 @@
                 var isEnrollmentPeriod = document.getElementById("isEnrollmentPeriod");
                 if(!isEnrollmentPeriod.value){
                     ckType.checked = false;
-                    $("#div-info").addClass("alert alert-warning");
-                    $("#div-info").html("Fora do período de inscrição para projetos.")
+                    alert("Fora do período de inscrição para projetos.");
+                }
+                if($("input[name=dataCollect]:checked").val() == "Não"){
+                    ckType.checked = false;
+                    alert("Para solicitar um projeto é necessario já ter coletados os dados!");
+                }
+            }
+        }else if(ckType.name == "dataCollect"){
+            if(ckType.value == "Não"){
+                if($("input[name=serviceType]:checked").val() == "Projeto"){
+                    ckType.checked = false;
+                    alert("Para solicitar um projeto é necessario já ter coletados os dados!");
                 }
             }
         }

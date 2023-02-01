@@ -29,6 +29,15 @@
             </div>
 
             <div class="row custom-form-group d-flex align-items-center">
+                <div class="col-12 col-md-auto text-md-left">
+                    <label for="institution">Coletou os dados:</label>
+                </div>
+                <div class="col-12 col-md">
+                    {{ $application->dataCollect }}
+                </div>
+            </div>
+
+            <div class="row custom-form-group d-flex align-items-center">
                 <div class="col-12 col-md-auto text-md-right">
                     <label for="projectResponsible">Responsável(is) pelo projeto:</label>
                 </div>
