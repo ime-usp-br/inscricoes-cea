@@ -21,7 +21,7 @@
                                 <option value="" selected></option>
 
                             @foreach ([
-                                        "Aprovado como consultoria",
+                                        "Aprovado como Consulta",
                                         "Aprovado como projeto",
                                         "Não aprovado",
                                     ] as $decision)

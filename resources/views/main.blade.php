@@ -24,8 +24,8 @@
                         </div>
                         <div class="col-12 col-md">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="serviceType" value="Consultoria" onClick="rdChange(this)" required {{ old("serviceType")=="Consultoria" ? "checked" : "" }}>
-                                <label class="font-weight-normal">Consultoria</label>
+                                <input class="form-check-input" type="radio" name="serviceType" value="Consulta" onClick="rdChange(this)" required {{ old("serviceType")=="Consulta" ? "checked" : "" }}>
+                                <label class="font-weight-normal">Consulta</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="serviceType" value="Projeto" onClick="rdChange(this)" required {{ old("serviceType")=="Projeto" ? "checked" : "" }}>
@@ -72,7 +72,7 @@
 
                     <div class="row custom-form-group d-flex align-items-center">
                         <div class="col-12 col-md-auto text-md-right">
-                            <label for="emailConfirmation">Repitir e-mail:</label>
+                            <label for="emailConfirmation">Repetir e-mail:</label>
                         </div>
                         <div class="col-12 col-md">
                             <input class="custom-form-control" type="text" name="emailConfirmation" id="emailConfirmation">
