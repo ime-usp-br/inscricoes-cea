@@ -28,6 +28,7 @@
                 <table class="table table-bordered table-striped table-hover" style="font-size:15px;">
                     <tr>
                         <th>Protocolo</th>
+                        <th>Responsável(is) pelo projeto</th>
                         <th>Modalidade</th>
                         <th>Data</th>
                         <th>Local ou Link</th>
@@ -39,6 +40,7 @@
                     @foreach($triagens as $triagem)
                         <tr class="text-center">
                             <td>{{ $triagem->application->protocol }}</td>
+                            <td>{{ $triagem->application->projectResponsible }}</td>
                             <td>{{ $triagem->application->serviceType }}</td>
                             <td>{{ $triagem->date ." ". $triagem->hour }}</td>
                             <td>{{ $triagem->link ?? $triagem->local }}</td>
