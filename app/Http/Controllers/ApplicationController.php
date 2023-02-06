@@ -215,4 +215,21 @@ class ApplicationController extends Controller
         ])->download($protocol.'.pdf');
 
     }
+
+    public function downloadFirstPageAsPDF($protocol)
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+        
+        $application = Application::where("protocol", $protocol)->first();
+
+
+        return (new LaraTeX('applications.latexfirstpage'))->with([
+            'application' => $application,
+        ])->download($protocol.'.pdf');
+
+    }
 }

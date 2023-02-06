@@ -91,11 +91,11 @@
 
 \textbf{Área de conhecimento:} {!! str_replace(",", ", ", $application->knowledgeArea) !!} {!! $application->kaOther ? " - ".str_replace("_", "\_", $application->kaOther) : "" !!}
 
-\vspace{30pt}
+\vspace{20pt}
 
 \hrule
 
-\vspace{30pt}
+\vspace{20pt}
 
 \centerline{\textbf{Dados Bancários}}
 
@@ -127,84 +127,14 @@
 
 \textbf{Comprovante de pagamento da taxa:} \href{{!! $application->depositReceipt->link !!}}{{!! str_replace("_", "\_", $application->depositReceipt->name) !!}}
 
-\vspace{30pt}
-
-\hrule
-
-\vspace{30pt}
-
-\centerline{\textbf{A SER PREENCHIDO PELO CEA}}
-
-\vspace{10pt}
-
-\textbf{Data da 1ª reunião:}
-
 \vspace{5pt}
 
-\textbf{Decisão:}
+@if($application->refundReceipt == "Sim")
 
-\pagebreak
+    \textbf{Dados que devem constar no recibo:}\\
+    @foreach(explode("\n", $application->refundReceiptData) as $line)
+        {!! $line !!}\\
+    @endforeach
 
-\textbf{1. Título do projeto, mesmo sendo provisório:}
-\begin{spverbatim}{!! $application->projectTitle !!}\end{spverbatim}
-
-\vspace{15pt}
-
-\textbf{2. Aspectos gerais da área de concentração, com ênfase naqueles que motivaram o projeto:}
-\begin{spverbatim}{!! $application->generalAspects !!}\end{spverbatim}
-
-\vspace{15pt}
-
-\textbf{3. Objetivos gerais:}
-\begin{spverbatim}{!! $application->generalObjectives !!}\end{spverbatim}
-
-\vspace{15pt}
-
-\textbf{4. Que características (ou variáveis) foram ou serão observadas para atingir os objetivos? Como foram ou serão efetuadas as medidas dessas características (ou variáveis)? Quais as unidades de medida?}
-\begin{spverbatim}{!! $application->features !!}\end{spverbatim}
-
-\vspace{15pt}
-
-\textbf{5. Que outras características (ou variáveis) poderiam influenciar essas medidas? Existe possibilidade destas serem controladas?}
-\begin{spverbatim}{!! $application->otherFeatures !!}\end{spverbatim}
-
-\vspace{15pt}
-
-\textbf{6. Como foi (ou será) conduzida a investigação para que os objetivos do item 3 sejam atingidos? Quais as restrições que foram ou serão naturalmente impostas à coleta de dados? Quantas unidades amostrais* foram ou serão analisadas? Indique as limitações de tempo e custo.}
-\begin{spverbatim}{!! $application->limitations !!}\end{spverbatim}
-
-\vspace{15pt}
-
-\textbf{7. Como os dados estão ou serão armazenados? Existe a possibilidade de apresentá-los em mídia eletrônica (CD, DVD, etc)?}
-\begin{spverbatim}{!! $application->storage !!}\end{spverbatim}
-
-\vspace{15pt}
-
-\textbf{8. Supondo que os dados já tivessem sido analisados de forma apropriada, indique o tipo de conclusões que seriam satisfatórias, tendo em vista seu comentário no item 3. Simule resultados possíveis e comente-os.}
-\begin{spverbatim}{!! $application->conclusions !!}\end{spverbatim}
-
-\vspace{15pt}
-
-\textbf{9. Que tipo de ajuda você espera do CEA?}
-\begin{spverbatim}{!! $application->expectedHelp !!}\end{spverbatim}
-
-\vspace{15pt}
-
-\textbf{10. Caso seja pertinente, anexe a esta ficha de inscrição algum plano de pesquisa, relatório, resumo ou trabalho publicado que se relacione com este projeto.}
-
-\vspace{5pt}
-
-@if(!$application->attachments->isEmpty())
-  @foreach($application->attachments as $attachment)
-    \href{{!! $attachment->link !!}}{{!! str_replace("_", "\_", $attachment->name) !!}}
-
-    \vspace{5pt}
-  @endforeach
-@else
-  Não foram feitos anexos.
 @endif
-
-
-
-
 \end{document}

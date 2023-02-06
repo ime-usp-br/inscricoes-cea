@@ -55,19 +55,30 @@
                                 @endif
                             </td>
                             <td style="white-space:nowrap">
+                                <div class="row justify-content-center pb-1">
+                                    <div class="col-12">
+                                        <a class="btn btn-outline-dark btn-sm"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Visualizar"
+                                            href="{{ route('applications.show', $ficha) }}"
+                                        >
+                                            Visualizar
+                                        </a>
+                                        <a class="btn btn-outline-dark btn-sm"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Visualizar"
+                                            href="{{ route('applications.downloadAsPDF', $ficha->protocol) }}"
+                                        >
+                                            PDF Completo
+                                        </a>
+                                    </div>
+                                </div>
                                 <a class="btn btn-outline-dark btn-sm"
                                     data-toggle="tooltip" data-placement="top"
                                     title="Visualizar"
-                                    href="{{ route('applications.show', $ficha) }}"
+                                    href="{{ route('applications.downloadFirstPageAsPDF', $ficha->protocol) }}"
                                 >
-                                    Visualizar
-                                </a>
-                                <a class="btn btn-outline-dark btn-sm"
-                                    data-toggle="tooltip" data-placement="top"
-                                    title="Visualizar"
-                                    href="{{ route('applications.downloadAsPDF', $ficha->protocol) }}"
-                                >
-                                    Download
+                                    PDF Primeira Pagina
                                 </a>
                             </td>
                         </tr>
