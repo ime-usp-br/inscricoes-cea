@@ -65,10 +65,18 @@ class TriageController extends Controller
         }
 
         $validated = $request->validated();
-        
-        $triage = Triage::create($validated);
 
         $application = Application::find($validated["applicationID"]);
+        
+        if($application->serviceType == "Consulta"){
+
+            Session::flash("alert-warning", "Consultas não passam pela triagem.");
+    
+            return back();
+        }
+
+        $triage = Triage::create($validated);
+
         $application->status = "Aguardando resultado da triagem";
         $application->save();
 

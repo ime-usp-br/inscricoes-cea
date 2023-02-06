@@ -110,6 +110,14 @@ class ApplicationController extends Controller
             $attachment->save();
         }
 
+        if($application->serviceType == "Projeto"){
+            $application->status = "Aguardando agendamento da triagem";
+        }elseif($application->serviceType == "Consulta"){
+            $application->status = "Aguardando agendamento da reunião de consulta";
+        }
+
+        $application->save();
+
         $mailtemplate = MailTemplate::where([
             "mail_class"=>"NotifyCEAAboutApplication",
             "sending_frequency"=>"A cada inscrição",
@@ -230,6 +238,32 @@ class ApplicationController extends Controller
         return (new LaraTeX('applications.latexfirstpage'))->with([
             'application' => $application,
         ])->download($protocol.'.pdf');
+
+    }
+
+    public function changeServiceType(Application $application)
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+
+        if($application->serviceType == "Projeto"){
+            $application->serviceType = "Consulta";
+            if($application->status == "Aguardando agendamento da triagem"){
+                $application->status = "Aguardando agendamento da reunião de consulta";
+            }
+        }elseif($application->serviceType == "Consulta"){
+            $application->serviceType = "Projeto";
+            if($application->status == "Aguardando agendamento da reunião de consulta"){
+                $application->status = "Aguardando agendamento da triagem";
+            }
+        }
+
+        $application->save();
+
+        return back();
 
     }
 }

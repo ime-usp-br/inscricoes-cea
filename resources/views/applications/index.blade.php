@@ -37,7 +37,15 @@
                     @foreach($fichas as $ficha)
                         <tr class="text-center">
                             <td>{{ $ficha->protocol }}</td>
-                            <td>{{ $ficha->serviceType }}</td>
+                            <td style="white-space:nowrap">                            
+                                <form method="POST" enctype="multipart/form-data" action="{{ route('applications.changeServiceType',$ficha) }}">
+                                    @csrf
+                                    @method("PATCH")
+
+                                    {{ $ficha->serviceType }}
+                                    <button class="btn btn-outline-dark btn-sm" title="Mudar Modalidade" type="submit">Mudar</button>                                    
+                                </form>    
+                            </td>
                             <td>{{ $ficha->projectResponsible }}</td>
                             <td>{{ $ficha->email }}</td>
                             <td>

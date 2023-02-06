@@ -30,6 +30,7 @@ Route::resource("semesters", SemesterController::class);
 
 Route::get("applications/{protocol}/aspdf",[ApplicationController::class, "downloadAsPDF"])->name("applications.downloadAsPDF");
 Route::get("applications/{protocol}/firstpageaspdf",[ApplicationController::class, "downloadFirstPageAsPDF"])->name("applications.downloadFirstPageAsPDF");
+Route::patch("applications/{application}/changeservicetype",[ApplicationController::class, "changeServiceType"])->name("applications.changeServiceType");
 Route::resource("applications", ApplicationController::class);
 
 Route::get("/attachment/download/{attachment}",[AttachmentController::class, "download"])->name("attachments.download");
