@@ -434,7 +434,7 @@
                     </div>
 
                     <div class="row custom-form-group justify-content-center mt-5">
-                        <button type="submit" class="btn btn-outline-dark">
+                        <button id="btn-submit" type="submit" class="btn btn-outline-dark">
                             Enviar Inscrição
                         </button>
                     </div>
@@ -589,6 +589,10 @@
             element.removeAttribute("data-placement");
             element.removeAttribute("title");     
             element.removeAttribute("data-original-title");       
+        },
+        submitHandler: function (form) {
+            $("#btn-submit").attr('disabled', true);
+            form.submit();
         }
     });
 
