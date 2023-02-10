@@ -139,7 +139,19 @@ class TriageController extends Controller
      */
     public function destroy(Triage $triage)
     {
-        //
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+
+        $triage->application->status = "Aguardando agendamento da triagem";
+        $triage->application->save();
+        $triage->delete();
+
+        Session::flash("alert-success", "Triagem cancelada com sucesso.");
+
+        return back();
     }
 
     public function reschedule(RescheduleTriageRequest $request, Triage $triage)

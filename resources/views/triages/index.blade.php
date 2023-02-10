@@ -63,6 +63,15 @@
                                 >
                                 <i class="fas fa-plus"></i> Resultado
                                 </a>
+                                <form action="{{ route('triages.destroy', $triagem) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method("delete")
+                                    
+                                    <button class="btn btn-outline-dark btn-sm" type="submit"
+                                            onclick="return confirm('Você tem certeza que deseja cancelar essa triagem?')">
+                                        <i class="fas fa-trash-alt"></i> Cancelar
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
