@@ -37,11 +37,10 @@
   \spaceskip=\fontdimen3\font
   \parbox[b]{15cm}{\textcolor{ultramarine}{\footnotesize{\textbf{CENTRO DE ESTATÍSTICA APLICADA}\\Rua do Matão, 1010 $|$ Cidade Universitária $|$ São Paulo-SP $|$ CEP 05508-090\\Tel: (11) 3091.6133 $|$ cea@ime.usp.br $|$ www.ime.usp.br/cea}}}
 }
-
 \begin{document}
 \pagestyle{fancy}
 
-  \textbf{Protocolo:} {!! str_replace("_", "\_", $application->protocol) !!}
+  \textbf{Protocolo:} {!! $application->protocol !!}
 
   \vspace{5pt}
 
@@ -49,11 +48,11 @@
 
   \vspace{5pt}
 
-  \textbf{Responsável(is) pelo projeto:} {!! str_replace("_", "\_", $application->projectResponsible) !!}
+  \textbf{Responsável(is) pelo projeto:} {!! clear_string($application->projectResponsible) !!}
 
   \vspace{5pt}
 
-  \textbf{Telefones para contato:} {!! str_replace("_", "\_", $application->contactPhone) !!}
+  \textbf{Telefones para contato:} {!! clear_string($application->contactPhone) !!}
 
   \vspace{5pt}
 
@@ -61,23 +60,23 @@
 
   \vspace{5pt}
 
-  \textbf{E-mail:} {!! str_replace("_", "\_", $application->email) !!}
+  \textbf{E-mail:} {!! clear_string($application->email) !!}
 
   \vspace{5pt}
 
-  \textbf{Instituição:} {!! str_replace("_", "\_", $application->institution) !!}
+  \textbf{Instituição:} {!! clear_string($application->institution) !!}
 
   \vspace{5pt}
 
-  \textbf{Curso:} {!! str_replace("_", "\_", $application->course) !!}
+  \textbf{Curso:} {!! clear_string($application->course) !!}
 
   \vspace{5pt}
 
-  \textbf{Vínculo com a Instituição:} {!! str_replace("_", "\_", $application->institutionRelationship) !!}
+  \textbf{Vínculo com a Instituição:} {!! clear_string($application->institutionRelationship) !!}
 
   \vspace{5pt}
 
-  \textbf{Colaborador(es) ou orientador:} {!! str_replace("_", "\_", $application->mentor) !!}
+  \textbf{Colaborador(es) ou orientador:} {!! clear_string($application->mentor) !!}
 
   \vspace{5pt}
 
@@ -101,7 +100,7 @@
 
 \vspace{10pt}
 
-\textbf{Nome completo:} {!! str_replace("_", "\_", $application->bdName) !!}
+\textbf{Nome completo:} {!! clear_string($application->bdName) !!}
 
 \vspace{5pt}
 
@@ -109,15 +108,15 @@
 
 \vspace{5pt}
 
-\textbf{Nome do Banco:} {!! str_replace("_", "\_", $application->bdBankName) !!}
+\textbf{Nome do Banco:} {!! clear_string($application->bdBankName) !!}
 
 \vspace{5pt}
 
-\textbf{Número da Agência:} {!! str_replace("_", "\_", $application->bdAgency) !!}
+\textbf{Número da Agência:} {!! clear_string($application->bdAgency) !!}
 
 \vspace{5pt}
 
-\textbf{Número da Conta:} {!! str_replace("_", "\_", $application->bdAccount) !!}
+\textbf{Número da Conta:} {!! clear_string($application->bdAccount) !!}
 
 \vspace{5pt}
 
@@ -145,48 +144,48 @@
 
 \pagebreak
 
-\textbf{1. Título do projeto, mesmo sendo provisório:}
-\begin{spverbatim}{!! $application->projectTitle !!}\end{spverbatim}
+\textbf{1. Título do projeto, mesmo sendo provisório:}\\
+{!! clear_string($application->projectTitle) !!}
 
 \vspace{15pt}
 
-\textbf{2. Aspectos gerais da área de concentração, com ênfase naqueles que motivaram o projeto:}
-\begin{spverbatim}{!! $application->generalAspects !!}\end{spverbatim}
+\textbf{2. Aspectos gerais da área de concentração, com ênfase naqueles que motivaram o projeto:}\\
+{!! clear_string($application->generalAspects) !!}
 
 \vspace{15pt}
 
-\textbf{3. Objetivos gerais:}
-\begin{spverbatim}{!! $application->generalObjectives !!}\end{spverbatim}
+\textbf{3. Objetivos gerais:}\\
+{!! clear_string($application->generalObjectives) !!}
 
 \vspace{15pt}
 
-\textbf{4. Que características (ou variáveis) foram ou serão observadas para atingir os objetivos? Como foram ou serão efetuadas as medidas dessas características (ou variáveis)? Quais as unidades de medida?}
-\begin{spverbatim}{!! $application->features !!}\end{spverbatim}
+\textbf{4. Que características (ou variáveis) foram ou serão observadas para atingir os objetivos? Como foram ou serão efetuadas as medidas dessas características (ou variáveis)? Quais as unidades de medida?}\\
+{!! clear_string($application->features) !!}
 
 \vspace{15pt}
 
-\textbf{5. Que outras características (ou variáveis) poderiam influenciar essas medidas? Existe possibilidade destas serem controladas?}
-\begin{spverbatim}{!! $application->otherFeatures !!}\end{spverbatim}
+\textbf{5. Que outras características (ou variáveis) poderiam influenciar essas medidas? Existe possibilidade destas serem controladas?}\\
+{!! clear_string($application->otherFeatures) !!}
 
 \vspace{15pt}
 
-\textbf{6. Como foi (ou será) conduzida a investigação para que os objetivos do item 3 sejam atingidos? Quais as restrições que foram ou serão naturalmente impostas à coleta de dados? Quantas unidades amostrais* foram ou serão analisadas? Indique as limitações de tempo e custo.}
-\begin{spverbatim}{!! $application->limitations !!}\end{spverbatim}
+\textbf{6. Como foi (ou será) conduzida a investigação para que os objetivos do item 3 sejam atingidos? Quais as restrições que foram ou serão naturalmente impostas à coleta de dados? Quantas unidades amostrais* foram ou serão analisadas? Indique as limitações de tempo e custo.}\\
+{!! clear_string($application->limitations) !!}
 
 \vspace{15pt}
 
-\textbf{7. Como os dados estão ou serão armazenados? Existe a possibilidade de apresentá-los em mídia eletrônica (CD, DVD, etc)?}
-\begin{spverbatim}{!! $application->storage !!}\end{spverbatim}
+\textbf{7. Como os dados estão ou serão armazenados? Existe a possibilidade de apresentá-los em mídia eletrônica (CD, DVD, etc)?}\\
+{!! clear_string($application->storage) !!}
 
 \vspace{15pt}
 
-\textbf{8. Supondo que os dados já tivessem sido analisados de forma apropriada, indique o tipo de conclusões que seriam satisfatórias, tendo em vista seu comentário no item 3. Simule resultados possíveis e comente-os.}
-\begin{spverbatim}{!! $application->conclusions !!}\end{spverbatim}
+\textbf{8. Supondo que os dados já tivessem sido analisados de forma apropriada, indique o tipo de conclusões que seriam satisfatórias, tendo em vista seu comentário no item 3. Simule resultados possíveis e comente-os.}\\
+{!! clear_string($application->conclusions) !!}
 
 \vspace{15pt}
 
-\textbf{9. Que tipo de ajuda você espera do CEA?}
-\begin{spverbatim}{!! $application->expectedHelp !!}\end{spverbatim}
+\textbf{9. Que tipo de ajuda você espera do CEA?}\\
+{!! clear_string($application->expectedHelp) !!}
 
 \vspace{15pt}
 
