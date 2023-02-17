@@ -27,7 +27,7 @@ class UpdateUserRequest extends FormRequest
         $rules = [
             'name' => 'required',
             'email' => ['required', 'unique:App\Models\User,email,' . $id],
-            'roles' => 'required|array|min:1',
+            'roles' => 'sometimes|array',
         ];
 
         return $rules;

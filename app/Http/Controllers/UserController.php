@@ -94,7 +94,11 @@ class UserController extends Controller
         $validated = $request->validated();
         $usuario = User::find($id);
         $usuario->roles()->detach();
-        $usuario->assignRole($validated['roles']);
+
+        if(isset($validated['roles'])){
+            $usuario->assignRole($validated['roles']);
+        }
+        
         $usuario->update($validated);
         return redirect('/users');
     }

@@ -27,7 +27,7 @@ class TriageController extends Controller
     {
         if(!Auth::check()){
             return redirect("/login");
-        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria", "Docente"])){
             abort(403);
         }
 
@@ -190,7 +190,7 @@ class TriageController extends Controller
     {
         if(!Auth::check()){
             return redirect("/login");
-        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria", "Docente"])){
             abort(403);
         }
 

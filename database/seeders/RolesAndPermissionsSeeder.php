@@ -26,6 +26,11 @@ class RolesAndPermissionsSeeder extends Seeder
         ->givePermissionTo('visualizar inscrições')
         ->givePermissionTo('visualizar triagens');
 
+        Role::firstOrCreate(['name' => 'Docente'])
+        ->givePermissionTo('visualizar semestres')
+        ->givePermissionTo('visualizar inscrições')
+        ->givePermissionTo('visualizar triagens');
+
 
         Role::firstOrCreate(['name' => 'Administrador'])
             ->givePermissionTo(Permission::all());
