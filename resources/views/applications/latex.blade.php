@@ -80,15 +80,15 @@
 
   \vspace{5pt}
 
-  \textbf{Finalidade do projeto:} {!! str_replace(",", ", ", $application->projectPurpose) !!} {!! $application->ppOther ? " - ".str_replace("_", "\_", $application->ppOther) : "" !!}
+  \textbf{Finalidade do projeto:} {!! str_replace(",", ", ", $application->projectPurpose) !!} {!! $application->ppOther ? " - ".clear_string($application->ppOther) : "" !!}
 
   \vspace{5pt}
 
-\textbf{Agência financiadora do projeto:} {!! str_replace(",", ", ", $application->fundingAgency) !!} {!! $application->faOther ? " - ".str_replace("_", "\_", $application->faOther) : "" !!}
+\textbf{Agência financiadora do projeto:} {!! str_replace(",", ", ", $application->fundingAgency) !!} {!! $application->faOther ? " - ".clear_string($application->faOther) : "" !!}
 
 \vspace{5pt}
 
-\textbf{Área de conhecimento:} {!! str_replace(",", ", ", $application->knowledgeArea) !!} {!! $application->kaOther ? " - ".str_replace("_", "\_", $application->kaOther) : "" !!}
+\textbf{Área de conhecimento:} {!! str_replace(",", ", ", $application->knowledgeArea) !!} {!! $application->kaOther ? " - ".clear_string($application->kaOther) : "" !!}
 
 \vspace{30pt}
 
@@ -124,7 +124,7 @@
 
 \vspace{5pt}
 
-\textbf{Comprovante de pagamento da taxa:} \href{{!! $application->depositReceipt->link !!}}{{!! str_replace("_", "\_", $application->depositReceipt->name) !!}}
+\textbf{Comprovante de pagamento da taxa:} \href{{!! $application->depositReceipt->link !!}}{{!! clear_string($application->depositReceipt->name) !!}}
 
 \vspace{30pt}
 
@@ -195,7 +195,7 @@
 
 @if(!$application->attachments->isEmpty())
   @foreach($application->attachments as $attachment)
-    \href{{!! $attachment->link !!}}{{!! str_replace("_", "\_", $attachment->name) !!}}
+    \href{{!! $attachment->link !!}}{{!! clear_string($attachment->name) !!}}
 
     \vspace{5pt}
   @endforeach
