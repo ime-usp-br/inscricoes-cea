@@ -25,6 +25,7 @@
                         "E-mail enviado ao inscrito quando a triagem é agendada"=>"NotifyAboutTriageSchedule",
                         "E-mail enviado ao inscrito quando sobre o resultado da triagem"=>"NotifyAboutTriageDecision",
                         "E-mail enviado ao inscrito quando a reunião de consulta é agendada"=>"NotifyAboutConsultationMeetingSchedule",
+                        "E-mail enviado ao inscrito quando sobre o resultado da reunião de consulta"=>"NotifyAboutConsultationMeetingDecision",
                      ] as $key=>$value)
                 <option value='{"description":"{{$key}}","mail_class":"{{$value}}"}' {{ ( $mailtemplate->mail_class === $value) ? 'selected' : ''}}>{{ $key }}</option>
             @endforeach
@@ -51,6 +52,8 @@
                             "A cada reagendamento de triagem",
                             "A cada resultado de triagem",
                             "A cada agendamento de reunião de consulta",
+                            "A cada reagendamento da reunião de consulta",
+                            "A cada resultado de reunião de consulta",
                         ] as $frequency)
                     <option value='{{$frequency}}' {{ ( $mailtemplate->sending_frequency === $frequency) ? 'selected' : ''}}>{{ $frequency }}</option>
                 @endforeach
@@ -114,7 +117,7 @@
     </div>
     <div class="col-sm-6 text-center text-sm-left my-1">
         <a class="btn btn-outline-dark"
-            href="{{ route('semesters.index') }}"
+            href="{{ route('mailtemplates.index') }}"
         >
             Cancelar
         </a>

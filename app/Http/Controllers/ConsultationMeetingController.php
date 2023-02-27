@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreConsultationMeetingRequest;
 use App\Http\Requests\UpdateConsultationMeetingRequest;
+use App\Http\Requests\RescheduleConsultationMeetingRequest;
+use App\Http\Requests\InformDecisionConsultationMeetingRequest;
 use App\Models\ConsultationMeeting;
 use App\Models\Semester;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NotifyAboutConsultationMeetingSchedule;
+use App\Mail\NotifyAboutConsultationMeetingDecision;
 use App\Models\Application;
 use App\Models\MailTemplate;
 use Session;
@@ -146,6 +149,68 @@ class ConsultationMeetingController extends Controller
         $consultationmeeting->delete();
 
         Session::flash("alert-success", "Reunião de consulta cancelada com sucesso.");
+
+        return back();
+    }
+
+    public function reschedule(RescheduleConsultationMeetingRequest $request, ConsultationMeeting $consultationmeeting)
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+
+        $validated = $request->validated();
+
+        $consultationmeeting->link = null;
+        $consultationmeeting->local = null;
+
+        $consultationmeeting->update($validated);        
+
+
+        $mailtemplate = MailTemplate::where([
+            "mail_class"=>"NotifyAboutConsultationMeetingSchedule",
+            "sending_frequency"=>"A cada reagendamento da reunião de consulta",
+            "active"=>true
+            ])->first();
+
+        if($mailtemplate){
+            Mail::to($consultationmeeting->application->email)->cc(env("MAIL_CEA"))->queue(new NotifyAboutConsultationMeetingSchedule($consultationmeeting, $mailtemplate));
+        }
+
+        Session::flash("alert-success", "Reunião de consulta reagendada com sucesso.");
+
+        return back();
+        
+    }
+
+    public function informDecision(InformDecisionConsultationMeetingRequest $request, ConsultationMeeting $consultationmeeting)
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria", "Docente"])){
+            abort(403);
+        }
+
+        $validated = $request->validated();
+
+        $consultationmeeting->update($validated);     
+
+        $consultationmeeting->application->status = $consultationmeeting->decision;
+        $consultationmeeting->application->save();
+
+        $mailtemplate = MailTemplate::where([
+            "mail_class"=>"NotifyAboutConsultationMeetingDecision",
+            "sending_frequency"=>"A cada resultado de reunião de consulta",
+            "active"=>true
+            ])->first();
+
+        if($mailtemplate){
+            Mail::to($consultationmeeting->application->email)->cc(env("MAIL_CEA"))->queue(new NotifyAboutConsultationMeetingDecision($consultationmeeting, $mailtemplate));
+        }
+
+        Session::flash("alert-success", "Resultado da reunião de consulta cadastrado com sucesso.");
 
         return back();
     }
