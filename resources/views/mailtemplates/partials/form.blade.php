@@ -24,6 +24,7 @@
                         "E-mail enviado a secretaria do CEA quando solicitado recibo de reembolso"=>"NotifyCEAAboutRefundReceipt",
                         "E-mail enviado ao inscrito quando a triagem é agendada"=>"NotifyAboutTriageSchedule",
                         "E-mail enviado ao inscrito quando sobre o resultado da triagem"=>"NotifyAboutTriageDecision",
+                        "E-mail enviado ao inscrito quando a reunião de consulta é agendada"=>"NotifyAboutConsultationMeetingSchedule",
                      ] as $key=>$value)
                 <option value='{"description":"{{$key}}","mail_class":"{{$value}}"}' {{ ( $mailtemplate->mail_class === $value) ? 'selected' : ''}}>{{ $key }}</option>
             @endforeach
@@ -49,6 +50,7 @@
                             "A cada agendamento de triagem",
                             "A cada reagendamento de triagem",
                             "A cada resultado de triagem",
+                            "A cada agendamento de reunião de consulta",
                         ] as $frequency)
                     <option value='{{$frequency}}' {{ ( $mailtemplate->sending_frequency === $frequency) ? 'selected' : ''}}>{{ $frequency }}</option>
                 @endforeach

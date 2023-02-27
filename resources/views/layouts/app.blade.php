@@ -64,6 +64,11 @@
                   <a href="{{ route('triages.index') }}">Triagens</a>
               </li>
           @endcan
+          @can("visualizar reuniões de consulta")
+              <li>
+                  <a href="{{ route('consultationmeetings.index') }}">Reuniões de Consulta</a>
+              </li>
+          @endcan
           @can("Editar E-mails")
               <li>
                   <a href="{{ route('mailtemplates.index') }}">E-mails</a>

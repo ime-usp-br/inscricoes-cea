@@ -9,6 +9,7 @@ use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\DepositReceiptController;
 use App\Http\Controllers\MailTemplateController;
 use App\Http\Controllers\TriageController;
+use App\Http\Controllers\ConsultationMeetingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,3 +46,7 @@ Route::resource('mailtemplates', MailTemplateController::class);
 Route::patch('/triages/{triage}/informdecision', [TriageController::class, "informDecision"])->name("triages.informdecision");
 Route::patch('/triages/{triage}/reschedule', [TriageController::class, "reschedule"])->name("triages.reschedule");
 Route::resource('triages', TriageController::class);
+
+Route::patch('/consultationmeetings/{consultationmeeting}/informdecision', [ConsultationMeetingController::class, "informDecision"])->name("consultationmeetings.informdecision");
+Route::patch('/consultationmeetings/{consultationmeeting}/reschedule', [ConsultationMeetingController::class, "reschedule"])->name("consultationmeetings.reschedule");
+Route::resource('consultationmeetings', ConsultationMeetingController::class);

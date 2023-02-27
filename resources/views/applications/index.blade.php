@@ -10,6 +10,7 @@
 
             @include('applications.modals.chooseSemester')
             @include('applications.modals.scheduleTriageModal')
+            @include('applications.modals.scheduleConsultationMeetingModal')
 
             <p class="text-right">
                 <a  id="btn-chooseSemesterModal"
@@ -57,6 +58,16 @@
                                         data-id="{{ $ficha->id }}"
                                         title="Agendar Triagem"
                                         href="{{ route('triages.store') }}"
+                                    >
+                                        <i class="fas fa-calendar-plus"></i>
+                                    </a>
+                                @elseif($ficha->status == "Aguardando agendamento da reunião de consulta")
+                                    <a class="text-dark text-decoration-none"
+                                        data-toggle="modal"
+                                        data-target="#scheduleConsultationMeetingModal"
+                                        data-id="{{ $ficha->id }}"
+                                        title="Agendar Reunião de Consulta"
+                                        href="{{ route('consultationmeetings.store') }}"
                                     >
                                         <i class="fas fa-calendar-plus"></i>
                                     </a>
@@ -114,6 +125,16 @@
         $('#div-reuniao').empty();
         $("#hiddenApplicationID").val(button.attr('data-id'));
     });
+    $('#scheduleConsultationMeetingModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var routePath = button.attr('href');
+        $(this).find('.modal-content form').attr('action', routePath);
+        $("input:radio[name='meetingMode']").each(function(i) {
+            this.checked = false;
+        });
+        $('#div-reuniao-cm').empty();
+        $(this).find("#hiddenApplicationID").val(button.attr('data-id'));
+    });
     function rdChange(ckType){
         if(ckType.value == "Online"){
             var html = [
@@ -127,6 +148,7 @@
                 '</div>'
             ].join("\n");
             $('#div-reuniao').html(html);
+            $('#div-reuniao-cm').html(html);
         }else if (ckType.value == "Presencial"){
             var html = [
                 '<div class="row custom-form-group d-flex align-items-center">',
@@ -139,6 +161,7 @@
                 '</div>'
             ].join("\n");
             $('#div-reuniao').html(html);
+            $('#div-reuniao-cm').html(html);
         }
     }
 </script>
