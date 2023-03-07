@@ -251,14 +251,10 @@ class ApplicationController extends Controller
 
         if($application->serviceType == "Projeto"){
             $application->serviceType = "Consulta";
-            if($application->status == "Aguardando agendamento da triagem"){
-                $application->status = "Aguardando agendamento da reunião de consulta";
-            }
+            $application->status = "Aguardando agendamento da reunião de consulta";
         }elseif($application->serviceType == "Consulta"){
             $application->serviceType = "Projeto";
-            if($application->status == "Aguardando agendamento da reunião de consulta"){
-                $application->status = "Aguardando agendamento da triagem";
-            }
+            $application->status = "Aguardando agendamento da triagem";
         }
 
         $application->save();
