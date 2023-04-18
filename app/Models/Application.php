@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Semester;
 use App\Models\Attachment;
 use App\Models\DepositReceipt;
+use App\Models\BankSlip;
 
 class Application extends Model
 {
@@ -64,5 +65,17 @@ class Application extends Model
     public function attachments()
     {
         return $this->hasMany(Attachment::class, "applicationID");
+    }
+
+    public function applicationFee()
+    {
+        return $this->hasOne(BankSlip::class, "applicationID")
+                    ->where("relativoA", "Taxa de Inscrição");
+    }
+
+    public function projectFee()
+    {
+        return $this->hasOne(BankSlip::class, "applicationID")
+                    ->where("relativoA", "Taxa de Projeto");
     }
 }

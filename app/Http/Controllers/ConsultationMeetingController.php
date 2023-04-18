@@ -13,6 +13,7 @@ use App\Mail\NotifyAboutConsultationMeetingSchedule;
 use App\Mail\NotifyAboutConsultationMeetingDecision;
 use App\Models\Application;
 use App\Models\MailTemplate;
+use App\Models\BankSlip;
 use Session;
 use Auth;
 
@@ -199,6 +200,11 @@ class ConsultationMeetingController extends Controller
 
         $consultationmeeting->application->status = $consultationmeeting->decision;
         $consultationmeeting->application->save();
+
+        if($consultationmeeting->decision == "Aprovado como projeto" and !$consultationmeeting->application->projectFee){
+            $bankSlip = BankSlip::gerarBoletoRegistrado($consultationmeeting->application, 200.00, 0, "Taxa de Projeto");
+            $consultationmeeting->application->projectFee()->save($bankSlip);
+        }
 
         $mailtemplate = MailTemplate::where([
             "mail_class"=>"NotifyAboutConsultationMeetingDecision",

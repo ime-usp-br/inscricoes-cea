@@ -32,6 +32,7 @@
                         <th>Responsável(is) pelo projeto</th>
                         <th>E-mail</th>
                         <th>Status</th>
+                        <th>Boleto</th>
                         <th></th>
                     </tr>
 
@@ -71,6 +72,17 @@
                                     >
                                         <i class="fas fa-calendar-plus"></i>
                                     </a>
+                                @endif
+                            </td>
+                            <td>
+                                @if($ficha->applicationFee)
+                                    Taxa de Inscrição, {{$ficha->applicationFee->getStatus(true)}}
+                                @else
+                                    Taxa de Inscrição, Não Emitido
+                                @endif
+                                <br>
+                                @if($ficha->projectFee)
+                                    Taxa de Projeto, {{$ficha->projectFee->getStatus(true)}}
                                 @endif
                             </td>
                             <td style="white-space:nowrap">

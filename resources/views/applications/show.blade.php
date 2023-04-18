@@ -138,13 +138,66 @@
 
             <div class="row custom-form-group d-flex align-items-center">
                 <div class="col-12 col-md-auto text-md-right">
-                    <label for="projectResponsible">Comprovante de pagamento da taxa:</label>
+                    <label>Comprovante de pagamento da taxa:</label>
                 </div>
-                <div class="col-12 col-md">                    
-                    <a href="{{ route('receipts.download', $application->depositReceipt) }}">{{ $application->depositReceipt->name }}</a>
-                </div>        
+                @if($application->depositReceipt)
+                    <div class="col-12 col-md">                    
+                        <a href="{{ route('receipts.download', $application->depositReceipt) }}">{{ $application->depositReceipt->name }}</a>
+                    </div>     
+                @else
+                    <div class="col-12 col-md">                    
+                        Inscrição feita após implementação do boleto.
+                    </div>     
+
+                @endif   
             </div>
 
+            <hr class="my-2">
+
+            <div class="row custom-form-group d-flex align-items-center">
+                <div class="col-12 col-md-auto text-md-right">
+                    <label>Boleto taxa de inscrição:</label>
+                </div>
+                @if($application->applicationFee)
+                    <div class="col-12 col-md">      
+                        <label>Status:</label> {{$application->applicationFee->getStatus()}}<br>
+                        <label>Valor do Documento:</label> {{$application->applicationFee->valorDocumento}}<br>
+                        <label>Data do Vencimento:</label> {{$application->applicationFee->dataVencimentoBoleto}}<br>
+                        <label>Valor Pago:</label> {{$application->applicationFee->valorEfetivamentePago}}<br>
+                        <label>Data do Pagamento:</label> {{$application->applicationFee->dataEfetivaPagamento ?? "Não foi pago"}}<br>
+                    </div>     
+                @else
+                    <div class="col-12 col-md">                    
+                        Não Emitido.
+                    </div>     
+
+                @endif   
+            </div>
+
+            <hr class="my-2">
+
+            <div class="row custom-form-group d-flex align-items-center">
+                <div class="col-12 col-md-auto text-md-right">
+                    <label>Boleto taxa de projeto:</label>
+                </div>
+                @if($application->projectfee)
+                    <div class="col-12 col-md">      
+                        <label>Status:</label> {{$application->projectfee->getStatus()}}<br>
+                        <label>Valor do Documento:</label> {{$application->projectfee->valorDocumento}}<br>
+                        <label>Data do Vencimento:</label> {{$application->projectfee->dataVencimentoBoleto}}<br>
+                        <label>Valor Pago:</label> {{$application->projectfee->valorEfetivamentePago}}<br>
+                        <label>Data do Pagamento:</label> {{$application->projectfee->dataEfetivaPagamento ?? "Não foi pago"}}<br>
+                    </div>     
+                @else
+                    <div class="col-12 col-md">                    
+                        Não Emitido.
+                    </div>     
+
+                @endif   
+            </div>
+
+            <hr class="my-2">
+            
             <div class="row custom-form-group d-flex align-items-center">
                 <div class="col-12 col-md-auto text-md-right">
                     <label for="refundReceipt">Recibo para reembolso:</label>

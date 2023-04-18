@@ -14,6 +14,7 @@ use App\Models\Semester;
 use App\Models\Attachment;
 use App\Models\DepositReceipt;
 use App\Models\MailTemplate;
+use App\Models\BankSlip;
 use Session;
 use Auth;
 
@@ -85,16 +86,6 @@ class ApplicationController extends Controller
 
         $application = Application::create($validated);
 
-        $receipt  = new DepositReceipt;
-            
-        $receipt->name = $validated["paymentVoucher"]->getClientOriginalName();
-        $receipt->path = $validated["paymentVoucher"]->store($protocol);
-
-        $application->depositReceipt()->save($receipt);
-
-        $receipt->link = route("receipts.download",$receipt);
-        $receipt->save();
-
         $anexos = $validated["anexosNovos"] ?? [];
         unset($validated["anexosNovos"]);
 
@@ -115,6 +106,9 @@ class ApplicationController extends Controller
         }elseif($application->serviceType == "Consulta"){
             $application->status = "Aguardando agendamento da reunião de consulta";
         }
+
+        $bankSlip = BankSlip::gerarBoletoRegistrado($application, 80.00, 0, "Taxa de Inscrição");
+        $application->applicationFee()->save($bankSlip);
 
         $application->save();
 

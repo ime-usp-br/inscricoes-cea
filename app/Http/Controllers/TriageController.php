@@ -13,6 +13,7 @@ use App\Models\Semester;
 use App\Models\Triage;
 use App\Models\Application;
 use App\Models\MailTemplate;
+use App\Models\BankSlip;
 use Session;
 use Auth;
 
@@ -200,6 +201,11 @@ class TriageController extends Controller
 
         $triage->application->status = $triage->decision;
         $triage->application->save();
+
+        if($triage->decision == "Aprovado como projeto" and !$triage->application->projectFee){
+            $bankSlip = BankSlip::gerarBoletoRegistrado($triage->application, 200.00, 0, "Taxa de Projeto");
+            $triage->application->projectFee()->save($bankSlip);
+        }
 
         $mailtemplate = MailTemplate::where([
             "mail_class"=>"NotifyAboutTriageDecision",

@@ -56,6 +56,12 @@ class NotifyAboutConsultationMeetingDecision extends Mailable
 
         $css = file_get_contents(base_path() . '/public/css/mail.css');
 
-        return $this->html($cssToInlineStyles->convert($body, $css))->subject($subject);
+        if($this->consultationmeeting->application->projectFee){
+            return $this->html($cssToInlineStyles->convert($body, $css))->subject($subject)->attachData(
+                base64_decode($this->consultationmeeting->application->projectFee->obterBoletoPDF()), 
+                'boleto.pdf');
+        }else{
+            return $this->html($cssToInlineStyles->convert($body, $css))->subject($subject);
+        }
     }
 }
