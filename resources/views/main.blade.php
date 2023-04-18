@@ -204,15 +204,6 @@
 
                     <div class="row custom-form-group d-flex align-items-center">
                         <div class="col-12 col-md-auto text-md-right">
-                            <label for="projectResponsible">Comprovante de pagamento da taxa:</label>
-                        </div>
-                        <div class="col-12 col-md">
-                            <input class="custom-form-input btn-sm" id="paymentVoucher" name="paymentVoucher" type="file" required>
-                        </div>        
-                    </div>
-
-                    <div class="row custom-form-group d-flex align-items-center">
-                        <div class="col-12 col-md-auto text-md-right">
                             <label id="refundReceipt">Recibo para reembolso:</label>
                         </div>
                         <div class="col-12 col-md">
@@ -235,7 +226,7 @@
 
                     <div class="col my-5 text-justify">
                         <h5>
-                            Dados bancarios para devolução da taxa em caso de não poder ser feita a consulta.
+                            Dados bancarios para emissão do boleto e devolução da taxa em caso de não poder ser feita a consulta.
                         </h5>
                     </div>
 

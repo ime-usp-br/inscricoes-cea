@@ -124,7 +124,11 @@
 
 \vspace{5pt}
 
-\textbf{Comprovante de pagamento da taxa:} \href{{!! $application->depositReceipt->link !!}}{{!! clear_string($application->depositReceipt->name) !!}}
+@if($application->depositReceipt)
+  \textbf{Comprovante de pagamento da taxa:} \href{{!! $application->depositReceipt->link !!}}{{!! clear_string($application->depositReceipt->name) !!}}
+@else
+  \textbf{Comprovante de pagamento da taxa:} Inscrição feita após implementação do boleto.
+@endif
 
 \vspace{30pt}
 

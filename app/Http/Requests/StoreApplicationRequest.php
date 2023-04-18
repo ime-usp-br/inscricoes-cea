@@ -38,7 +38,6 @@ class StoreApplicationRequest extends FormRequest
             'faOther' => 'sometimes',
             'knowledgeArea' => 'required|array',
             'kaOther' => 'sometimes',
-            "paymentVoucher" => "required|max:10240",
             'refundReceipt' => 'required',
             'refundReceiptData' => 'required_if:refundReceipt,Sim',
             'bdName' => 'required',

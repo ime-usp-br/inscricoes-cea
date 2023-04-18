@@ -13,6 +13,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "neitanod/forceutf8": "^2.0",
+        "ricorocks-digital-agency/soap": "^1.6",
         "tijsverkoyen/css-to-inline-styles": "^2.2",
         "uspdev/laravel-usp-theme": "dev-master",
         "uspdev/replicado": "^1.16",
@@ -65,7 +66,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

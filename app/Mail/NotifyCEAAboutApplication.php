@@ -55,8 +55,7 @@ class NotifyCEAAboutApplication extends Mailable
 
         $css = file_get_contents(base_path() . '/public/css/mail.css');
 
-        $mail = $this->html($cssToInlineStyles->convert($body, $css))->subject($subject)
-            ->attachFromStorage($this->application->depositReceipt->path, $this->application->depositReceipt->name);
+        $mail = $this->html($cssToInlineStyles->convert($body, $css))->subject($subject);
 
         try{
             $mail->attachData(

@@ -54,7 +54,6 @@ class NotifyCEAAboutRefundReceipt extends Mailable
 
         $css = file_get_contents(base_path() . '/public/css/mail.css');
 
-        return $this->html($cssToInlineStyles->convert($body, $css))->subject($subject)
-            ->attachFromStorage($this->application->depositReceipt->path, $this->application->depositReceipt->name);
+        return $this->html($cssToInlineStyles->convert($body, $css))->subject($subject);
     }
 }
