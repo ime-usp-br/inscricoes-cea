@@ -6,6 +6,7 @@ use App\Http\Requests\StoreConsultationMeetingRequest;
 use App\Http\Requests\UpdateConsultationMeetingRequest;
 use App\Http\Requests\RescheduleConsultationMeetingRequest;
 use App\Http\Requests\InformDecisionConsultationMeetingRequest;
+use App\Http\Requests\IndexConsultationMeetingRequest;
 use App\Models\ConsultationMeeting;
 use App\Models\Semester;
 use Illuminate\Support\Facades\Mail;
@@ -24,7 +25,7 @@ class ConsultationMeetingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexConsultationMeetingRequest $request)
     {
         if(!Auth::check()){
             return redirect("/login");
@@ -32,7 +33,13 @@ class ConsultationMeetingController extends Controller
             abort(403);
         }
 
-        $semester = Semester::getLatest();
+        $validated = $request->validated();
+
+        if(isset($validated['semester_id'])){
+            $semester = Semester::find($validated['semester_id']);
+        }else{
+            $semester = Semester::getLatest();
+        }
 
         $consultationmeetings = ConsultationMeeting::whereHas("application", function($query)use($semester){
             $query->whereBelongsTo($semester);

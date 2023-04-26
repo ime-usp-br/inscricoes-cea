@@ -12,11 +12,11 @@
             <div class="modal-body">
                 <div class="row custom-form-group align-items-center">
                     <div class="col-12 col-lg-6 text-lg-right">
-                        <label for="periodoId">Semestre</label>   
+                        <label for="semester_id">Semestre</label>   
                     </div> 
                     <div class="col-12 col-md-5">
 
-                        <select id="periodoId" name="semesterId" class="custom-form-control">
+                        <select id="semester_id" name="semester_id" class="custom-form-control">
                             @foreach(App\Models\Semester::all() as $st)
                                 <option value={{ $st->id }}>{{ $st->year . " " . $st->period }}</option>
                             @endforeach

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTriageRequest;
 use App\Http\Requests\UpdateTriageRequest;
 use App\Http\Requests\RescheduleTriageRequest;
 use App\Http\Requests\InformDecisionTriageRequest;
+use App\Http\Requests\IndexTriageRequest;
 use App\Mail\NotifyAboutTriageSchedule;
 use App\Mail\NotifyAboutTriageDecision;
 use Illuminate\Support\Facades\Mail;
@@ -24,7 +25,7 @@ class TriageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexTriageRequest $request)
     {
         if(!Auth::check()){
             return redirect("/login");
@@ -32,7 +33,13 @@ class TriageController extends Controller
             abort(403);
         }
 
-        $semester = Semester::getLatest();
+        $validated = $request->validated();
+
+        if(isset($validated['semester_id'])){
+            $semester = Semester::find($validated['semester_id']);
+        }else{
+            $semester = Semester::getLatest();
+        }
 
         $triagens = Triage::whereHas("application", function($query)use($semester){
             $query->whereBelongsTo($semester);

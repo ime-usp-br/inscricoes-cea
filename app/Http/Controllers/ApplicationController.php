@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
+use App\Http\Requests\IndexApplicationRequest;
 use App\Mail\NotifyCEAAboutApplication;
 use App\Mail\NotifyCEAAboutRefundReceipt;
 use App\Mail\NotifyInscribedAboutApplication;
@@ -25,7 +26,7 @@ class ApplicationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexApplicationRequest $request)
     {
         if(!Auth::check()){
             return redirect("/login");
@@ -33,7 +34,13 @@ class ApplicationController extends Controller
             abort(403);
         }
 
-        $semester = Semester::getLatest();
+        $validated = $request->validated();
+
+        if(isset($validated['semester_id'])){
+            $semester = Semester::find($validated['semester_id']);
+        }else{
+            $semester = Semester::getLatest();
+        }
 
         $fichas = Application::whereBelongsTo($semester)->get();
 
