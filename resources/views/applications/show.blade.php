@@ -55,14 +55,16 @@
                 </div>
             </div>
 
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label for="cpf-cnpj">CPF/CNPJ:</label>
+            @if(Auth::user()->hasRole(["Administrador","Secretaria"]))
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label for="cpf-cnpj">CPF/CNPJ:</label>
+                    </div>
+                    <div class="col-12 col-md">
+                        {{ $application->CPFCNPJ }}
+                    </div>
                 </div>
-                <div class="col-12 col-md">
-                    {{ $application->CPFCNPJ }}
-                </div>
-            </div>
+            @endif
 
             <div class="row custom-form-group d-flex align-items-center">
                 <div class="col-12 col-md-auto text-md-right">
@@ -135,148 +137,151 @@
                     {{ str_replace(",", ", ", $application->knowledgeArea) }} {{ $application->kaOther ? " - ".$application->kaOther : "" }}
                 </div>
             </div>
-
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label>Comprovante de pagamento da taxa:</label>
-                </div>
-                @if($application->depositReceipt)
-                    <div class="col-12 col-md">                    
-                        <a href="{{ route('receipts.download', $application->depositReceipt) }}">{{ $application->depositReceipt->name }}</a>
-                    </div>     
-                @else
-                    <div class="col-12 col-md">                    
-                        Inscrição feita após implementação do boleto.
-                    </div>     
-
-                @endif   
-            </div>
-
-            <hr class="my-2">
-
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label>Boleto taxa de inscrição:</label>
-                </div>
-                @if($application->applicationFee)
-                    <div class="col-12 col-md">      
-                        <label>Status:</label> {{$application->applicationFee->getStatus()}}<br>
-                        <label>Valor do Documento:</label> {{$application->applicationFee->valorDocumento}}<br>
-                        <label>Data do Vencimento:</label> {{$application->applicationFee->dataVencimentoBoleto}}<br>
-                        <label>Valor Pago:</label> {{$application->applicationFee->valorEfetivamentePago}}<br>
-                        <label>Data do Pagamento:</label> {{$application->applicationFee->dataEfetivaPagamento ?? "Não foi pago"}}<br>
-                    </div>     
-                @else
-                    <div class="col-12 col-md">                    
-                        Não Emitido.
-                    </div>     
-
-                @endif   
-            </div>
-
-            <hr class="my-2">
-
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label>Boleto taxa de projeto:</label>
-                </div>
-                @if($application->projectfee)
-                    <div class="col-12 col-md">      
-                        <label>Status:</label> {{$application->projectfee->getStatus()}}<br>
-                        <label>Valor do Documento:</label> {{$application->projectfee->valorDocumento}}<br>
-                        <label>Data do Vencimento:</label> {{$application->projectfee->dataVencimentoBoleto}}<br>
-                        <label>Valor Pago:</label> {{$application->projectfee->valorEfetivamentePago}}<br>
-                        <label>Data do Pagamento:</label> {{$application->projectfee->dataEfetivaPagamento ?? "Não foi pago"}}<br>
-                    </div>     
-                @else
-                    <div class="col-12 col-md">                    
-                        Não Emitido.
-                    </div>     
-
-                @endif   
-            </div>
-
-            <hr class="my-2">
             
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label for="refundReceipt">Recibo para reembolso:</label>
-                </div>
-                <div class="col-12 col-md">
-                    {{ $application->refundReceipt }}
-                </div>
-            </div>
+            @if(Auth::user()->hasRole(["Administrador","Secretaria"]))
 
-            @if($application->refundReceipt == "Sim")
-                <div class="custom-form-group">
-                    <label class="text-justify" for="otherFeatures">Dados que devem constar no recibo:</label>
-                    <div class="col-12 col-md text-justify">
-                        {!! nl2br($application->refundReceiptData) !!}
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label>Comprovante de pagamento da taxa:</label>
+                    </div>
+                    @if($application->depositReceipt)
+                        <div class="col-12 col-md">                    
+                            <a href="{{ route('receipts.download', $application->depositReceipt) }}">{{ $application->depositReceipt->name }}</a>
+                        </div>     
+                    @else
+                        <div class="col-12 col-md">                    
+                            Inscrição feita após implementação do boleto.
+                        </div>     
+
+                    @endif   
+                </div>
+
+                <hr class="my-2">
+
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label>Boleto taxa de inscrição:</label>
+                    </div>
+                    @if($application->applicationFee)
+                        <div class="col-12 col-md">      
+                            <label>Status:</label> {{$application->applicationFee->getStatus()}}<br>
+                            <label>Valor do Documento:</label> {{$application->applicationFee->valorDocumento}}<br>
+                            <label>Data do Vencimento:</label> {{$application->applicationFee->dataVencimentoBoleto}}<br>
+                            <label>Valor Pago:</label> {{$application->applicationFee->valorEfetivamentePago}}<br>
+                            <label>Data do Pagamento:</label> {{$application->applicationFee->dataEfetivaPagamento ?? "Não foi pago"}}<br>
+                        </div>     
+                    @else
+                        <div class="col-12 col-md">                    
+                            Não Emitido.
+                        </div>     
+
+                    @endif   
+                </div>
+
+                <hr class="my-2">
+
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label>Boleto taxa de projeto:</label>
+                    </div>
+                    @if($application->projectfee)
+                        <div class="col-12 col-md">      
+                            <label>Status:</label> {{$application->projectfee->getStatus()}}<br>
+                            <label>Valor do Documento:</label> {{$application->projectfee->valorDocumento}}<br>
+                            <label>Data do Vencimento:</label> {{$application->projectfee->dataVencimentoBoleto}}<br>
+                            <label>Valor Pago:</label> {{$application->projectfee->valorEfetivamentePago}}<br>
+                            <label>Data do Pagamento:</label> {{$application->projectfee->dataEfetivaPagamento ?? "Não foi pago"}}<br>
+                        </div>     
+                    @else
+                        <div class="col-12 col-md">                    
+                            Não Emitido.
+                        </div>     
+
+                    @endif   
+                </div>
+
+                <hr class="my-2">
+                
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label for="refundReceipt">Recibo para reembolso:</label>
+                    </div>
+                    <div class="col-12 col-md">
+                        {{ $application->refundReceipt }}
+                    </div>
+                </div>
+
+                @if($application->refundReceipt == "Sim")
+                    <div class="custom-form-group">
+                        <label class="text-justify" for="otherFeatures">Dados que devem constar no recibo:</label>
+                        <div class="col-12 col-md text-justify">
+                            {!! nl2br($application->refundReceiptData) !!}
+                        </div>
+                    </div>
+                @endif
+
+                <hr class="my-5">
+
+                <div class="col my-5 text-justify">
+                    <h5>
+                        Dados bancarios
+                    </h5>
+                </div>
+
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label for="projectResponsible">Nome completo:</label>
+                    </div>
+                    <div class="col-12 col-md">
+                        {{ $application->bdName }}
+                    </div>        
+                </div>
+
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label for="cpf-cnpj">CPF/CNPJ:</label>
+                    </div>
+                    <div class="col-12 col-md">
+                        {{ $application->bdCpfCnpj }}
+                    </div>
+                </div>
+
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label for="projectResponsible">Nome do Banco:</label>
+                    </div>
+                    <div class="col-12 col-md">
+                        {{ $application->bdBankName }}
+                    </div>        
+                </div>
+
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label for="projectResponsible">Número da Agência:</label>
+                    </div>
+                    <div class="col-12 col-md">
+                        {{ $application->bdAgency }}
+                    </div>        
+                </div>
+
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label for="projectResponsible">Número da Conta:</label>
+                    </div>
+                    <div class="col-12 col-md">
+                        {{ $application->bdAccount }}
+                    </div>        
+                </div>
+
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label for="knowledgeArea">Tipo da Conta:</label>
+                    </div>
+                    <div class="col-12 col-md">
+                        {{ $application->bdType }}
                     </div>
                 </div>
             @endif
-
-            <hr class="my-5">
-
-            <div class="col my-5 text-justify">
-                <h5>
-                    Dados bancarios
-                </h5>
-            </div>
-
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label for="projectResponsible">Nome completo:</label>
-                </div>
-                <div class="col-12 col-md">
-                    {{ $application->bdName }}
-                </div>        
-            </div>
-
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label for="cpf-cnpj">CPF/CNPJ:</label>
-                </div>
-                <div class="col-12 col-md">
-                    {{ $application->bdCpfCnpj }}
-                </div>
-            </div>
-
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label for="projectResponsible">Nome do Banco:</label>
-                </div>
-                <div class="col-12 col-md">
-                    {{ $application->bdBankName }}
-                </div>        
-            </div>
-
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label for="projectResponsible">Número da Agência:</label>
-                </div>
-                <div class="col-12 col-md">
-                    {{ $application->bdAgency }}
-                </div>        
-            </div>
-
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label for="projectResponsible">Número da Conta:</label>
-                </div>
-                <div class="col-12 col-md">
-                    {{ $application->bdAccount }}
-                </div>        
-            </div>
-
-            <div class="row custom-form-group d-flex align-items-center">
-                <div class="col-12 col-md-auto text-md-right">
-                    <label for="knowledgeArea">Tipo da Conta:</label>
-                </div>
-                <div class="col-12 col-md">
-                    {{ $application->bdType }}
-                </div>
-            </div>
 
             <hr class="my-5">
 

@@ -56,10 +56,6 @@
 
   \vspace{5pt}
 
-  \textbf{CPF/CNPJ:} {!! $application->CPFCNPJ !!}
-
-  \vspace{5pt}
-
   \textbf{E-mail:} {!! clear_string($application->email) !!}
 
   \vspace{5pt}
@@ -89,46 +85,6 @@
 \vspace{5pt}
 
 \textbf{Área de conhecimento:} {!! str_replace(",", ", ", $application->knowledgeArea) !!} {!! $application->kaOther ? " - ".clear_string($application->kaOther) : "" !!}
-
-\vspace{30pt}
-
-\hrule
-
-\vspace{30pt}
-
-\centerline{\textbf{Dados Bancários}}
-
-\vspace{10pt}
-
-\textbf{Nome completo:} {!! clear_string($application->bdName) !!}
-
-\vspace{5pt}
-
-\textbf{CPF/CNPJ:} {!! $application->bdCpfCnpj !!}
-
-\vspace{5pt}
-
-\textbf{Nome do Banco:} {!! clear_string($application->bdBankName) !!}
-
-\vspace{5pt}
-
-\textbf{Número da Agência:} {!! clear_string($application->bdAgency) !!}
-
-\vspace{5pt}
-
-\textbf{Número da Conta:} {!! clear_string($application->bdAccount) !!}
-
-\vspace{5pt}
-
-\textbf{Tipo da Conta:} {!! $application->bdType !!}
-
-\vspace{5pt}
-
-@if($application->depositReceipt)
-  \textbf{Comprovante de pagamento da taxa:} \href{{!! $application->depositReceipt->link !!}}{{!! clear_string($application->depositReceipt->name) !!}}
-@else
-  \textbf{Comprovante de pagamento da taxa:} Inscrição feita após implementação do boleto.
-@endif
 
 \vspace{30pt}
 
