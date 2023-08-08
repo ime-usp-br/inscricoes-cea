@@ -33,6 +33,7 @@
                         <th>Data</th>
                         <th>Local ou Link</th>
                         <th>Resultado</th>
+                        <th>Taxa Projeto</th>
                         <th>Observações</th>
                         <th></th>
                     </tr>
@@ -45,9 +46,16 @@
                             <td>{{ $triagem->date ." ". $triagem->hour }}</td>
                             <td>{{ $triagem->link ?? $triagem->local }}</td>
                             <td>{{ $triagem->decision }}</td>
+                            <td>
+                                @if($triagem->application->projectFee)
+                                    {{$triagem->application->projectFee->getStatus(true)}}
+                                @else
+                                    Não Emitido
+                                @endif
+                            </td>
                             <td>{{ $triagem->note }}</td>
-                            <td style="white-space:nowrap">
-                                <a class="btn btn-outline-dark btn-sm"
+                            <td>
+                                <a class="btn btn-outline-dark btn-sm my-1"
                                     data-toggle="modal"
                                     data-target="#rescheduleModal"
                                     title="Reagendar Triagem"
@@ -55,7 +63,7 @@
                                 >
                                     <i class="fas fa-calendar-plus"></i> Reagendar
                                 </a>
-                                <a class="btn btn-outline-dark btn-sm"
+                                <a class="btn btn-outline-dark btn-sm my-1"
                                     data-toggle="modal"
                                     data-target="#decisionModal"
                                     title="Informar Resultado"
@@ -63,11 +71,18 @@
                                 >
                                 <i class="fas fa-plus"></i> Resultado
                                 </a>
+                                <a class="btn btn-outline-dark btn-sm my-1"
+                                    data-toggle="tooltip" data-placement="top"
+                                    title="Visualizar"
+                                    href="{{ route('applications.show', $triagem->application) }}"
+                                >
+                                    Visualizar Inscrição
+                                </a>
                                 <form action="{{ route('triages.destroy', $triagem) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method("delete")
                                     
-                                    <button class="btn btn-outline-dark btn-sm" type="submit"
+                                    <button class="btn btn-outline-dark btn-sm my-1" type="submit"
                                             onclick="return confirm('Você tem certeza que deseja cancelar essa triagem?')">
                                         <i class="fas fa-trash-alt"></i> Cancelar
                                     </button>
