@@ -46,7 +46,7 @@
                             <td>{{ $triagem->date ." ". $triagem->hour }}</td>
                             <td>{{ $triagem->link ?? $triagem->local }}</td>
                             <td>{{ $triagem->decision }}</td>
-                            <td>
+                            <td style="white-space:nowrap">
                                 @if($triagem->application->projectFee)
                                     {{$triagem->application->projectFee->getStatus(true)}}
                                 @else
