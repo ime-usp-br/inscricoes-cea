@@ -59,6 +59,11 @@
                   <a href="{{ route('applications.index') }}">Inscrições</a>
               </li>
           @endcan
+          @can("visualizar inscrições")
+              <li>
+                  <a href="{{ route('applications.deleted_index') }}">Inscrições Excluidas</a>
+              </li>
+          @endcan
           @can("visualizar triagens")
               <li>
                   <a href="{{ route('triages.index') }}">Triagens</a>

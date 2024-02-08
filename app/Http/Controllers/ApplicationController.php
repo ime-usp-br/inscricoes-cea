@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
 use App\Http\Requests\IndexApplicationRequest;
+use App\Http\Requests\DeletedIndexApplicationRequest;
 use App\Mail\NotifyCEAAboutApplication;
 use App\Mail\NotifyCEAAboutRefundReceipt;
 use App\Mail\NotifyInscribedAboutApplication;
@@ -42,7 +43,7 @@ class ApplicationController extends Controller
             $semester = Semester::getLatest();
         }
 
-        $fichas = Application::whereBelongsTo($semester)->get();
+        $fichas = Application::whereBelongsTo($semester)->where("deleted", false)->get();
 
         return view("applications.index", compact(["semester", "fichas"]));
     }
@@ -205,7 +206,50 @@ class ApplicationController extends Controller
      */
     public function destroy(Application $application)
     {
-        //
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria", "Docente"])){
+            abort(403);
+        }
+
+        $application->deleted = true;
+        $application->save();
+
+        Session::flash("alert-success", "A inscrição de protocolo ".$application->protocol." foi excluida com sucesso.");
+
+        return back();
+    }
+
+    public function deleted_index()
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria", "Docente"])){
+            abort(403);
+        }
+
+        $semester = Semester::getLatest();
+
+        $fichas = Application::whereBelongsTo($semester)->where("deleted", true)->get();
+
+        return view("applications.deleted", compact(["semester", "fichas"]));
+    }
+
+    public function restore(Application $application)
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria", "Docente"])){
+            abort(403);
+        }
+
+        $application->deleted = false;
+        $application->save();
+
+        Session::flash("alert-success", "A inscrição de protocolo ".$application->protocol." foi restaurada com sucesso.");
+
+        return back();
+
     }
 
     public function downloadAsPDF($protocol)

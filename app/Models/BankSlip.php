@@ -6,6 +6,7 @@ require_once(base_path('app/Http/SoapClient/nusoap.php'));
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use App\Models\Application;
 use App\Models\Triage;
 use nusoap_client;

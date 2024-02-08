@@ -42,7 +42,7 @@ class TriageController extends Controller
         }
 
         $triagens = Triage::whereHas("application", function($query)use($semester){
-            $query->whereBelongsTo($semester);
+            $query->whereBelongsTo($semester)->where("deleted", false);
         })->get();
 
         return view("triages.index", compact(["semester", "triagens"]));

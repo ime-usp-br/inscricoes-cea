@@ -42,7 +42,7 @@ class ConsultationMeetingController extends Controller
         }
 
         $consultationmeetings = ConsultationMeeting::whereHas("application", function($query)use($semester){
-            $query->whereBelongsTo($semester);
+            $query->whereBelongsTo($semester)->where("deleted", false);
         })->get();
 
         return view("consultationmeetings.index", compact(["semester", "consultationmeetings"]));

@@ -104,13 +104,19 @@
                                         </a>
                                     </div>
                                 </div>
-                                <a class="btn btn-outline-dark btn-sm"
+                                <a class="btn btn-outline-dark btn-sm my-1"
                                     data-toggle="tooltip" data-placement="top"
                                     title="Visualizar"
                                     href="{{ route('applications.downloadFirstPageAsPDF', $ficha->protocol) }}"
                                 >
                                     PDF Primeira Pagina
                                 </a>
+                                                       
+                                <form method="POST" enctype="multipart/form-data" action="{{ route('applications.destroy',$ficha) }}">
+                                    @csrf
+                                    @method("DELETE")
+                                    <button class="btn btn-outline-danger btn-sm" title="Mudar Modalidade" type="submit">Excluir</button>                                    
+                                </form>    
                             </td>
                         </tr>
                     @endforeach

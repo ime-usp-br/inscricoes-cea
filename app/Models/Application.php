@@ -50,6 +50,7 @@ class Application extends Model
         'storage',
         'conclusions',
         'expectedHelp',
+        'deleted',
     ];
 
     public function semester()

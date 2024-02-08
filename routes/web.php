@@ -32,6 +32,8 @@ Route::resource("semesters", SemesterController::class);
 Route::get("applications/{protocol}/aspdf",[ApplicationController::class, "downloadAsPDF"])->name("applications.downloadAsPDF");
 Route::get("applications/{protocol}/firstpageaspdf",[ApplicationController::class, "downloadFirstPageAsPDF"])->name("applications.downloadFirstPageAsPDF");
 Route::patch("applications/{application}/changeservicetype",[ApplicationController::class, "changeServiceType"])->name("applications.changeServiceType");
+Route::get("applications/deleted",[ApplicationController::class, "deleted_index"])->name("applications.deleted_index");
+Route::patch("applications/{application}/restore",[ApplicationController::class, "restore"])->name("applications.restore");
 Route::resource("applications", ApplicationController::class);
 
 Route::get("/attachment/download/{attachment}",[AttachmentController::class, "download"])->name("attachments.download");
