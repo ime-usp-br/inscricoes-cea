@@ -29,7 +29,7 @@
                     <tr>
                         <th>Protocolo</th>
                         <th>Modalidade</th>
-                        <th>Responsável(is) pelo projeto</th>
+                        <th>Nome do pesquisador</th>
                         <th>E-mail</th>
                         <th>Status</th>
                         <th>Boleto</th>
@@ -74,7 +74,7 @@
                                     </a>
                                 @endif
                             </td>
-                            <td>
+                            <td style="white-space:nowrap">
                                 @if($ficha->applicationFee)
                                     Taxa de Inscrição, {{$ficha->applicationFee->getStatus(true)}}
                                 @else

@@ -49,7 +49,7 @@
 
   \vspace{5pt}
 
-  \textbf{Responsável(is) pelo projeto:} {!! str_replace("_", "\_", $application->projectResponsible) !!}
+  \textbf{Nome do pesquisador:} {!! str_replace("_", "\_", $application->projectResponsible) !!}
 
   \vspace{5pt}
 
@@ -65,7 +65,7 @@
 
   \vspace{5pt}
 
-  \textbf{Instituição:} {!! str_replace("_", "\_", $application->institution) !!}
+  \textbf{Instituição/Unidade:} {!! str_replace("_", "\_", $application->institution) !!}
 
   \vspace{5pt}
 
@@ -73,7 +73,7 @@
 
   \vspace{5pt}
 
-  \textbf{Vínculo com a Instituição:} {!! str_replace("_", "\_", $application->institutionRelationship) !!}
+  \textbf{Vínculo com a Instituição:} {!! str_replace(",", ", ", $application->institutionRelationship) !!} {!! $application->irOther ? " - ".str_replace("_", "\_", $application->irOther) : "" !!}
 
   \vspace{5pt}
 

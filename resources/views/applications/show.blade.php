@@ -39,7 +39,7 @@
 
             <div class="row custom-form-group d-flex align-items-center">
                 <div class="col-12 col-md-auto text-md-right">
-                    <label for="projectResponsible">Responsável(is) pelo projeto:</label>
+                    <label for="projectResponsible">Nome do pesquisador:</label>
                 </div>
                 <div class="col-12 col-md">
                     {{ $application->projectResponsible }}
@@ -77,7 +77,7 @@
 
             <div class="row custom-form-group d-flex align-items-center">
                 <div class="col-12 col-md-auto text-md-left">
-                    <label for="institution">Instituição:</label>
+                    <label for="institution">Instituição/Unidade:</label>
                 </div>
                 <div class="col-12 col-md">
                     {{ $application->institution }}
@@ -98,7 +98,7 @@
                     <label for="institutionRelationship">Vínculo com a Instituição:</label>
                 </div>
                 <div class="col-12 col-md">
-                    {{ $application->institutionRelationship }}
+                    {{ str_replace(",", ", ", $application->institutionRelationship) }} {{ $application->irOther ? " - ".$application->irOther : "" }}
                 </div>
             </div>
 

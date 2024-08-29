@@ -48,7 +48,7 @@
 
   \vspace{5pt}
 
-  \textbf{Responsável(is) pelo projeto:} {!! clear_string($application->projectResponsible) !!}
+  \textbf{Nome do pesquisador:} {!! clear_string($application->projectResponsible) !!}
 
   \vspace{5pt}
 
@@ -60,7 +60,7 @@
 
   \vspace{5pt}
 
-  \textbf{Instituição:} {!! clear_string($application->institution) !!}
+  \textbf{Instituição/Unidade:} {!! clear_string($application->institution) !!}
 
   \vspace{5pt}
 
@@ -68,7 +68,7 @@
 
   \vspace{5pt}
 
-  \textbf{Vínculo com a Instituição:} {!! clear_string($application->institutionRelationship) !!}
+  \textbf{Vínculo com a Instituição:} {!! str_replace(",", ", ", $application->institutionRelationship) !!} {!! $application->irOther ? " - ".str_replace("_", "\_", $application->irOther) : "" !!}
 
   \vspace{5pt}
 

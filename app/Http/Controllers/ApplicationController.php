@@ -86,6 +86,7 @@ class ApplicationController extends Controller
 
         $validated["protocol"] = $protocol;
 
+        $validated["institutionRelationship"] = implode(",", $validated["institutionRelationship"]);
         $validated["projectPurpose"] = implode(",", $validated["projectPurpose"]);
         $validated["knowledgeArea"] = implode(",", $validated["knowledgeArea"]);
         if(array_key_exists("fundingAgency", $validated)){
@@ -115,8 +116,8 @@ class ApplicationController extends Controller
             $application->status = "Aguardando agendamento da reunião de consulta";
         }
 
-        $bankSlip = BankSlip::gerarBoletoRegistrado($application, 80.00, 0, "Taxa de Inscrição");
-        $application->applicationFee()->save($bankSlip);
+        //$bankSlip = BankSlip::gerarBoletoRegistrado($application, 80.00, 0, "Taxa de Inscrição");
+        //$application->applicationFee()->save($bankSlip);
 
         $application->save();
 

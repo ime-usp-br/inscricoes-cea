@@ -36,7 +36,7 @@
 
                     <div class="row custom-form-group d-flex align-items-center">
                         <div class="col-12 col-md-auto text-md-right">
-                            <label for="projectResponsible">Responsável(is) pelo projeto:</label>
+                            <label for="projectResponsible">Nome do pesquisador:</label>
                         </div>
                         <div class="col-12 col-md">
                             <input class="custom-form-control" type="text" name="projectResponsible" id="projectResponsible" required value={{ old("projectResponsible") ?? '' }}>
@@ -81,7 +81,7 @@
 
                     <div class="row custom-form-group d-flex align-items-center">
                         <div class="col-12 col-md-auto text-md-left">
-                            <label for="institution">Instituição:</label>
+                            <label for="institution">Instituição/Unidade:</label>
                         </div>
                         <div class="col-12 col-md">
                             <input class="custom-form-control" type="text" name="institution" id="institution" required value={{ old("institution") ?? '' }}>
@@ -99,10 +99,26 @@
 
                     <div class="row custom-form-group d-flex align-items-center">
                         <div class="col-12 col-md-auto text-md-right">
-                            <label for="institutionRelationship">Vínculo com a Instituição:</label>
+                            <label id="institutionRelationship">Vínculo com a Instituição:</label>
                         </div>
                         <div class="col-12 col-md">
-                            <input class="custom-form-control" type="text" name="institutionRelationship" id="institutionRelationship" required value={{ old("institutionRelationship") ?? '' }}>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="ckirStudent" name="institutionRelationship[]" value="Estudante" onClick="ckChange(this)" {{ (is_array(old("institutionRelationship")) and in_array("Estudante", old("institutionRelationship"))) ? "checked" : '' }}>
+                                <label class="font-weight-normal">Estudante</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="ckirEmployee" name="institutionRelationship[]" value="Funcionário" onClick="ckChange(this)" {{ (is_array(old("institutionRelationship")) and in_array("Funcionário", old("institutionRelationship"))) ? "checked" : '' }}>
+                                <label class="font-weight-normal">Funcionário</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="ckirProfessor" name="institutionRelationship[]" value="Professor" onClick="ckChange(this)" {{ (is_array(old("institutionRelationship")) and in_array("Professor", old("institutionRelationship"))) ? "checked" : '' }}>
+                                <label class="font-weight-normal">Professor</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="ckirOther" name="institutionRelationship[]" value="Outro" onClick="ckChange(this)" {{ (is_array(old("institutionRelationship")) and in_array("Outro", old("institutionRelationship"))) ? "checked" : '' }}>
+                                <label class="font-weight-normal">Outro</label>
+                                <input class="custom-form-control ml-2" type="text" name="irOther" id="irOther" placeholder="Especifique" {{ (is_array(old("institutionRelationship")) and in_array("Outro", old("institutionRelationship"))) ? '' : 'disabled' }} value={{ old("ppOther") ?? '' }}>
+                            </div>
                         </div>
                     </div>
 
@@ -291,6 +307,15 @@
                         </div>
                     </div>
 
+                    <div class="col my-5 text-justify">
+                        <p>
+                            O não pagamento do boleto na data, impossibilitara a emissão de novo boleto.
+                        </p>
+                        <p>
+                            A devolução da taxa em caso de canceamento esta sujeita a análise, desde que feita no prazo de 24h horas antes da consulta.
+                        </p>
+                    </div>
+
                     <hr class="my-5">
 
                     <div class="custom-form-group d-flex align-items-center">
@@ -444,6 +469,7 @@
 @parent
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
 <script src="{{ asset('js/jquery-captcha.min.js').'?version=1' }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     jQuery.validator.addMethod("confirmacaoEmail", function(value, element) {
         return value == document.getElementById("email").value;
@@ -581,9 +607,23 @@
             element.removeAttribute("title");     
             element.removeAttribute("data-original-title");       
         },
-        submitHandler: function (form) {
-            $("#btn-submit").attr('disabled', true);
-            form.submit();
+        submitHandler: function (form, event) {
+            Swal.fire({
+                title: 'ATENÇÂO!!',
+                text: "O agendamento só será realizado após pagamento da taxa. \n Deseja realmente submeter o formulário?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, submeter!',
+                cancelButtonText: 'Não, cancelar!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $("#btn-submit").attr('disabled', true);
+                    form.submit();
+                }else if(!result.value){
+                    event.preventDefault();
+                }
+            });
         }
     });
 
@@ -678,6 +718,10 @@
                 var inputText = document.getElementById("faOther");
                 inputText.disabled = false;
                 inputText.required = true;
+            }else if(ckType.id == "ckirOther"){
+                var inputText = document.getElementById("irOther");
+                inputText.disabled = false;
+                inputText.required = true;
             }
         }
         else {
@@ -691,6 +735,10 @@
                 inputText.required = false;
             }else if(ckType.id == "ckfaOther"){
                 var inputText = document.getElementById("faOther");
+                inputText.disabled = true;
+                inputText.required = false;
+            }else if(ckType.id == "ckirOther"){
+                var inputText = document.getElementById("irOther");
                 inputText.disabled = true;
                 inputText.required = false;
             }
@@ -736,6 +784,16 @@
         } 
         cks = document.getElementsByName("knowledgeArea[]");
         if ($('[name="knowledgeArea[]"]').is(':checked')) {
+            $.each(cks, function(index, ck){
+                ck.required = false;
+            });
+        }else {
+            $.each(cks, function(index, ck){
+                ck.required = true;
+            });
+        } 
+        cks = document.getElementsByName("institutionRelationship[]");
+        if ($('[name="institutionRelationship[]"]').is(':checked')) {
             $.each(cks, function(index, ck){
                 ck.required = false;
             });

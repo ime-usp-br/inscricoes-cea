@@ -32,6 +32,7 @@ class StoreApplicationRequest extends FormRequest
             'institution' => 'required',
             'course' => 'sometimes',
             'institutionRelationship' => 'required',
+            'irOther' => 'sometimes',
             'projectPurpose' => 'required|array',
             'ppOther' => 'sometimes',
             'fundingAgency' => 'sometimes|array',

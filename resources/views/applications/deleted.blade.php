@@ -13,7 +13,7 @@
                     <tr>
                         <th>Protocolo</th>
                         <th>Modalidade</th>
-                        <th>Responsável(is) pelo projeto</th>
+                        <th>Nome do pesquisador</th>
                         <th>E-mail</th>
                         <th></th>
                     </tr>

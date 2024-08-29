@@ -28,7 +28,7 @@
                 <table class="table table-bordered table-striped table-hover" style="font-size:15px;">
                     <tr>
                         <th>Protocolo</th>
-                        <th>Responsável(is) pelo projeto</th>
+                        <th>Nome do pesquisador</th>
                         <th>Modalidade</th>
                         <th>Data</th>
                         <th>Local ou Link</th>

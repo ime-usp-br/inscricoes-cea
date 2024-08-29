@@ -25,6 +25,7 @@ class Application extends Model
         'institution',
         'course',
         'institutionRelationship',
+        'irOther',
         'mentor',
         'projectPurpose',
         'ppOther',
