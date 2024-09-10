@@ -48,7 +48,7 @@
 
             <div class="row custom-form-group d-flex align-items-center">
                 <div class="col-12 col-md-auto text-md-right">
-                    <label for="contactPhone">Telefones para contato:</label>
+                    <label for="contactPhone">Telefones para contato{{ $application->whatsapp ? " (Whatsapp)" : ""}}:</label>
                 </div>
                 <div class="col-12 col-md">
                     {{ $application->contactPhone }}

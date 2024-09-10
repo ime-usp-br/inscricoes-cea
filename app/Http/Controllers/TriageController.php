@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreTriageRequest;
 use App\Http\Requests\UpdateTriageRequest;
 use App\Http\Requests\RescheduleTriageRequest;
@@ -15,6 +16,7 @@ use App\Models\Triage;
 use App\Models\Application;
 use App\Models\MailTemplate;
 use App\Models\BankSlip;
+use App\Models\Event;
 use Session;
 use Auth;
 
@@ -157,6 +159,13 @@ class TriageController extends Controller
         $triage->application->save();
         $triage->delete();
 
+        $event = Event::create([
+            'applicationID'=>$triage->application->id,
+            'name'=>'cancelamento triagem',
+            'description'=>'Cancelamento de triagem',
+            'event_date'=>date("Y-m-d H:i:s")
+        ]);
+
         Session::flash("alert-success", "Triagem cancelada com sucesso.");
 
         return back();
@@ -187,6 +196,13 @@ class TriageController extends Controller
         if($mailtemplate){
             Mail::to($triage->application->email)->cc(env("MAIL_CEA"))->queue(new NotifyAboutTriageSchedule($triage, $mailtemplate));
         }
+
+        $event = Event::create([
+            'applicationID'=>$triage->application->id,
+            'name'=>'reagendamento triagem',
+            'description'=>'Reagendamento de triagem',
+            'event_date'=>date("Y-m-d H:i:s")
+        ]);
 
         Session::flash("alert-success", "Triagem reagendada com sucesso.");
 
@@ -227,5 +243,26 @@ class TriageController extends Controller
         Session::flash("alert-success", "Resultado da triagem cadastrado com sucesso.");
 
         return back();
+    }
+
+    public function updateFeedback(Request $request, Triage $triage)
+    {
+        if(!Auth::check()){
+            return response()->json([
+                'status' => 'Precisa estar logado!',
+            ]);
+        }elseif(!Auth::user()->hasRole("Docente")){
+            return response()->json([
+                'status' => 'Usuário sem perfil!',
+            ]);
+        }
+
+        $triage->update([
+            "feedback" => $request->get('valor')
+        ]);
+
+        return response()->json([
+            'status' => 'Feedback alterado!'
+        ]);
     }
 }

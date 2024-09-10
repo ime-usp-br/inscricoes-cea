@@ -33,8 +33,11 @@
                         <th>Data</th>
                         <th>Local ou Link</th>
                         <th>Resultado</th>
-                        <th>Observações</th>
-                        <th></th>
+                        <th>Observações</th>                    
+                        <th>Feedback<br>do<br>Pesquisador</th>
+                        @hasanyrole("Administrador|Secretaria")
+                            <th></th>
+                        @endhasanyrole
                     </tr>
 
                     @foreach($consultationmeetings as $consultationmeeting)
@@ -46,33 +49,51 @@
                             <td>{{ $consultationmeeting->link ?? $consultationmeeting->local }}</td>
                             <td>{{ $consultationmeeting->decision }}</td>
                             <td>{{ $consultationmeeting->note }}</td>
-                            <td style="white-space:nowrap">
-                                <a class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal"
-                                    data-target="#rescheduleModal"
-                                    title="Reagendar Reunião de Consulta"
-                                    href="{{ route('consultationmeetings.reschedule', $consultationmeeting) }}"
-                                >
-                                    <i class="fas fa-calendar-plus"></i> Reagendar
-                                </a>
-                                <a class="btn btn-outline-dark btn-sm"
-                                    data-toggle="modal"
-                                    data-target="#decisionModal"
-                                    title="Informar Resultado"
-                                    href="{{ route('consultationmeetings.informdecision', $consultationmeeting) }}"
-                                >
-                                <i class="fas fa-plus"></i> Resultado
-                                </a>
-                                <form action="{{ route('consultationmeetings.destroy', $consultationmeeting) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method("delete")
-                                    
-                                    <button class="btn btn-outline-dark btn-sm" type="submit"
-                                            onclick="return confirm('Você tem certeza que deseja cancelar essa reunião de consulta?')">
-                                        <i class="fas fa-trash-alt"></i> Cancelar
-                                    </button>
-                                </form>
+                            <td>
+                                @hasrole("Docente")
+                                    <?php $date = $consultationmeeting->date ." ". $consultationmeeting->hour ?>
+                                    @if(Carbon\Carbon::createFromFormat("d/m/Y H:i", $date) < now())
+                                        <div class="col-12" style="white-space:nowrap;text-align:left">
+                                            <input class="form-check-input" type="radio" name="{{'feedback-'.$consultationmeeting->id}}" value="Consulta realizada" onClick="rdFBChange(this)" {{ $consultationmeeting->feedback=="Consulta realizada" ? "checked" : "" }}>
+                                            <label class="font-weight-normal">Consulta realizada</label><br>
+                                            <input class="form-check-input" type="radio" name="{{'feedback-'.$consultationmeeting->id}}" value="Consulta não realizada" onClick="rdFBChange(this)" {{ $consultationmeeting->feedback=="Consulta não realizada" ? "checked" : "" }}>
+                                            <label class="font-weight-normal">Consulta não realizada</label>
+                                        </div>
+                                    @endif
+                                @endhasrole
+                                @hasanyrole("Administrador|Secretaria")
+                                    {{ $consultationmeeting->feedback }}
+                                @endhasanyrole
                             </td>
+                            @hasanyrole("Administrador|Secretaria")
+                                <td style="white-space:nowrap">
+                                    <a class="btn btn-outline-dark btn-sm"
+                                        data-toggle="modal"
+                                        data-target="#rescheduleModal"
+                                        title="Reagendar Reunião de Consulta"
+                                        href="{{ route('consultationmeetings.reschedule', $consultationmeeting) }}"
+                                    >
+                                        <i class="fas fa-calendar-plus"></i> Reagendar
+                                    </a>
+                                    <a class="btn btn-outline-dark btn-sm"
+                                        data-toggle="modal"
+                                        data-target="#decisionModal"
+                                        title="Informar Resultado"
+                                        href="{{ route('consultationmeetings.informdecision', $consultationmeeting) }}"
+                                    >
+                                    <i class="fas fa-plus"></i> Resultado
+                                    </a>
+                                    <form action="{{ route('consultationmeetings.destroy', $consultationmeeting) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method("delete")
+                                        
+                                        <button class="btn btn-outline-dark btn-sm" type="submit"
+                                                onclick="return confirm('Você tem certeza que deseja cancelar essa reunião de consulta?')">
+                                            <i class="fas fa-trash-alt"></i> Cancelar
+                                        </button>
+                                    </form>
+                                </td>
+                            @endhasanyrole
                         </tr>
                     @endforeach
                 </table>
@@ -128,6 +149,27 @@
             ].join("\n");
             $('#div-reuniao').html(html);
         }
+    }
+    $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    function rdFBChange(rdFeedBack){
+        var res = rdFeedBack.name.split("-");
+        $.ajax({
+            type:"patch",
+            url:"/consultationmeetings/feedback/"+res[1]+"/update",
+            data:{valor:rdFeedBack.value},
+            success:function(response){
+                if(response["status"]=="Feedback alterado!"){
+                    console.log("Feedback alterado com sucesso!!");
+                }
+            },        
+            error:function(response){
+                console.log(response);
+            }}
+        );
     }
 </script>
 @endsection

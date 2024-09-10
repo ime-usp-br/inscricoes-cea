@@ -8,6 +8,7 @@ use App\Models\Semester;
 use App\Models\Attachment;
 use App\Models\DepositReceipt;
 use App\Models\BankSlip;
+use App\Models\Event;
 
 class Application extends Model
 {
@@ -52,6 +53,7 @@ class Application extends Model
         'conclusions',
         'expectedHelp',
         'deleted',
+        'whatsapp',
     ];
 
     public function semester()
@@ -79,5 +81,10 @@ class Application extends Model
     {
         return $this->hasOne(BankSlip::class, "applicationID")
                     ->where("relativoA", "Taxa de Projeto");
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class, "applicationID");
     }
 }

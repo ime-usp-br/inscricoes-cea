@@ -34,8 +34,11 @@
                         <th>Local ou Link</th>
                         <th>Resultado</th>
                         <th>Taxa Projeto</th>
-                        <th>Observações</th>
-                        <th></th>
+                        <th>Observações</th>                        
+                        <th>Feedback<br>do<br>Pesquisador</th>
+                        @hasanyrole("Administrador|Secretaria")
+                            <th></th>
+                        @endhasanyrole
                     </tr>
 
                     @foreach($triagens as $triagem)
@@ -55,39 +58,57 @@
                             </td>
                             <td>{{ $triagem->note }}</td>
                             <td>
-                                <a class="btn btn-outline-dark btn-sm my-1"
-                                    data-toggle="modal"
-                                    data-target="#rescheduleModal"
-                                    title="Reagendar Triagem"
-                                    href="{{ route('triages.reschedule', $triagem) }}"
-                                >
-                                    <i class="fas fa-calendar-plus"></i> Reagendar
-                                </a>
-                                <a class="btn btn-outline-dark btn-sm my-1"
-                                    data-toggle="modal"
-                                    data-target="#decisionModal"
-                                    title="Informar Resultado"
-                                    href="{{ route('triages.informdecision', $triagem) }}"
-                                >
-                                <i class="fas fa-plus"></i> Resultado
-                                </a>
-                                <a class="btn btn-outline-dark btn-sm my-1"
-                                    data-toggle="tooltip" data-placement="top"
-                                    title="Visualizar"
-                                    href="{{ route('applications.show', $triagem->application) }}"
-                                >
-                                    Visualizar Inscrição
-                                </a>
-                                <form action="{{ route('triages.destroy', $triagem) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method("delete")
-                                    
-                                    <button class="btn btn-outline-dark btn-sm my-1" type="submit"
-                                            onclick="return confirm('Você tem certeza que deseja cancelar essa triagem?')">
-                                        <i class="fas fa-trash-alt"></i> Cancelar
-                                    </button>
-                                </form>
+                                @hasrole("Docente")
+                                    <?php $date = $triagem->date ." ". $triagem->hour ?>
+                                    @if(Carbon\Carbon::createFromFormat("d/m/Y H:i", $date) < now())
+                                        <div class="col-12" style="white-space:nowrap;text-align:left">
+                                            <input class="form-check-input" type="radio" name="{{'feedback-'.$triagem->id}}" value="Triagem Realizada" onClick="rdFBChange(this)" {{ $triagem->feedback=="Triagem Realizada" ? "checked" : "" }}>
+                                            <label class="font-weight-normal">Triagem Realizada</label><br>
+                                            <input class="form-check-input" type="radio" name="{{'feedback-'.$triagem->id}}" value="Triagem não realizada" onClick="rdFBChange(this)" {{ $triagem->feedback=="Triagem não realizada" ? "checked" : "" }}>
+                                            <label class="font-weight-normal">Triagem não realizada</label>
+                                        </div>
+                                    @endif
+                                @endhasrole
+                                @hasanyrole("Administrador|Secretaria")
+                                    {{ $triagem->feedback }}
+                                @endhasanyrole
                             </td>
+                            @hasanyrole("Administrador|Secretaria")
+                                <td>
+                                    <a class="btn btn-outline-dark btn-sm my-1"
+                                        data-toggle="modal"
+                                        data-target="#rescheduleModal"
+                                        title="Reagendar Triagem"
+                                        href="{{ route('triages.reschedule', $triagem) }}"
+                                    >
+                                        <i class="fas fa-calendar-plus"></i> Reagendar
+                                    </a>
+                                    <a class="btn btn-outline-dark btn-sm my-1"
+                                        data-toggle="modal"
+                                        data-target="#decisionModal"
+                                        title="Informar Resultado"
+                                        href="{{ route('triages.informdecision', $triagem) }}"
+                                    >
+                                    <i class="fas fa-plus"></i> Resultado
+                                    </a>
+                                    <a class="btn btn-outline-dark btn-sm my-1"
+                                        data-toggle="tooltip" data-placement="top"
+                                        title="Visualizar"
+                                        href="{{ route('applications.show', $triagem->application) }}"
+                                    >
+                                        Visualizar Inscrição
+                                    </a>
+                                    <form action="{{ route('triages.destroy', $triagem) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method("delete")
+                                        
+                                        <button class="btn btn-outline-dark btn-sm my-1" type="submit"
+                                                onclick="return confirm('Você tem certeza que deseja cancelar essa triagem?')">
+                                            <i class="fas fa-trash-alt"></i> Cancelar
+                                        </button>
+                                    </form>
+                                </td>   
+                            @endhasanyrole
                         </tr>
                     @endforeach
                 </table>
@@ -143,6 +164,27 @@
             ].join("\n");
             $('#div-reuniao').html(html);
         }
+    }
+    $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    function rdFBChange(rdFeedBack){
+        var res = rdFeedBack.name.split("-");
+        $.ajax({
+            type:"patch",
+            url:"/triages/feedback/"+res[1]+"/update",
+            data:{valor:rdFeedBack.value},
+            success:function(response){
+                if(response["status"]=="Feedback alterado!"){
+                    console.log("Feedback alterado com sucesso!!");
+                }
+            },        
+            error:function(response){
+                console.log(response);
+            }}
+        );
     }
 </script>
 @endsection

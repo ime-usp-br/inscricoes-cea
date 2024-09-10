@@ -10,6 +10,7 @@ use App\Http\Controllers\DepositReceiptController;
 use App\Http\Controllers\MailTemplateController;
 use App\Http\Controllers\TriageController;
 use App\Http\Controllers\ConsultationMeetingController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,10 +46,15 @@ Route::get('/mailtemplates/activate/{mailtemplate}', [MailTemplateController::cl
 Route::get('/mailtemplates/deactivate/{mailtemplate}', [MailTemplateController::class, 'deactivate'])->name('mailtemplates.deactivate');
 Route::resource('mailtemplates', MailTemplateController::class);
 
+Route::patch('/triages/feedback/{triage}/update', [TriageController::class, "updateFeedback"])->name("triages.updateFeedback");
 Route::patch('/triages/{triage}/informdecision', [TriageController::class, "informDecision"])->name("triages.informdecision");
 Route::patch('/triages/{triage}/reschedule', [TriageController::class, "reschedule"])->name("triages.reschedule");
 Route::resource('triages', TriageController::class);
 
+Route::patch('/consultationmeetings/feedback/{consultationmeeting}/update', [ConsultationMeetingController::class, "updateFeedback"])->name("consultationmeetings.updateFeedback");
 Route::patch('/consultationmeetings/{consultationmeeting}/informdecision', [ConsultationMeetingController::class, "informDecision"])->name("consultationmeetings.informdecision");
 Route::patch('/consultationmeetings/{consultationmeeting}/reschedule', [ConsultationMeetingController::class, "reschedule"])->name("consultationmeetings.reschedule");
 Route::resource('consultationmeetings', ConsultationMeetingController::class);
+
+
+Route::get('/events', [EventController::class, 'index'])->name("events.index");

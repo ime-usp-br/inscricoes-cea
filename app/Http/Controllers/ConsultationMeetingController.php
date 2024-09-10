@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreConsultationMeetingRequest;
 use App\Http\Requests\UpdateConsultationMeetingRequest;
 use App\Http\Requests\RescheduleConsultationMeetingRequest;
@@ -15,6 +16,7 @@ use App\Mail\NotifyAboutConsultationMeetingDecision;
 use App\Models\Application;
 use App\Models\MailTemplate;
 use App\Models\BankSlip;
+use App\Models\Event;
 use Session;
 use Auth;
 
@@ -156,6 +158,13 @@ class ConsultationMeetingController extends Controller
         $consultationmeeting->application->save();
         $consultationmeeting->delete();
 
+        $event = Event::create([
+            'applicationID'=>$consultationmeeting->application->id,
+            'name'=>'cancelamento consulta',
+            'description'=>'Cancelamento de consulta',
+            'event_date'=>date("Y-m-d H:i:s")
+        ]);
+
         Session::flash("alert-success", "Reunião de consulta cancelada com sucesso.");
 
         return back();
@@ -186,6 +195,13 @@ class ConsultationMeetingController extends Controller
         if($mailtemplate){
             Mail::to($consultationmeeting->application->email)->cc(env("MAIL_CEA"))->queue(new NotifyAboutConsultationMeetingSchedule($consultationmeeting, $mailtemplate));
         }
+
+        $event = Event::create([
+            'applicationID'=>$consultationmeeting->application->id,
+            'name'=>'reagendamento consulta',
+            'description'=>'Reagendamento de consulta',
+            'event_date'=>date("Y-m-d H:i:s")
+        ]);
 
         Session::flash("alert-success", "Reunião de consulta reagendada com sucesso.");
 
@@ -226,5 +242,26 @@ class ConsultationMeetingController extends Controller
         Session::flash("alert-success", "Resultado da reunião de consulta cadastrado com sucesso.");
 
         return back();
+    }
+
+    public function updateFeedback(Request $request, ConsultationMeeting $consultationmeeting)
+    {
+        if(!Auth::check()){
+            return response()->json([
+                'status' => 'Precisa estar logado!',
+            ]);
+        }elseif(!Auth::user()->hasRole("Docente")){
+            return response()->json([
+                'status' => 'Usuário sem perfil!',
+            ]);
+        }
+
+        $consultationmeeting->update([
+            "feedback" => $request->get('valor')
+        ]);
+
+        return response()->json([
+            'status' => 'Feedback alterado!'
+        ]);
     }
 }

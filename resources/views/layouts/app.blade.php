@@ -54,6 +54,11 @@
                   <a href="{{ route('semesters.index') }}">Semestres</a>
               </li>
           @endcan
+          @hasanyrole("Administrador|Secretaria")
+              <li>
+                  <a href="{{ route('events.index') }}">Registros</a>
+              </li>
+          @endhasanyrole
           @can("visualizar inscrições")
               <li>
                   <a href="{{ route('applications.index') }}">Inscrições</a>

@@ -4,23 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Application;
 
-class ConsultationMeeting extends Model
+class Event extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
-        'applicationID',
-        'date',
-        'hour',
-        'meetingMode',
-        'link',
-        'local',
-        'decision',
-        'note',
-        'feedback',
+        'applicationID', 
+        'name', 
+        'description', 
+        'event_date'
     ];
+
 
     public function application()
     {

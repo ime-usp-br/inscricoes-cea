@@ -11,6 +11,7 @@ $(function () {
     });
     $('.custom-datepicker').datepicker({
       showOn: 'both',
+      dateFormat: 'dd/mm/yyyy',
       buttonText: '<i class="far fa-calendar"></i>',
     });
     $('.custom-datepicker').datepicker('option', $.datepicker.regional["pt-BR"]);

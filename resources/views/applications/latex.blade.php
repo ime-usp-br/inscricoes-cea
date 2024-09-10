@@ -52,7 +52,7 @@
 
   \vspace{5pt}
 
-  \textbf{Telefones para contato:} {!! clear_string($application->contactPhone) !!}
+  \textbf{Telefones para contato{{ $application->whatsapp ? " (Whatsapp)" : ""}}:} {!! clear_string($application->contactPhone) !!}
 
   \vspace{5pt}
 

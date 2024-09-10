@@ -47,6 +47,13 @@
                         <div class="col-12 col-md-auto text-md-right">
                             <label for="contactPhone">Telefones para contato:</label>
                         </div>
+                        
+                        <div class="col col-md-auto">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="wpp" name="whatsapp" value='1' {{ old("whatsapp") ? "checked" : '' }}>
+                                <label class="font-weight-normal">Whatsapp</label>
+                            </div>
+                        </div>
                         <div class="col-12 col-md">
                             <input class="custom-form-control" type="text" name="contactPhone" id="contactPhone" required value={{ old("contactPhone") ?? '' }}>
                         </div>

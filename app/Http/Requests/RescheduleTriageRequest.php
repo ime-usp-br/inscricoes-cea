@@ -24,7 +24,7 @@ class RescheduleTriageRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'date' => 'required',
+            'date' => 'required|date_format:d/m/Y',
             'hour' => 'required',
             'meetingMode' => 'required',
             'link' => 'required_if:mettingMode,Online',

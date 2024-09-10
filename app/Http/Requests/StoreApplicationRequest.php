@@ -60,6 +60,7 @@ class StoreApplicationRequest extends FormRequest
             'expectedHelp' => 'required',
             'anexosNovos' => "sometimes|array",
             "anexosNovos.*.arquivo" => "required",
+            'whatsapp' => 'sometimes',
         ];
 
         if(isset(request()->projectPurpose))

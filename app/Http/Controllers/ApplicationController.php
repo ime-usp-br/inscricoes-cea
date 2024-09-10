@@ -17,6 +17,7 @@ use App\Models\Attachment;
 use App\Models\DepositReceipt;
 use App\Models\MailTemplate;
 use App\Models\BankSlip;
+use App\Models\Event;
 use Session;
 use Auth;
 
@@ -152,6 +153,13 @@ class ApplicationController extends Controller
                 Mail::to(env("MAIL_CEA"))->queue(new NotifyCEAAboutRefundReceipt($application, $mailtemplate));
             }
         }
+
+        $event = Event::create([
+            'applicationID'=>$application->id,
+            'name'=>'Inscrição',
+            'description'=>'Inscrição Realizada',
+            'event_date'=>$application->created_at
+        ]);
 
         Session::flash("alert-success", "Sua inscrição foi efetuada com sucesso! Seu número de protocolo é ".$protocol.".");
 

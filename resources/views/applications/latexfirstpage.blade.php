@@ -53,7 +53,7 @@
 
   \vspace{5pt}
 
-  \textbf{Telefones para contato:} {!! str_replace("_", "\_", $application->contactPhone) !!}
+  \textbf{Telefones para contato{{ $application->whatsapp ? " (Whatsapp)" : ""}}:} {!! str_replace("_", "\_", $application->contactPhone) !!}
 
   \vspace{5pt}
 

@@ -19,6 +19,7 @@ class Triage extends Model
         'local',
         'decision',
         'note',
+        'feedback',
     ];
 
     public function application()

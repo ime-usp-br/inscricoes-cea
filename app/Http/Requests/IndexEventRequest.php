@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreConsultationMeetingRequest extends FormRequest
+class IndexEventRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,7 @@ class StoreConsultationMeetingRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'applicationID' => 'required',
-            'date' => 'required|date_format:d/m/Y',
-            'hour' => 'required',
-            'meetingMode' => 'required',
-            'link' => 'required_if:mettingMode,Online',
-            'local' => 'required_if:mettingMode,Presencial',
+            'semester_id' => 'sometimes|numeric',
         ];
 
         return $rules;
