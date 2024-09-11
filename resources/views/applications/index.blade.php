@@ -76,13 +76,13 @@
                             </td>
                             <td style="white-space:nowrap">
                                 @if($ficha->applicationFee)
-                                    Taxa de Inscrição, {{$ficha->applicationFee->getStatus(true)}}
+                                    Taxa de Inscrição, {{$ficha->applicationFee->getStatus()}}
                                 @else
                                     Taxa de Inscrição, Não Emitido
                                 @endif
                                 <br>
                                 @if($ficha->projectFee)
-                                    Taxa de Projeto, {{$ficha->projectFee->getStatus(true)}}
+                                    Taxa de Projeto, {{$ficha->projectFee->getStatus()}}
                                 @endif
                             </td>
                             <td style="white-space:nowrap">

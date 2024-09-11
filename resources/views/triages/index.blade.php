@@ -51,7 +51,7 @@
                             <td>{{ $triagem->decision }}</td>
                             <td style="white-space:nowrap">
                                 @if($triagem->application->projectFee)
-                                    {{$triagem->application->projectFee->getStatus(true)}}
+                                    {{$triagem->application->projectFee->getStatus()}}
                                 @else
                                     Não Emitido
                                 @endif

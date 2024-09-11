@@ -56,7 +56,7 @@
           @endcan
           @hasanyrole("Administrador|Secretaria")
               <li>
-                  <a href="{{ route('events.index') }}">Registros</a>
+                  <a href="{{ route('events.index') }}">Histórico</a>
               </li>
           @endhasanyrole
           @can("visualizar inscrições")
