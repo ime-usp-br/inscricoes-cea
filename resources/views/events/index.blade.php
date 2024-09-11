@@ -5,7 +5,7 @@
 <div id="layout_conteudo">
     <div class="justify-content-center">
         <div class="col-md-12">
-            <h1 class='text-center mt-4'>Registros</h1>
+            <h1 class='text-center mt-4'>Histórico</h1>
             <h4 class='text-center pb-4'>{{ $semester->period }} de {{ $semester->year }}</h4>
 
             @include('events.modals.chooseSemester')
