@@ -34,7 +34,7 @@
                         <th>Local ou Link</th>
                         <th>Resultado</th>
                         <th>Observações</th>                    
-                        <th>Feedback<br>do<br>Pesquisador</th>
+                        <th>Feedback<br>do<br>Professor</th>
                         @hasanyrole("Administrador|Secretaria")
                             <th></th>
                         @endhasanyrole
