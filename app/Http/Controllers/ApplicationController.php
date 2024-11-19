@@ -82,8 +82,8 @@ class ApplicationController extends Controller
         $body = json_decode($body, true);
 
         if(!$body["success"]){
-            Session::flash("alert-danger", "Falhou na validação do reCaptcha.");    
-
+            Session::flash("alert-danger", "Falhou na validação do reCaptcha.");   
+            return back();
         }
 
         $semester = Semester::getLatest();
