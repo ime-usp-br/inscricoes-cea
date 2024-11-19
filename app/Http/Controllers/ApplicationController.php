@@ -18,6 +18,7 @@ use App\Models\DepositReceipt;
 use App\Models\MailTemplate;
 use App\Models\BankSlip;
 use App\Models\Event;
+use GuzzleHttp\Client;
 use Session;
 use Auth;
 
@@ -68,6 +69,22 @@ class ApplicationController extends Controller
     public function store(StoreApplicationRequest $request)
     {
         $validated = $request->validated();
+
+        $client = new Client();
+
+        $response = $client->request('POST', 'https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => env("GOOGLE_RECAPTCHA_SECRET"),
+                'response' => $validated["g-recaptcha-response"],
+            ]
+        ]);
+        $body = (string) $response->getBody();
+        $body = json_decode($body, true);
+
+        if(!$body["success"]){
+            Session::flash("alert-danger", "Falhou na validação do reCaptcha.");    
+
+        }
 
         $semester = Semester::getLatest();
 

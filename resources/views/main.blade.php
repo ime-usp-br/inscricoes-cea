@@ -446,13 +446,7 @@
 
                     <div class="custom-form-group mt-5">
                         <div class="col-12">
-                            <canvas id="canvas" style="width: 220px;height: 88px;"></canvas>
-                        </div>
-                        <div class="col-12">
-                            <label>Digite os 4 caracteres acima:</label>
-                        </div>
-                        <div class="col-12">
-                            <input name="captchafield" style="width:220px;" required/>
+                            <div class="g-recaptcha" data-sitekey="6Lfe_oMqAAAAANKhCHxnvXTwzsvxOPi6MVaaawF4" required></div>
                         </div>
                     </div>
 
@@ -477,6 +471,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
 <script src="{{ asset('js/jquery-captcha.min.js').'?version=1' }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
     jQuery.validator.addMethod("confirmacaoEmail", function(value, element) {
         return value == document.getElementById("email").value;
@@ -492,10 +487,6 @@
         });
         return soma <= param * 1000000;
     }, 'A soma do tamanho dos arquivos não deve ultrapassar {0} MB');
-    const captcha = new Captcha($('#canvas'),{autoRefresh: false});
-    jQuery.validator.addMethod("validatedCaptcha", function(value, element) {
-        return captcha.valid(value);
-    }, "Wrong sequence");
     jQuery.validator.addMethod("validateCPFCNPJ", function(value, element) {
         var valor = value.replace(/[^0-9]/g, '');
         if(valor.length == 11){
@@ -586,10 +577,6 @@
                 required: true,
                 validateCPFCNPJ : true
             },
-            captchafield: {
-                required: true,
-                validatedCaptcha: true
-            },
             paymentVoucher:{
                 filesize: 8
             }
@@ -615,22 +602,28 @@
             element.removeAttribute("data-original-title");       
         },
         submitHandler: function (form, event) {
-            Swal.fire({
-                title: 'ATENÇÂO!!',
-                text: "O agendamento só será realizado após pagamento da taxa. \n Deseja realmente submeter o formulário?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sim, submeter!',
-                cancelButtonText: 'Não, cancelar!',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $("#btn-submit").attr('disabled', true);
-                    form.submit();
-                }else if(!result.value){
-                    event.preventDefault();
-                }
-            });
+
+            if (grecaptcha.getResponse() == ""){
+                alert("Prove que voce não é um robo!");
+                event.preventDefault();
+            } else{
+                Swal.fire({
+                    title: 'ATENÇÂO!!',
+                    text: "O agendamento só será realizado após pagamento da taxa. \n Deseja realmente submeter o formulário?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, submeter!',
+                    cancelButtonText: 'Não, cancelar!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#btn-submit").attr('disabled', true);
+                        form.submit();
+                    }else if(!result.value){
+                        event.preventDefault();
+                    }
+                });
+            }
         }
     });
 
@@ -830,6 +823,11 @@
         }else{
             mentor.required = false;
             declaration.required = false;
+        }
+
+        const $recaptcha = document.querySelector('#g-recaptcha-response');
+        if ($recaptcha) {
+            $recaptcha.setAttribute('required', 'required');
         }
     });
     function removeAnexo(id){   

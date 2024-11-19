@@ -61,6 +61,7 @@ class StoreApplicationRequest extends FormRequest
             'anexosNovos' => "sometimes|array",
             "anexosNovos.*.arquivo" => "required",
             'whatsapp' => 'sometimes',
+            'g-recaptcha-response' => 'required'
         ];
 
         if(isset(request()->projectPurpose))
