@@ -316,10 +316,10 @@
 
                     <div class="col my-5 text-justify">
                         <p>
-                            O não pagamento do boleto na data, impossibilitara a emissão de novo boleto.
+                            <b>A DEVOLUÇÃO DA TAXA EM CASO DE CANCEAMENTO ESTÁ SUJEITA A ANÁLISE, DESDE QUE FEITA NO PRAZO DE 24H HORAS ANTES DA CONSULTA.<b>
                         </p>
                         <p>
-                            A devolução da taxa em caso de canceamento esta sujeita a análise, desde que feita no prazo de 24h horas antes da consulta.
+                            <b>A SUA INSCRIÇÃO SÓ SERÁ CONFIRMADA  NA TRIAGEM APÓS O PAGAMENTO DO BOLETO BANCÁRIO.<b>
                         </p>
                     </div>
 
