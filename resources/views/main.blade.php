@@ -315,12 +315,13 @@
                     </div>
 
                     <div class="col my-5 text-justify">
-                        <p>
-                            <b>A DEVOLUÇÃO DA TAXA EM CASO DE CANCEAMENTO ESTÁ SUJEITA A ANÁLISE, DESDE QUE FEITA NO PRAZO DE 24H HORAS ANTES DA CONSULTA.<b>
-                        </p>
-                        <p>
-                            <b>A SUA INSCRIÇÃO SÓ SERÁ CONFIRMADA  NA TRIAGEM APÓS O PAGAMENTO DO BOLETO BANCÁRIO.<b>
-                        </p>
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <b>A DEVOLUÇÃO DA TAXA EM CASO DE CANCEAMENTO ESTÁ SUJEITA A ANÁLISE, DESDE QUE FEITA NO PRAZO DE 24H HORAS ANTES DA CONSULTA.<b>
+                                <br> <br>
+                                <b>A SUA INSCRIÇÃO SÓ SERÁ CONFIRMADA  NA TRIAGEM APÓS O PAGAMENTO DO BOLETO BANCÁRIO.<b>
+                            </div>
+                        </div>                            
                     </div>
 
                     <hr class="my-5">
