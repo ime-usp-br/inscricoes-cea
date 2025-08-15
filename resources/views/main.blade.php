@@ -317,7 +317,7 @@
                     <div class="col my-5 text-justify">
                         <div class="card bg-light">
                             <div class="card-body">
-                                <b>A DEVOLUÇÃO DA TAXA EM CASO DE CANCEAMENTO ESTÁ SUJEITA A ANÁLISE, DESDE QUE FEITA NO PRAZO DE 24H HORAS ANTES DA CONSULTA.<b>
+                                <b>A DEVOLUÇÃO DA TAXA EM CASO DE CANCEAMENTO ESTÁ SUJEITA A ANÁLISE.<b>
                                 <br> <br>
                                 <b>A SUA INSCRIÇÃO SÓ SERÁ CONFIRMADA  NA TRIAGEM APÓS O PAGAMENTO DO BOLETO BANCÁRIO.<b>
                             </div>
