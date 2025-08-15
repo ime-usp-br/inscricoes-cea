@@ -317,9 +317,9 @@
                     <div class="col my-5 text-justify">
                         <div class="card bg-light">
                             <div class="card-body">
-                                <b>A DEVOLUÇÃO DA TAXA EM CASO DE CANCEAMENTO ESTÁ SUJEITA A ANÁLISE.<b>
+                                <b>A DEVOLUÇÃO DA TAXA DE INSCRIÇÃO EM CASO DE DESISTÊNCIA ESTÁ SUJEITA A ANÁLISE.<b>
                                 <br> <br>
-                                <b>A SUA INSCRIÇÃO SÓ SERÁ CONFIRMADA  NA TRIAGEM APÓS O PAGAMENTO DO BOLETO BANCÁRIO.<b>
+                                <b>A SUA INSCRIÇÃO SÓ SERÁ CONFIRMADA NA TRIAGEM APÓS O PAGAMENTO DO BOLETO BANCÁRIO.<b>
                             </div>
                         </div>                            
                     </div>
