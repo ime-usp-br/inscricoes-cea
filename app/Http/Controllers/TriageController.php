@@ -226,7 +226,7 @@ class TriageController extends Controller
         $triage->application->save();
 
         if($triage->decision == "Aprovado como projeto" and !$triage->application->projectFee){
-            $bankSlip = BankSlip::gerarBoletoRegistrado($triage->application, 200.00, 0, "Taxa de Projeto");
+            $bankSlip = BankSlip::gerarBoletoRegistrado($triage->application, 250.00, 0, "Taxa de Projeto");
             $triage->application->projectFee()->save($bankSlip);
         }
 

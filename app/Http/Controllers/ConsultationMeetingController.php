@@ -225,7 +225,7 @@ class ConsultationMeetingController extends Controller
         $consultationmeeting->application->save();
 
         if($consultationmeeting->decision == "Aprovado como projeto" and !$consultationmeeting->application->projectFee){
-            $bankSlip = BankSlip::gerarBoletoRegistrado($consultationmeeting->application, 200.00, 0, "Taxa de Projeto");
+            $bankSlip = BankSlip::gerarBoletoRegistrado($consultationmeeting->application, 250.00, 0, "Taxa de Projeto");
             $consultationmeeting->application->projectFee()->save($bankSlip);
         }
 

@@ -134,7 +134,11 @@ class ApplicationController extends Controller
             $application->status = "Aguardando agendamento da reunião de consulta";
         }
 
-        $bankSlip = BankSlip::gerarBoletoRegistrado($application, 80.00, 0, "Taxa de Inscrição");
+        if($application->serviceType == 'Consulta'){
+            $bankSlip = BankSlip::gerarBoletoRegistrado($application, 140.00, 0, "Taxa de Consulta");
+        }else{
+            $bankSlip = BankSlip::gerarBoletoRegistrado($application, 80.00, 0, "Taxa de Inscrição");
+        }
         $application->applicationFee()->save($bankSlip);
 
         $application->save();
