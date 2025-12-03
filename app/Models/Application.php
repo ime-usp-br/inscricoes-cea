@@ -74,13 +74,19 @@ class Application extends Model
     public function applicationFee()
     {
         return $this->hasOne(BankSlip::class, "applicationID")
-                    ->where("relativoA", "Taxa de Inscrição");
+            ->where("relativoA", "Taxa de Inscrição");
     }
 
     public function projectFee()
     {
         return $this->hasOne(BankSlip::class, "applicationID")
-                    ->where("relativoA", "Taxa de Projeto");
+            ->where("relativoA", "Taxa de Projeto");
+    }
+
+    public function complementaryFee()
+    {
+        return $this->hasOne(BankSlip::class, "applicationID")
+            ->where("relativoA", "Complemento de Taxa");
     }
 
     public function events()

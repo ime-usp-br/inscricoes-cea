@@ -201,6 +201,28 @@
                 </div>
 
                 <hr class="my-2">
+
+                <div class="row custom-form-group d-flex align-items-center">
+                    <div class="col-12 col-md-auto text-md-right">
+                        <label>Boleto complemento de taxa:</label>
+                    </div>
+                    @if($application->complementaryFee)
+                        <div class="col-12 col-md">      
+                            <label>Status:</label> {{$application->complementaryFee->getStatus()}}<br>
+                            <label>Valor do Documento:</label> {{$application->complementaryFee->valorDocumento}}<br>
+                            <label>Data do Vencimento:</label> {{$application->complementaryFee->dataVencimentoBoleto}}<br>
+                            <label>Valor Pago:</label> {{$application->complementaryFee->valorEfetivamentePago}}<br>
+                            <label>Data do Pagamento:</label> {{$application->complementaryFee->dataEfetivaPagamento ?? "Não foi pago"}}<br>
+                        </div>     
+                    @else
+                        <div class="col-12 col-md">                    
+                            Não Emitido.
+                        </div>     
+
+                    @endif   
+                </div>
+
+                <hr class="my-2">
                 
                 <div class="row custom-form-group d-flex align-items-center">
                     <div class="col-12 col-md-auto text-md-right">

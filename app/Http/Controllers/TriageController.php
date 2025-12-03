@@ -220,25 +220,8 @@ class TriageController extends Controller
 
         $validated = $request->validated();
 
-        $triage->update($validated);     
-
-        $triage->application->status = $triage->decision;
-        $triage->application->save();
-
-        if($triage->decision == "Aprovado como projeto" and !$triage->application->projectFee){
-            $bankSlip = BankSlip::gerarBoletoRegistrado($triage->application, 250.00, 0, "Taxa de Projeto");
-            $triage->application->projectFee()->save($bankSlip);
-        }
-
-        $mailtemplate = MailTemplate::where([
-            "mail_class"=>"NotifyAboutTriageDecision",
-            "sending_frequency"=>"A cada resultado de triagem",
-            "active"=>true
-            ])->first();
-
-        if($mailtemplate){
-            Mail::to($triage->application->email)->cc(env("MAIL_CEA"))->queue(new NotifyAboutTriageDecision($triage, $mailtemplate));
-        }
+        $triageService = new \App\Services\TriageService();
+        $triageService->processDecision($triage, $validated);
 
         Session::flash("alert-success", "Resultado da triagem cadastrado com sucesso.");
 
