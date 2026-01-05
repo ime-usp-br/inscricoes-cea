@@ -62,6 +62,14 @@
                                     >
                                         <i class="fas fa-calendar-plus"></i>
                                     </a>
+                                @elseif($ficha->status == "Aguardando pagamento" or $ficha->status == "Aguardando confirmação de pagamento")
+                                    <a href="{{ route('applications.show', $ficha) }}" class="btn btn-sm btn-primary">Detalhes</a>
+                                    @if(!$ficha->applicationFee)
+                                        <form action="{{ route('applications.regenerateBoleto', $ficha) }}" method="POST" class="d-inline" onsubmit="return confirm('Tentaremos gerar um novo boleto via SOAP e enviar por e-mail. Confirmar?');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-warning">Gerar Boleto (Manual)</button>
+                                        </form>
+                                    @endif
                                 @elseif($ficha->status == "Aguardando agendamento da reunião de consulta")
                                     <a class="text-dark text-decoration-none"
                                         data-toggle="modal"

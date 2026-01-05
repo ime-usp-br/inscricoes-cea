@@ -7,8 +7,10 @@ use App\Http\Requests\UpdateApplicationRequest;
 use App\Http\Requests\IndexApplicationRequest;
 use App\Http\Requests\DeletedIndexApplicationRequest;
 use App\Mail\NotifyCEAAboutApplication;
+use App\Mail\NotifyCEABoletoFailure;
 use App\Mail\NotifyCEAAboutRefundReceipt;
 use App\Mail\NotifyInscribedAboutApplication;
+use App\Mail\NotifyUserNewBoleto;
 use Illuminate\Support\Facades\Mail;
 use Ismaelw\LaraTeX\LaraTeX;
 use App\Models\Application;
@@ -135,11 +137,18 @@ class ApplicationController extends Controller
         }
 
         if($application->serviceType == 'Consulta'){
-            $bankSlip = BankSlip::gerarBoletoRegistrado($application, 140.00, 0, "Taxa de Consulta");
+            // Format as string to ensure SOAP compatibility
+            $bankSlip = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Consulta");
         }else{
-            $bankSlip = BankSlip::gerarBoletoRegistrado($application, 80.00, 0, "Taxa de Inscrição");
+            $bankSlip = BankSlip::gerarBoletoRegistrado($application, '80.00', 0, "Taxa de Inscrição");
         }
-        $application->applicationFee()->save($bankSlip);
+
+        if ($bankSlip) {
+            $application->applicationFee()->save($bankSlip);
+        } else {
+            // Fault Tolerance: Notify CEA about the failure so they can regenerate later
+            Mail::to(env("MAIL_CEA"))->send(new NotifyCEABoletoFailure($application));
+        }
 
         $application->save();
 
@@ -336,5 +345,35 @@ class ApplicationController extends Controller
 
         return back();
 
+    }
+    public function regenerateBoleto(Application $application)
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+
+        if ($application->applicationFee) {
+            return redirect()->back()->withErrors(['Este boleto já foi gerado.']);
+        }
+
+        if($application->serviceType == 'Consulta'){
+            // Format as string to ensure SOAP compatibility
+            $bankSlip = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Consulta");
+        }else{
+            $bankSlip = BankSlip::gerarBoletoRegistrado($application, '80.00', 0, "Taxa de Inscrição");
+        }
+
+        if ($bankSlip) {
+            $application->applicationFee()->save($bankSlip);
+            
+            // Notify user about the new boleto
+            Mail::to($application->email)->queue(new NotifyUserNewBoleto($application));
+
+            return redirect()->back()->with('success', 'Boleto gerado com sucesso e enviado ao usuário.');
+        } else {
+            return redirect()->back()->withErrors(['Falha ao gerar o boleto via SOAP. Tente novamente mais tarde.']);
+        }
     }
 }

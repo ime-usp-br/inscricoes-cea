@@ -55,9 +55,17 @@ class NotifyInscribedAboutApplication extends Mailable
 
         $css = file_get_contents(base_path() . '/public/css/mail.css');
 
-        $mail = $this->html($cssToInlineStyles->convert($body, $css))->subject($subject)->attachData(
-            base64_decode($this->application->applicationFee->obterBoletoPDF()), 
-            'boleto.pdf');
+        if ($this->application->applicationFee) {
+            $mail = $this->html($cssToInlineStyles->convert($body, $css))->subject($subject)->attachData(
+                base64_decode($this->application->applicationFee->obterBoletoPDF()), 
+                'boleto.pdf');
+        } else {
+            // Fault Tolerance: If boleto failed, inform the user in the email body
+            $warning = "<br><br><p style='color: red; font-weight: bold;'>Atenção: Houve uma instabilidade momentânea no sistema de geração de boletos. Sua inscrição foi recebida, mas o boleto não pode ser gerado automaticamente neste momento. O CEA já foi notificado e nossa equipe entrará em contato em breve enviando o seu boleto. Não é necessário realizar nova inscrição.</p>";
+            $body .= $warning;
+            
+            $mail = $this->html($cssToInlineStyles->convert($body, $css))->subject($subject);
+        }
 
         try{
             $mail->attachData(
