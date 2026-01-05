@@ -136,18 +136,30 @@ class ApplicationController extends Controller
             $application->status = "Aguardando agendamento da reunião de consulta";
         }
 
-        if($application->serviceType == 'Consulta'){
-            // Format as string to ensure SOAP compatibility
-            $bankSlip = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Consulta");
-        }else{
-            $bankSlip = BankSlip::gerarBoletoRegistrado($application, '80.00', 0, "Taxa de Inscrição");
-        }
+        try {
+            if($application->serviceType == 'Consulta'){
+                // Format as string to ensure SOAP compatibility
+                $bankSlip = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Consulta");
+            }else{
+                $bankSlip = BankSlip::gerarBoletoRegistrado($application, '80.00', 0, "Taxa de Inscrição");
+            }
 
-        if ($bankSlip) {
-            $application->applicationFee()->save($bankSlip);
-        } else {
-            // Fault Tolerance: Notify CEA about the failure so they can regenerate later
-            Mail::to(env("MAIL_CEA"))->send(new NotifyCEABoletoFailure($application));
+            if ($bankSlip) {
+                $application->applicationFee()->save($bankSlip);
+            } else {
+                // Fault Tolerance: Notify CEA about the failure so they can regenerate later
+                Mail::to(env("MAIL_CEA"))->send(new NotifyCEABoletoFailure($application));
+            }
+        } catch (\Throwable $e) {
+            // Check if it's the specific NuSOAP array to string conversion error or any other crash
+            \Log::error("Critical Error generating bank slip for application {$application->id}: " . $e->getMessage());
+            
+            // Still notify admin so they know manual intervention is needed
+            try {
+                Mail::to(env("MAIL_CEA"))->send(new NotifyCEABoletoFailure($application));
+            } catch (\Exception $mailException) {
+                \Log::error("Failed to send failure notification email: " . $mailException->getMessage());
+            }
         }
 
         $application->save();
@@ -358,22 +370,27 @@ class ApplicationController extends Controller
             return redirect()->back()->withErrors(['Este boleto já foi gerado.']);
         }
 
-        if($application->serviceType == 'Consulta'){
-            // Format as string to ensure SOAP compatibility
-            $bankSlip = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Consulta");
-        }else{
-            $bankSlip = BankSlip::gerarBoletoRegistrado($application, '80.00', 0, "Taxa de Inscrição");
-        }
+        try {
+            if($application->serviceType == 'Consulta'){
+                // Format as string to ensure SOAP compatibility
+                $bankSlip = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Consulta");
+            }else{
+                $bankSlip = BankSlip::gerarBoletoRegistrado($application, '80.00', 0, "Taxa de Inscrição");
+            }
 
-        if ($bankSlip) {
-            $application->applicationFee()->save($bankSlip);
-            
-            // Notify user about the new boleto
-            Mail::to($application->email)->queue(new NotifyUserNewBoleto($application));
+            if ($bankSlip) {
+                $application->applicationFee()->save($bankSlip);
+                
+                // Notify user about the new boleto
+                Mail::to($application->email)->queue(new NotifyUserNewBoleto($application));
 
-            return redirect()->back()->with('success', 'Boleto gerado com sucesso e enviado ao usuário.');
-        } else {
-            return redirect()->back()->withErrors(['Falha ao gerar o boleto via SOAP. Tente novamente mais tarde.']);
+                return redirect()->back()->with('success', 'Boleto gerado com sucesso e enviado ao usuário.');
+            } else {
+                return redirect()->back()->withErrors(['Falha ao gerar o boleto via SOAP (Retornou Falso). Tente novamente mais tarde.']);
+            }
+        } catch (\Throwable $e) {
+            \Log::error("Critical Error regenerating bank slip: " . $e->getMessage());
+            return redirect()->back()->withErrors(['Erro crítico ao gerar boleto: ' . $e->getMessage()]);
         }
     }
 }
