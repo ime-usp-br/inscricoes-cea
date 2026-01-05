@@ -83,7 +83,6 @@
                                 @endif
                             </td>
                             <td style="white-space:nowrap">
-                            <td style="white-space:nowrap">
                                 Taxa de Inscrição, {{$ficha->getAggregatedInscriptionFeeStatus()}}
                                 <br>
                                 Taxa de Projeto, {{$ficha->getAggregatedProjectFeeStatus()}}
