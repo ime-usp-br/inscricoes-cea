@@ -77,25 +77,18 @@ class RegenerateAndNotifyPaymentFailure extends Command
 
         foreach ($applications as $app) {
             try {
+                $this->info("Processing App ID: {$app->id}");
                 $oldBoleto = $app->applicationFee;
 
                 // 1. Cancel Old Boleto if exists and not already cancelled
+                // FIXME: NuSOAP crashes when cancellation fails (SOAP Fault). skipping cancellation to ensure new boleto generation.
+                /*
                 if ($oldBoleto && $oldBoleto->statusBoletoBancario != 'C') {
                     $oldBoleto->cancelarBoleto();
-                    // We don't delete the record, just cancel it remotely. 
-                    // But we will create a NEW record. 
-                    // The relationship 'applicationFee' (hasOne) might grab the old one unless we handle it?
-                    // applicationFee() grabs the *first* one. 
-                    // If we create a new one, we will have TWO 'Taxa de Inscrição' boletos?
-                    // Application::applicationFee() uses 'hasOne'. It doesn't order.
-                    // We should probably mark the old one in DB as 'Cancelado' or similar to avoid confusion,
-                    // OR rename its 'relativoA' to 'Taxa de Inscrição (Cancelado)'? 
-                    // Best approach: Just create the new one. Use 'latest()' in relation if needed, 
-                    // but for now let's hope `hasOne` picks the new one or we explicitly pass the new one to email.
                 }
+                */
 
                 // 2. Generate New Boleto
-                // Determine value based on service type
                 $valor = ($app->serviceType == 'Consulta') ? '140.00' : '80.00';
                 
                 // Using 'Taxa de Inscrição' as standard now
@@ -107,17 +100,7 @@ class RegenerateAndNotifyPaymentFailure extends Command
                     continue;
                 }
 
-                // Associate ONLY if necessary (gerarBoletoRegistrado already creates and we might need to link manually if relations are tricky)
-                // AppController logic: $app->applicationFee()->save($newBoleto);
-                // But $newBoleto is already a saved model from `gerarBoletoRegistrado` (which creates it).
-                // Wait, `gerarBoletoRegistrado` in BankSlip.php:
-                // `BankSlip::create([...]);`
-                // Does it link? 
-                // In my fix I REMOVED `applicationID` based on user feedback (step 982).
-                // So `gerarBoletoRegistrado` creates an ORPHAN boleto.
-                // WE MUST LINK IT.
                 $app->applicationFee()->save($newBoleto);
-
 
                 // 3. Fetch PDF
                 $pdfContent = $newBoleto->obterBoletoPDF();
@@ -127,7 +110,7 @@ class RegenerateAndNotifyPaymentFailure extends Command
                     $this->error("\nFalha ao obter PDF para {$app->bdName}");
                     continue;
                 }
-
+                
                 // 4. Send Email
                 $mail = Mail::to($app->email);
                 

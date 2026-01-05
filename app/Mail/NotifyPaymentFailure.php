@@ -35,7 +35,7 @@ class NotifyPaymentFailure extends Mailable implements ShouldQueue
     {
         return $this->subject('Aviso de Falha no Envio do Boleto - Inscrição CEA')
                     ->view('emails.payment_failure')
-                    ->attachData($this->pdfContent, 'boleto.pdf', [
+                    ->attachData(base64_decode($this->pdfContent), 'boleto.pdf', [
                         'mime' => 'application/pdf',
                     ]);
     }

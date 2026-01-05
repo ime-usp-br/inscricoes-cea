@@ -37,5 +37,16 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('local') || $this->app->environment('development')) {
             Mail::alwaysTo(env('MAIL_DEV_TEST'));
         }
+
+        // Share valid/latest semester with all views to avoid undefined variable errors in Mailables/Console
+        try {
+            $semester = \App\Models\Semester::getInEnrollmentPeriod() ?? \App\Models\Semester::getLatest();
+            \Illuminate\Support\Facades\View::share('semester', $semester);
+            
+            // Fix for 'Undefined variable: errors' in Console/Mail
+            \Illuminate\Support\Facades\View::share('errors', new \Illuminate\Support\MessageBag());
+        } catch (\Throwable $e) {
+            // Ignore if DB not ready
+        }
     }
 }
