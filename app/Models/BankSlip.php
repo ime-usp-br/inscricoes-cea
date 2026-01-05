@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-require_once(base_path('app/Http/SoapClient/nusoap.php'));
+if(!class_exists('nusoap_client')) {
+    require_once(base_path('app/Http/SoapClient/nusoap.php'));
+}
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
