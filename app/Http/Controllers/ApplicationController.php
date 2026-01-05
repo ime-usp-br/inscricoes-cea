@@ -141,7 +141,7 @@ class ApplicationController extends Controller
         try {
             if($application->serviceType == 'Consulta'){
                 // Format as string to ensure SOAP compatibility
-                $bankSlip = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Consulta");
+                $bankSlip = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Inscrição");
             }else{
                 $bankSlip = BankSlip::gerarBoletoRegistrado($application, '80.00', 0, "Taxa de Inscrição");
             }
@@ -375,7 +375,8 @@ class ApplicationController extends Controller
         try {
             if($application->serviceType == 'Consulta'){
                 // Format as string to ensure SOAP compatibility
-                $bankSlip = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Consulta");
+                // Format as string to ensure SOAP compatibility
+                $bankSlip = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Inscrição");
             }else{
                 $bankSlip = BankSlip::gerarBoletoRegistrado($application, '80.00', 0, "Taxa de Inscrição");
             }
