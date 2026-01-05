@@ -49,20 +49,18 @@ class RegenerateAndNotifyPaymentFailure extends Command
 
         // Filter applications that have a bank slip for "Taxa de Inscrição"
         // And the bank slip status is NOT 'P' (Pago)
-        // Note: Using 'has' with callback to filter relations
+        // And application is NOT deleted
         $applications = Application::where('semesterID', $semester->id)
+            ->where('deleted', false) // Fix: Exclude soft-deleted applications
             ->whereHas('applicationFee', function ($query) {
                 $query->where('statusBoletoBancario', '!=', 'P')
-                      // Optionally exclude 'C' (Cancelado) if we don't want to spam cancelled ones,
-                      // but user said "boletos vencidos", which might still be 'E' or 'V'.
-                      // Let's assume 'status != P' covers everything that needs paying.
                       ->where('relativoA', 'Taxa de Inscrição');
             })
             ->with('applicationFee')
             ->get();
 
         $count = $applications->count();
-        $this->info("Encontradas {$count} inscrições com boletos não pagos.");
+        $this->info("Encontradas {$count} inscrições ativas com boletos não pagos.");
 
         if ($count == 0) {
             return 0;
@@ -77,16 +75,15 @@ class RegenerateAndNotifyPaymentFailure extends Command
 
         foreach ($applications as $app) {
             try {
-                $this->info("Processing App ID: {$app->id}");
                 $oldBoleto = $app->applicationFee;
 
-                // 1. Cancel Old Boleto if exists and not already cancelled
-                // FIXME: NuSOAP crashes when cancellation fails (SOAP Fault). skipping cancellation to ensure new boleto generation.
-                /*
-                if ($oldBoleto && $oldBoleto->statusBoletoBancario != 'C') {
-                    $oldBoleto->cancelarBoleto();
+                // 1. Handle Old Boleto
+                // Since we cannot cancel (SOAP crash), we Rename the 'relativoA' so the 'applicationFee' relationship 
+                // (which filters by 'Taxa de Inscrição') will pick up the NEW boleto instead of this old one.
+                if ($oldBoleto) {
+                    $oldBoleto->relativoA = 'Taxa de Inscrição (Substituído)';
+                    $oldBoleto->save();
                 }
-                */
 
                 // 2. Generate New Boleto
                 $valor = ($app->serviceType == 'Consulta') ? '140.00' : '80.00';
@@ -97,6 +94,11 @@ class RegenerateAndNotifyPaymentFailure extends Command
                 if (!$newBoleto) {
                     Log::error("Falha ao regenerar boleto para App ID: {$app->id}");
                     $this->error("\nFalha ao regenerar boleto para {$app->bdName} (App ID: {$app->id})");
+                    // Restore old boleto label if generation failed, so it doesn't disappear
+                    if ($oldBoleto) {
+                        $oldBoleto->relativoA = 'Taxa de Inscrição';
+                        $oldBoleto->save();
+                    }
                     continue;
                 }
 
