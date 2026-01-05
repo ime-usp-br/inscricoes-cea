@@ -83,15 +83,10 @@
                                 @endif
                             </td>
                             <td style="white-space:nowrap">
-                                @if($ficha->applicationFee)
-                                    Taxa de Inscrição, {{$ficha->applicationFee->getStatus()}}
-                                @else
-                                    Taxa de Inscrição, Não Emitido
-                                @endif
+                            <td style="white-space:nowrap">
+                                Taxa de Inscrição, {{$ficha->getAggregatedInscriptionFeeStatus()}}
                                 <br>
-                                @if($ficha->projectFee)
-                                    Taxa de Projeto, {{$ficha->projectFee->getStatus()}}
-                                @endif
+                                Taxa de Projeto, {{$ficha->getAggregatedProjectFeeStatus()}}
                             </td>
                             <td style="white-space:nowrap">
                                 <div class="row justify-content-center pb-1">
