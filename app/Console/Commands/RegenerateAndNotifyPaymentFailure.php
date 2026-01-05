@@ -49,12 +49,14 @@ class RegenerateAndNotifyPaymentFailure extends Command
 
         // Filter applications that have a bank slip for "Taxa de Inscrição"
         // And the bank slip status is NOT 'P' (Pago)
+        // And the bank slip is EXPIRED (due date < today)
         // And application is NOT deleted
         $applications = Application::where('semesterID', $semester->id)
-            ->where('deleted', false) // Fix: Exclude soft-deleted applications
+            ->where('deleted', false)
             ->whereHas('applicationFee', function ($query) {
                 $query->where('statusBoletoBancario', '!=', 'P')
-                      ->where('relativoA', 'Taxa de Inscrição');
+                      ->where('relativoA', 'Taxa de Inscrição')
+                      ->where('dataVencimentoBoleto', '<', now()->format('Y-m-d'));
             })
             ->with('applicationFee')
             ->get();
