@@ -445,11 +445,13 @@
 
                     <hr class="my-5">
 
+                    @if(env('APP_ENV') != 'local')
                     <div class="custom-form-group mt-5">
                         <div class="col-12">
                             <div class="g-recaptcha" data-sitekey="6Lfe_oMqAAAAANKhCHxnvXTwzsvxOPi6MVaaawF4" required></div>
                         </div>
                     </div>
+                    @endif
 
                     <div class="row custom-form-group justify-content-center mt-5">
                         <button id="btn-submit" type="submit" class="btn btn-outline-dark">
@@ -604,10 +606,14 @@
         },
         submitHandler: function (form, event) {
 
+            @if(env('APP_ENV') != 'local')
             if (grecaptcha.getResponse() == ""){
                 alert("Prove que voce não é um robo!");
                 event.preventDefault();
             } else{
+            @else
+            if(true){
+            @endif
                 Swal.fire({
                     title: 'ATENÇÂO!!',
                     text: "O agendamento só será realizado após pagamento da taxa. \n Deseja realmente submeter o formulário?",
