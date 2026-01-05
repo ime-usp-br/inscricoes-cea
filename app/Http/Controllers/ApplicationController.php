@@ -393,4 +393,25 @@ class ApplicationController extends Controller
             return redirect()->back()->withErrors(['Erro crítico ao gerar boleto: ' . $e->getMessage()]);
         }
     }
+    public function downloadBoleto(BankSlip $bankSlip)
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria", "Docente"])){
+            abort(403);
+        }
+
+        $pdfContent = $bankSlip->obterBoletoPDF();
+        
+        if (!$pdfContent) {
+            return back()->withErrors(['Falha ao obter PDF do boleto. O serviço pode estar indisponível.']);
+        }
+
+        // The SOAP service usually returns base64.
+        $pdf = base64_decode($pdfContent);
+
+        return response($pdf)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="boleto_'.$bankSlip->id.'.pdf"');
+    }
 }

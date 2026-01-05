@@ -169,6 +169,7 @@
                             <label>Data do Vencimento:</label> {{$application->applicationFee->dataVencimentoBoleto}}<br>
                             <label>Valor Pago:</label> {{$application->applicationFee->valorEfetivamentePago}}<br>
                             <label>Data do Pagamento:</label> {{$application->applicationFee->dataEfetivaPagamento ?? "Não foi pago"}}<br>
+                            <a href="{{ route('bankslips.download', $application->applicationFee) }}" class="btn btn-sm btn-outline-dark mt-1" target="_blank">Baixar Boleto</a>
                         </div>     
                     @else
                         <div class="col-12 col-md">                    
@@ -191,6 +192,7 @@
                             <label>Data do Vencimento:</label> {{$application->projectfee->dataVencimentoBoleto}}<br>
                             <label>Valor Pago:</label> {{$application->projectfee->valorEfetivamentePago}}<br>
                             <label>Data do Pagamento:</label> {{$application->projectfee->dataEfetivaPagamento ?? "Não foi pago"}}<br>
+                            <a href="{{ route('bankslips.download', $application->projectfee) }}" class="btn btn-sm btn-outline-dark mt-1" target="_blank">Baixar Boleto</a>
                         </div>     
                     @else
                         <div class="col-12 col-md">                    
@@ -213,6 +215,7 @@
                             <label>Data do Vencimento:</label> {{$application->complementaryFee->dataVencimentoBoleto}}<br>
                             <label>Valor Pago:</label> {{$application->complementaryFee->valorEfetivamentePago}}<br>
                             <label>Data do Pagamento:</label> {{$application->complementaryFee->dataEfetivaPagamento ?? "Não foi pago"}}<br>
+                            <a href="{{ route('bankslips.download', $application->complementaryFee) }}" class="btn btn-sm btn-outline-dark mt-1" target="_blank">Baixar Boleto</a>
                         </div>     
                     @else
                         <div class="col-12 col-md">                    

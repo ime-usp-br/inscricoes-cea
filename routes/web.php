@@ -40,7 +40,8 @@ Route::resource("applications", ApplicationController::class);
 
 Route::get("/attachment/download/{attachment}",[AttachmentController::class, "download"])->name("attachments.download");
 
-Route::get("/receipt/download/{receipt}",[DepositReceiptController::class, "download"])->name("receipts.download");
+Route::get('/receipt/download/{receipt}',[DepositReceiptController::class, "download"])->name("receipts.download");
+Route::get('/bankslips/{bankSlip}/download', [ApplicationController::class, 'downloadBoleto'])->name('bankslips.download');
 
 Route::post('/mailtemplates/test', [MailTemplateController::class, 'test'])->name('mailtemplates.test');
 Route::get('/mailtemplates/activate/{mailtemplate}', [MailTemplateController::class, 'activate'])->name('mailtemplates.activate');
