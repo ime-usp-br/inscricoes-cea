@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Olá, {{ $application->bdName }}!</h2>
+        <h2>Olá, {{ explode(' ', trim($application->bdName))[0] }}!</h2>
 
         <p>
             Informamos que houve uma falha técnica no envio automático do seu boleto de inscrição para o curso/projeto do CEA.
