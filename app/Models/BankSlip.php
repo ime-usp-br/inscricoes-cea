@@ -57,10 +57,15 @@ class BankSlip extends Model
         $informacoesBoletoSacado = 'Dúvidas ou demais informações, entrar em contato com o CEA pelo e-mail cea@ime.usp.br';
         $instrucoesObjetoCobranca = 'Não receber após o vencimento';
 
+        if (env('APP_ENV') === 'local') {
+            $informacoesBoletoSacado = '[TESTE - NÃO PAGAR] ' . $informacoesBoletoSacado;
+            $instrucoesObjetoCobranca = '[TESTE - NÃO PAGAR] ' . $instrucoesObjetoCobranca;
+        }
+
         // Create client with caching disabled for debugging if necessary
         $clienteSoap = new nusoap_client(env("WSDL_URL"), 'wsdl');
-        $clienteSoap->soap_defencoding = 'UTF-8';
-        $clienteSoap->decode_utf8 = false;
+        // $clienteSoap->soap_defencoding = 'UTF-8';
+        // $clienteSoap->decode_utf8 = false;
 
         $erro = $clienteSoap->getError();
         if ($erro) {
