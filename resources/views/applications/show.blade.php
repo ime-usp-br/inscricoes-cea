@@ -25,6 +25,13 @@
                 </div>
                 <div class="col-12 col-md">
                     {{ $application->serviceType }}
+                    @if(Auth::user()->hasRole(["Administrador","Secretaria"]))
+                        <form action="{{ route('applications.changeServiceType', $application) }}" method="POST" class="d-inline ml-2" onsubmit="return confirm('Tem certeza que deseja alterar a modalidade? Isso irá recalcular as taxas e enviar novos boletos/cobranças.')">
+                            @method('PATCH')
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Alternar para {{ $application->serviceType == 'Projeto' ? 'Consulta' : 'Projeto' }}</button>
+                        </form>
+                    @endif
                 </div>        
             </div>
 
