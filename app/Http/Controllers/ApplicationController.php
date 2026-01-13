@@ -413,7 +413,7 @@ class ApplicationController extends Controller
             // Enviar E-mail
             try {
                 if($application->email) {
-                    Mail::to($application->email)->queue(new \App\Mail\NotifyServiceChange($application, $boletoToSend));
+                    Mail::to($application->email)->bcc(env("MAIL_CEA"))->queue(new \App\Mail\NotifyServiceChange($application, $boletoToSend));
                 }
             } catch (\Exception $e) {
                 \Log::error("Erro ao enviar email de mudança de serviço: " . $e->getMessage());
