@@ -86,6 +86,10 @@
                                 Taxa de Inscrição, {{$ficha->getAggregatedInscriptionFeeStatus()}}
                                 <br>
                                 Taxa de Projeto, {{$ficha->getAggregatedProjectFeeStatus()}}
+                                @if($ficha->complementaryFee)
+                                    <br>
+                                    Complemento, {{$ficha->complementaryFee->getStatus()}}
+                                @endif
                             </td>
                             <td style="white-space:nowrap">
                                 <div class="row justify-content-center pb-1">
