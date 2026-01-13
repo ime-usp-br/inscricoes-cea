@@ -63,6 +63,7 @@ Os testes focam em validação End-to-End (E2E) dos principais fluxos de negóci
 *   **Pré-condição**: Alterar data de `end_date` do semestre no banco para o passado.
 *   **Ação**: Tentar submeter formulário de Projeto.
 *   **Resultado Esperado**: Erro "Fora do período de inscrição para projetos" e redirecionamento para home.
+*   **Limitação Conhecida**: A verificação automatizada deste teste (via PHPUnit ou script) apresenta instabilidade devido à complexidade de mockar o estado de sessão e datas (`Carbon::setTestNow`) simultaneamente no ambiente de teste da aplicação. Recomenda-se validação manual ocasional.
 
 ---
 
