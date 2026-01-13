@@ -348,11 +348,84 @@ class ApplicationController extends Controller
         }
 
         if($application->serviceType == "Projeto"){
+            // Mudança de Projeto para Consulta
             $application->serviceType = "Consulta";
             $application->status = "Aguardando agendamento da reunião de consulta";
+
+            // Lógica de Boletos
+            $boletoToSend = null;
+            $currentFee = $application->applicationFee; // Busca "Taxa de Inscrição"
+
+            if ($currentFee) {
+                // Tenta atualizar status para ter certeza
+                try {
+                    $currentFee->atualizarSituacao();
+                } catch (\Exception $e) {
+                    \Log::error("Erro ao atualizar boleto na troca de serviço: " . $e->getMessage());
+                }
+
+                if ($currentFee->statusBoletoBancario == 'P') {
+                    // PAGO: Gerar Complemento de R$ 60,00 (140 - 80)
+                    if (!$application->complementaryFee) {
+                        $boletoToSend = BankSlip::gerarBoletoRegistrado($application, '60.00', 0, "Complemento de Taxa");
+                        if ($boletoToSend) {
+                            $application->complementaryFee()->save($boletoToSend);
+                        } else {
+                            Session::flash("alert-warning", "Atenção: Falha ao gerar boleto de complemento de taxa via sistema bancário.");
+                        }
+                    } else {
+                        // Se já existir, usamos o existente (evita duplicidade se clicarem duas vezes)
+                        $boletoToSend = $application->complementaryFee;
+                    }
+                } else {
+                    // NÃO PAGO (ou Cancelado/Verificar/Emitido): Gerar nova Taxa Cheia R$ 140,00
+                    
+                    // Marca o antigo como substituído para liberar a relação hasOne 'applicationFee'
+                    $currentFee->relativoA = "Taxa de Inscrição (Substituído)";
+                    $currentFee->save();
+
+                    // Tenta cancelar o antigo no banco (best effort)
+                    try {
+                        if($currentFee->statusBoletoBancario == 'E') {
+                            $currentFee->cancelarBoleto();
+                        }
+                    } catch (\Exception $e) {
+                        \Log::warning("Não foi possível cancelar o boleto antigo ID {$currentFee->id}");
+                    }
+
+                    $boletoToSend = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Inscrição");
+                    if ($boletoToSend) {
+                        $application->applicationFee()->save($boletoToSend);
+                    } else {
+                        Session::flash("alert-warning", "Atenção: Falha ao gerar novo boleto de Taxa de Inscrição via sistema bancário.");
+                    }
+                }
+            } else {
+                // Não havia boleto (ex: erro na inscrição inicial). Gera o de R$ 140.
+                $boletoToSend = BankSlip::gerarBoletoRegistrado($application, '140.00', 0, "Taxa de Inscrição");
+                if ($boletoToSend) {
+                    $application->applicationFee()->save($boletoToSend);
+                } else {
+                     Session::flash("alert-warning", "Atenção: Falha ao gerar boleto via sistema bancário.");
+                }
+            }
+
+            // Enviar E-mail
+            try {
+                if($application->email) {
+                    Mail::to($application->email)->queue(new \App\Mail\NotifyServiceChange($application, $boletoToSend));
+                }
+            } catch (\Exception $e) {
+                \Log::error("Erro ao enviar email de mudança de serviço: " . $e->getMessage());
+                Session::flash("alert-warning", "Mudança realizada, mas falha ao enviar e-mail de notificação.");
+            }
+            
+            Session::flash("alert-success", "Modalidade alterada para Consulta. Processo de ajuste de taxas realizado.");
+
         }elseif($application->serviceType == "Consulta"){
             $application->serviceType = "Projeto";
             $application->status = "Aguardando agendamento da triagem";
+             Session::flash("alert-success", "Modalidade alterada para Projeto.");
         }
 
         $application->save();
