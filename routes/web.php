@@ -36,6 +36,7 @@ Route::patch("applications/{application}/changeservicetype",[ApplicationControll
 Route::get("applications/deleted",[ApplicationController::class, "deleted_index"])->name("applications.deleted_index");
 Route::patch("applications/{application}/restore",[ApplicationController::class, "restore"])->name("applications.restore");
 Route::post("applications/{application}/regenerate-boleto",[ApplicationController::class, "regenerateBoleto"])->name("applications.regenerateBoleto");
+Route::patch("applications/{application}/transfer-semester", [ApplicationController::class, "transferToNextSemester"])->name("applications.transferSemester");
 Route::resource("applications", ApplicationController::class);
 
 Route::get("/attachment/download/{attachment}",[AttachmentController::class, "download"])->name("attachments.download");

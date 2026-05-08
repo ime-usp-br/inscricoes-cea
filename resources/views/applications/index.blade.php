@@ -118,11 +118,20 @@
                                     PDF Primeira Pagina
                                 </a>
                                                        
+                                @if(Auth::user()->hasRole(["Administrador","Secretaria"]))
+                                    <form method="POST" action="{{ route('applications.transferSemester', $ficha) }}" class="d-inline">
+                                        @csrf
+                                        @method("PATCH")
+                                        <button class="btn btn-outline-warning btn-sm" type="submit" title="Transferir para próximo semestre" onclick="return confirm('Transferir inscrição {{ $ficha->protocol }} para o próximo semestre?')">
+                                            {{ $ficha->transfer_pending ? 'Pendente' : 'Transferir' }}
+                                        </button>
+                                    </form>
+                                @endif
                                 <form method="POST" enctype="multipart/form-data" action="{{ route('applications.destroy',$ficha) }}">
                                     @csrf
                                     @method("DELETE")
-                                    <button class="btn btn-outline-danger btn-sm" title="Mudar Modalidade" type="submit">Excluir</button>                                    
-                                </form>    
+                                    <button class="btn btn-outline-danger btn-sm" title="Mudar Modalidade" type="submit">Excluir</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

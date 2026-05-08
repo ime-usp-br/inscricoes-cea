@@ -23,12 +23,16 @@ class TriageService
 
     protected function handleFees(Triage $triage)
     {
-        if ($triage->decision == "Aprovado como projeto" and !$triage->application->projectFee) {
+        if ($triage->decision == "Aprovado como projeto" and $triage->application->getAggregatedProjectFeeStatus() != 'Pago') {
             $bankSlip = BankSlip::gerarBoletoRegistrado($triage->application, 250.00, 0, "Taxa de Projeto");
-            $triage->application->projectFee()->save($bankSlip);
+            if ($bankSlip) {
+                $triage->application->projectFee()->save($bankSlip);
+            }
         } elseif ($triage->decision == "Aprovado como Consulta" and !$triage->application->complementaryFee) {
             $bankSlip = BankSlip::gerarBoletoRegistrado($triage->application, 60.00, 0, "Complemento de Taxa");
-            $triage->application->complementaryFee()->save($bankSlip);
+            if ($bankSlip) {
+                $triage->application->complementaryFee()->save($bankSlip);
+            }
         }
     }
 

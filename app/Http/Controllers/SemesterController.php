@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSemesterRequest;
 use App\Http\Requests\UpdateSemesterRequest;
 use App\Models\Semester;
+use App\Models\Application;
+use App\Models\Event;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 class SemesterController extends Controller
 {
@@ -63,7 +66,41 @@ class SemesterController extends Controller
 
         $periodo = Semester::updateOrCreate(['year'=>$validated['year'], 'period'=>$validated['period']],$validated);
 
+        if ($periodo->wasRecentlyCreated) {
+            $this->migratePendingApplications($periodo);
+        }
+
         return redirect('/semesters');
+    }
+
+    private function migratePendingApplications(Semester $newSemester)
+    {
+        DB::transaction(function () use ($newSemester) {
+            $applications = Application::where('transfer_pending', true)
+                ->where('deleted', false)
+                ->lockForUpdate()
+                ->get();
+
+            foreach ($applications as $application) {
+                $application->semesterID = $newSemester->id;
+                $application->transfer_pending = false;
+
+                if ($application->serviceType == "Projeto") {
+                    $application->status = "Aguardando agendamento da triagem";
+                } elseif ($application->serviceType == "Consulta") {
+                    $application->status = "Aguardando agendamento da reunião de consulta";
+                }
+
+                $application->save();
+
+                Event::create([
+                    'applicationID' => $application->id,
+                    'name' => 'Transferência de Semestre (Automática)',
+                    'description' => "Inscrição transferida automaticamente para o semestre {$newSemester->period} de {$newSemester->year}.",
+                    'event_date' => now(),
+                ]);
+            }
+        });
     }
 
     /**

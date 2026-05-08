@@ -31,8 +31,17 @@
                             @csrf
                             <button type="submit" class="btn btn-sm btn-outline-danger">Alternar para {{ $application->serviceType == 'Projeto' ? 'Consulta' : 'Projeto' }}</button>
                         </form>
+                        @if(Auth::user()->hasRole(["Administrador","Secretaria"]))
+                            <form action="{{ route('applications.transferSemester', $application) }}" method="POST" class="d-inline ml-2" onsubmit="return confirm('Tem certeza que deseja transferir esta inscrição para o próximo semestre?')">
+                                @method('PATCH')
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-outline-warning">
+                                    {{ $application->transfer_pending ? 'Transferência Pendente' : 'Transferir para Próximo Semestre' }}
+                                </button>
+                            </form>
+                        @endif
                     @endif
-                </div>        
+                </div>
             </div>
 
             <div class="row custom-form-group d-flex align-items-center">
@@ -252,13 +261,56 @@
                     </div>
                 @endif
 
+            @if($application->triage || $application->consultationMeeting)
                 <hr class="my-5">
-
                 <div class="col my-5 text-justify">
-                    <h5>
-                        Dados bancarios
-                    </h5>
+                    <h5>Agendamentos</h5>
                 </div>
+
+                @if($application->triage)
+                    @php
+                        $triageDate = \Carbon\Carbon::parse($application->triage->date);
+                        $isOldTriage = $triageDate->lt($application->semester->created_at);
+                    @endphp
+                    <div class="row custom-form-group d-flex align-items-center">
+                        <div class="col-12 col-md-auto text-md-right">
+                            <label>Triagem:</label>
+                        </div>
+                        <div class="col-12 col-md">
+                            Data: {{ $application->triage->date }} | Hora: {{ $application->triage->hour }} | Modo: {{ $application->triage->meetingMode }}
+                            @if($isOldTriage)
+                                <span class="badge badge-danger ml-2">Dados de semestre anterior</span>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
+                @if($application->consultationMeeting)
+                    @php
+                        $cmDate = \Carbon\Carbon::parse($application->consultationMeeting->date);
+                        $isOldCm = $cmDate->lt($application->semester->created_at);
+                    @endphp
+                    <div class="row custom-form-group d-flex align-items-center">
+                        <div class="col-12 col-md-auto text-md-right">
+                            <label>Reunião de Consulta:</label>
+                        </div>
+                        <div class="col-12 col-md">
+                            Data: {{ $application->consultationMeeting->date }} | Hora: {{ $application->consultationMeeting->hour }} | Modo: {{ $application->consultationMeeting->meetingMode }}
+                            @if($isOldCm)
+                                <span class="badge badge-danger ml-2">Dados de semestre anterior</span>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            @endif
+
+            <hr class="my-5">
+
+            <div class="col my-5 text-justify">
+                <h5>
+                    Dados bancarios
+                </h5>
+            </div>
 
                 <div class="row custom-form-group d-flex align-items-center">
                     <div class="col-12 col-md-auto text-md-right">

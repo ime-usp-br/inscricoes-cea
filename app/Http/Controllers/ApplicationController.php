@@ -23,6 +23,7 @@ use App\Models\Event;
 use GuzzleHttp\Client;
 use Session;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 class ApplicationController extends Controller
 {
@@ -303,6 +304,58 @@ class ApplicationController extends Controller
 
         return back();
 
+    }
+
+    public function transferToNextSemester(Application $application)
+    {
+        if (!Auth::check()) {
+            return redirect("/login");
+        } elseif (!Auth::user()->hasRole(["Administrador", "Secretaria"])) {
+            abort(403);
+        }
+
+        $currentSemester = $application->semester;
+        $nextSemester = Semester::getNext($currentSemester);
+
+        if ($nextSemester) {
+            DB::transaction(function () use ($application, $nextSemester, $currentSemester) {
+                $application->semesterID = $nextSemester->id;
+                $application->transfer_pending = false;
+
+                if ($application->serviceType == "Projeto") {
+                    $application->status = "Aguardando agendamento da triagem";
+                } elseif ($application->serviceType == "Consulta") {
+                    $application->status = "Aguardando agendamento da reunião de consulta";
+                }
+
+                $application->save();
+
+                Event::create([
+                    'applicationID' => $application->id,
+                    'name' => 'Transferência de Semestre',
+                    'description' => "Inscrição transferida do semestre {$currentSemester->period} de {$currentSemester->year} para {$nextSemester->period} de {$nextSemester->year} pelo usuário " . Auth::user()->name,
+                    'event_date' => now(),
+                ]);
+            });
+
+            Session::flash("alert-success", "Inscrição transferida com sucesso para o semestre {$nextSemester->period} de {$nextSemester->year}.");
+        } else {
+            DB::transaction(function () use ($application) {
+                $application->transfer_pending = true;
+                $application->save();
+
+                Event::create([
+                    'applicationID' => $application->id,
+                    'name' => 'Transferência de Semestre Pendente',
+                    'description' => "Inscrição marcada para transferência automática para o próximo semestre pelo usuário " . Auth::user()->name,
+                    'event_date' => now(),
+                ]);
+            });
+
+            Session::flash("alert-success", "Inscrição marcada para transferência automática assim que o próximo semestre for criado.");
+        }
+
+        return back();
     }
 
     public function downloadAsPDF($protocol)
