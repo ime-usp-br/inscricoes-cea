@@ -269,7 +269,7 @@
 
                 @if($application->triage)
                     @php
-                        $triageDate = \Carbon\Carbon::parse($application->triage->date);
+                        $triageDate = \Carbon\Carbon::createFromFormat('d/m/Y', $application->triage->date);
                         $isOldTriage = $triageDate->lt($application->semester->created_at);
                     @endphp
                     <div class="row custom-form-group d-flex align-items-center">
@@ -287,7 +287,7 @@
 
                 @if($application->consultationMeeting)
                     @php
-                        $cmDate = \Carbon\Carbon::parse($application->consultationMeeting->date);
+                        $cmDate = \Carbon\Carbon::createFromFormat('d/m/Y', $application->consultationMeeting->date);
                         $isOldCm = $cmDate->lt($application->semester->created_at);
                     @endphp
                     <div class="row custom-form-group d-flex align-items-center">
