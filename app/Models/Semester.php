@@ -94,4 +94,19 @@ class Semester extends Model
     public function getInEnrollmentPeriod(){
         return Semester::where("start_date_enrollments", "<=", now())->where("end_date_enrollments", ">=", now())->first();
     }
+
+    public static function getNext(Semester $semester)
+    {
+        $nextYear = $semester->year;
+        $nextPeriod = '2° Semestre';
+
+        if ($semester->period == '2° Semestre') {
+            $nextYear = $semester->year + 1;
+            $nextPeriod = '1° Semestre';
+        } elseif ($semester->period == '1° Semestre') {
+            $nextPeriod = '2° Semestre';
+        }
+
+        return self::where('year', $nextYear)->where('period', $nextPeriod)->first();
+    }
 }

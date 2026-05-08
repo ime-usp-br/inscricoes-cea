@@ -56,11 +56,18 @@ class NotifyAboutConsultationMeetingDecision extends Mailable
 
         $css = file_get_contents(base_path() . '/public/css/mail.css');
 
-        if($this->consultationmeeting->application->projectFee){
+        $projectFeeStatus = $this->consultationmeeting->application->getAggregatedProjectFeeStatus();
+
+        if ($projectFeeStatus == 'Pago') {
+            $body .= "<br><br><p style='color: green; font-weight: bold;'>Nota: O sistema identificou que a taxa referente a esta modalidade já foi paga anteriormente. Portanto, sua inscrição está validada e você deve desconsiderar qualquer cobrança.</p>";
+            return $this->html($cssToInlineStyles->convert($body, $css))->subject($subject);
+        }
+
+        if ($this->consultationmeeting->application->projectFee) {
             return $this->html($cssToInlineStyles->convert($body, $css))->subject($subject)->attachData(
-                base64_decode($this->consultationmeeting->application->projectFee->obterBoletoPDF()), 
+                base64_decode($this->consultationmeeting->application->projectFee->obterBoletoPDF()),
                 'boleto.pdf');
-        }else{
+        } else {
             return $this->html($cssToInlineStyles->convert($body, $css))->subject($subject);
         }
     }

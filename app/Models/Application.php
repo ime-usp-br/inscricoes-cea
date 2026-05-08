@@ -9,6 +9,8 @@ use App\Models\Attachment;
 use App\Models\DepositReceipt;
 use App\Models\BankSlip;
 use App\Models\Event;
+use App\Models\Triage;
+use App\Models\ConsultationMeeting;
 
 class Application extends Model
 {
@@ -54,6 +56,7 @@ class Application extends Model
         'expectedHelp',
         'deleted',
         'whatsapp',
+        'transfer_pending',
     ];
 
     public function semester()
@@ -152,5 +155,15 @@ class Application extends Model
     public function events()
     {
         return $this->hasMany(Event::class, "applicationID");
+    }
+
+    public function triage()
+    {
+        return $this->hasOne(Triage::class, "applicationID");
+    }
+
+    public function consultationMeeting()
+    {
+        return $this->hasOne(ConsultationMeeting::class, "applicationID");
     }
 }

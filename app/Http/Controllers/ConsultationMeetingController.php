@@ -224,9 +224,11 @@ class ConsultationMeetingController extends Controller
         $consultationmeeting->application->status = $consultationmeeting->decision;
         $consultationmeeting->application->save();
 
-        if($consultationmeeting->decision == "Aprovado como projeto" and !$consultationmeeting->application->projectFee){
+        if($consultationmeeting->decision == "Aprovado como projeto" and $consultationmeeting->application->getAggregatedProjectFeeStatus() != 'Pago'){
             $bankSlip = BankSlip::gerarBoletoRegistrado($consultationmeeting->application, 250.00, 0, "Taxa de Projeto");
-            $consultationmeeting->application->projectFee()->save($bankSlip);
+            if ($bankSlip) {
+                $consultationmeeting->application->projectFee()->save($bankSlip);
+            }
         }
 
         $mailtemplate = MailTemplate::where([
