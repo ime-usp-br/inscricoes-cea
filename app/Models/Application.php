@@ -16,6 +16,10 @@ class Application extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'transfer_pending' => 'boolean',
+    ];
+
     protected $fillable = [
         'semesterID',
         'protocol',
