@@ -69,6 +69,11 @@
                   <a href="{{ route('applications.deleted_index') }}">Inscrições Excluidas</a>
               </li>
           @endcan
+          @hasanyrole("Administrador|Secretaria")
+              <li>
+                  <a href="{{ route('applications.overdue_index') }}">Cobranças Manuais</a>
+              </li>
+          @endhasanyrole
           @can("visualizar triagens")
               <li>
                   <a href="{{ route('triages.index') }}">Triagens</a>

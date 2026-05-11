@@ -20,6 +20,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'visualizar inscrições']);
         Permission::firstOrCreate(['name' => 'visualizar triagens']);
         Permission::firstOrCreate(['name' => 'visualizar reuniões de consulta']);
+        Permission::firstOrCreate(['name' => 'Editar E-mails']);
 
 
         Role::firstOrCreate(['name' => 'Secretaria'])
@@ -35,7 +36,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ->givePermissionTo('visualizar reuniões de consulta');
 
 
-        Role::firstOrCreate(['name' => 'Administrador'])
-            ->givePermissionTo(Permission::all());
+        $adminRole = Role::firstOrCreate(['name' => 'Administrador']);
+        $adminRole->syncPermissions(Permission::where('guard_name', 'web')->get());
     }
 }

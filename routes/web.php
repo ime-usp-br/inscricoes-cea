@@ -36,6 +36,9 @@ Route::patch("applications/{application}/changeservicetype",[ApplicationControll
 Route::get("applications/deleted",[ApplicationController::class, "deleted_index"])->name("applications.deleted_index");
 Route::patch("applications/{application}/restore",[ApplicationController::class, "restore"])->name("applications.restore");
 Route::post("applications/{application}/regenerate-boleto",[ApplicationController::class, "regenerateBoleto"])->name("applications.regenerateBoleto");
+Route::get("applications/overdue", [ApplicationController::class, "overdueIndex"])->name("applications.overdue_index");
+Route::post("applications/overdue/send-reminders", [ApplicationController::class, "sendOverdueReminders"])->name("applications.sendOverdueReminders");
+Route::post("bankslips/{bankSlip}/confirm-manual-payment", [ApplicationController::class, "confirmManualPayment"])->name("bankslips.confirmManualPayment");
 Route::patch("applications/{application}/transfer-semester", [ApplicationController::class, "transferToNextSemester"])->name("applications.transferSemester");
 Route::resource("applications", ApplicationController::class);
 
