@@ -258,6 +258,49 @@ class ApplicationControllerTest extends TestCase
             'relativoA' => 'Taxa de Inscrição', // New One
             'valorDocumento' => '140.00'
         ]);
+
+        // SCENARIO 3: Paid Project (80) + Paid Project Fee (250) -> Consultation (Credit, no boleto)
+        \nusoap_client::$mockStatus = 'P';
+
+        $app3 = Application::factory()->create([
+            'serviceType' => 'Projeto',
+            'status' => 'Aguardando agendamento da triagem'
+        ]);
+
+        BankSlip::factory()->create([
+            'applicationID' => $app3->id,
+            'relativoA' => 'Taxa de Inscrição',
+            'valorDocumento' => '80.00',
+            'statusBoletoBancario' => 'P',
+            'dataVencimentoBoleto' => now()->addDays(5)->format('d/m/Y')
+        ]);
+
+        BankSlip::factory()->create([
+            'applicationID' => $app3->id,
+            'relativoA' => 'Taxa de Projeto',
+            'valorDocumento' => '250.00',
+            'statusBoletoBancario' => 'P',
+            'dataVencimentoBoleto' => now()->addDays(5)->format('d/m/Y')
+        ]);
+
+        $response = $this->actingAs($user)
+                         ->patch(route('applications.changeServiceType', $app3));
+
+        $app3->refresh();
+
+        // Assert Service Changed
+        $this->assertEquals('Consulta', $app3->serviceType);
+
+        // Assert no Supplement Generated
+        $this->assertDatabaseMissing('bank_slips', [
+            'applicationID' => $app3->id,
+            'relativoA' => 'Complemento de Taxa',
+        ]);
+
+        // Assert refund warning
+        $response->assertSessionHas('alert-warning', function ($value) {
+            return str_contains($value, 'devolvido');
+        });
     }
 }
 
