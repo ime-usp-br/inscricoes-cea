@@ -182,12 +182,37 @@
                         @forelse($application->allApplicationFees as $fee)
                             <div class="mb-3 p-2 border rounded">
                                 <strong>{{ $fee->relativoA }} (ID: {{ $fee->id }})</strong><br>
-                                <label>Status:</label> {{ $fee->getStatus() }}<br>
+                                <label>Status Bancário:</label> {{ $fee->getStatus() }}<br>
+                                @if($fee->manual_payment_confirmed)
+                                    <span class="badge badge-success">Pagamento Manual Confirmado em {{ \Carbon\Carbon::parse($fee->manual_payment_confirmed_at)->format('d/m/Y H:i') }} por {{ $fee->manual_payment_confirmed_by }}</span><br>
+                                @endif
                                 <label>Valor do Documento:</label> {{ $fee->valorDocumento }}<br>
                                 <label>Data do Vencimento:</label> {{ $fee->dataVencimentoBoleto }}<br>
                                 <label>Valor Pago:</label> {{ $fee->valorEfetivamentePago }}<br>
                                 <label>Data do Pagamento:</label> {{ $fee->dataEfetivaPagamento ?? "Não foi pago" }}<br>
                                 <a href="{{ route('bankslips.download', $fee) }}" class="btn btn-sm btn-outline-dark mt-1" target="_blank">Baixar Boleto</a>
+                                @if(Auth::user()->hasRole(["Administrador","Secretaria"]))
+                                    @php
+                                        $isSubstituted = str_contains($fee->relativoA, '(Substituído)');
+                                        $isPaid = $fee->statusBoletoBancario == 'P';
+                                        $isManualConfirmed = $fee->manual_payment_confirmed;
+                                        $isOverdue = false;
+                                        if (!$isSubstituted && !$isPaid && !$isManualConfirmed && !empty($fee->dataVencimentoBoleto)) {
+                                            try {
+                                                $dueDate = \Carbon\Carbon::createFromFormat('d/m/Y', $fee->dataVencimentoBoleto);
+                                                $isOverdue = $dueDate->isPast();
+                                            } catch (\Exception $e) {
+                                                $isOverdue = false;
+                                            }
+                                        }
+                                    @endphp
+                                    @if($isOverdue)
+                                        <form action="{{ route('bankslips.confirmManualPayment', $fee) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirmar pagamento manual por depósito?')">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success mt-1">Confirmar Pagamento (Depósito)</button>
+                                        </form>
+                                    @endif
+                                @endif
                             </div>
                         @empty
                             Não Emitido.
@@ -205,12 +230,37 @@
                         @forelse($application->allProjectFees as $fee)
                             <div class="mb-3 p-2 border rounded">
                                 <strong>{{ $fee->relativoA }} (ID: {{ $fee->id }})</strong><br>
-                                <label>Status:</label> {{ $fee->getStatus() }}<br>
+                                <label>Status Bancário:</label> {{ $fee->getStatus() }}<br>
+                                @if($fee->manual_payment_confirmed)
+                                    <span class="badge badge-success">Pagamento Manual Confirmado em {{ \Carbon\Carbon::parse($fee->manual_payment_confirmed_at)->format('d/m/Y H:i') }} por {{ $fee->manual_payment_confirmed_by }}</span><br>
+                                @endif
                                 <label>Valor do Documento:</label> {{ $fee->valorDocumento }}<br>
                                 <label>Data do Vencimento:</label> {{ $fee->dataVencimentoBoleto }}<br>
                                 <label>Valor Pago:</label> {{ $fee->valorEfetivamentePago }}<br>
                                 <label>Data do Pagamento:</label> {{ $fee->dataEfetivaPagamento ?? "Não foi pago" }}<br>
                                 <a href="{{ route('bankslips.download', $fee) }}" class="btn btn-sm btn-outline-dark mt-1" target="_blank">Baixar Boleto</a>
+                                @if(Auth::user()->hasRole(["Administrador","Secretaria"]))
+                                    @php
+                                        $isSubstituted = str_contains($fee->relativoA, '(Substituído)');
+                                        $isPaid = $fee->statusBoletoBancario == 'P';
+                                        $isManualConfirmed = $fee->manual_payment_confirmed;
+                                        $isOverdue = false;
+                                        if (!$isSubstituted && !$isPaid && !$isManualConfirmed && !empty($fee->dataVencimentoBoleto)) {
+                                            try {
+                                                $dueDate = \Carbon\Carbon::createFromFormat('d/m/Y', $fee->dataVencimentoBoleto);
+                                                $isOverdue = $dueDate->isPast();
+                                            } catch (\Exception $e) {
+                                                $isOverdue = false;
+                                            }
+                                        }
+                                    @endphp
+                                    @if($isOverdue)
+                                        <form action="{{ route('bankslips.confirmManualPayment', $fee) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirmar pagamento manual por depósito?')">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success mt-1">Confirmar Pagamento (Depósito)</button>
+                                        </form>
+                                    @endif
+                                @endif
                             </div>
                         @empty
                             Não Emitido.

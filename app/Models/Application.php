@@ -117,13 +117,20 @@ class Application extends Model
         $fees = $this->allApplicationFees;
         if ($fees->isEmpty()) return "Não Emitido";
 
-        // 1. Priority: Paid
-        if ($fees->contains('statusBoletoBancario', 'P')) return "Pago";
+        // 1. Priority: Paid (Bank or Manual)
+        foreach ($fees as $fee) {
+            if ($fee->statusBoletoBancario == 'P' || $fee->manual_payment_confirmed) {
+                return "Pago";
+            }
+        }
 
         // 2. Priority: Issued (Valid and Not Expired)
         // Check if there is any boleto that is 'E' (Emitido) AND not expired
         foreach ($fees as $fee) {
             if ($fee->statusBoletoBancario == 'E') {
+                if (empty($fee->dataVencimentoBoleto)) {
+                    continue;
+                }
                 $dueDate = \Carbon\Carbon::createFromFormat('d/m/Y', $fee->dataVencimentoBoleto);
                 if ($dueDate->isFuture() || $dueDate->isToday()) {
                     return "Emitido";
@@ -140,12 +147,17 @@ class Application extends Model
         $fees = $this->allProjectFees;
         if ($fees->isEmpty()) return "Não Emitido";
 
-        if ($fees->contains('statusBoletoBancario', 'P')) return "Pago";
+        foreach ($fees as $fee) {
+            if ($fee->statusBoletoBancario == 'P' || $fee->manual_payment_confirmed) {
+                return "Pago";
+            }
+        }
 
         foreach ($fees as $fee) {
             if ($fee->statusBoletoBancario == 'E') {
-                 // Assuming date format d/m/Y stored as string in DB for legacy reasons or date cast? 
-                 // BankSlip uses date("d/m/Y") to set it.
+                if (empty($fee->dataVencimentoBoleto)) {
+                    continue;
+                }
                 $dueDate = \Carbon\Carbon::createFromFormat('d/m/Y', $fee->dataVencimentoBoleto);
                 if ($dueDate->isFuture() || $dueDate->isToday()) {
                     return "Emitido";

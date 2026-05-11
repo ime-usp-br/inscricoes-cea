@@ -27,6 +27,9 @@ class BankSlip extends Model
         'valorDesconto',
         'valorEfetivamentePago',
         'statusBoletoBancario',
+        'manual_payment_confirmed',
+        'manual_payment_confirmed_at',
+        'manual_payment_confirmed_by',
     ];
 
     public function application()

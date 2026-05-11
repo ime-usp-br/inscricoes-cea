@@ -11,6 +11,7 @@ use App\Mail\NotifyCEABoletoFailure;
 use App\Mail\NotifyCEAAboutRefundReceipt;
 use App\Mail\NotifyInscribedAboutApplication;
 use App\Mail\NotifyUserNewBoleto;
+use App\Mail\NotifyOverdueBankSlip;
 use Illuminate\Support\Facades\Mail;
 use Ismaelw\LaraTeX\LaraTeX;
 use App\Models\Application;
@@ -571,5 +572,150 @@ class ApplicationController extends Controller
         return response($pdf)
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'attachment; filename="boleto_'.$bankSlip->id.'.pdf"');
+    }
+
+    public function overdueIndex()
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+
+        $semester = Semester::getLatest();
+
+        $applications = Application::whereBelongsTo($semester)
+            ->where("deleted", false)
+            ->with(['allApplicationFees', 'allProjectFees', 'events'])
+            ->get();
+
+        $overdueApplications = $applications->filter(function ($app) {
+            return $this->applicationHasOverdueFee($app);
+        });
+
+        return view("applications.overdue_index", compact(["semester", "overdueApplications"]));
+    }
+
+    private function applicationHasOverdueFee(Application $app)
+    {
+        return $this->hasOverdueFees($app->allApplicationFees) || $this->hasOverdueFees($app->allProjectFees);
+    }
+
+    private function hasOverdueFees($fees)
+    {
+        foreach ($fees as $fee) {
+            if (str_contains($fee->relativoA, '(Substituído)')) {
+                continue;
+            }
+            if ($fee->statusBoletoBancario == 'P' || $fee->manual_payment_confirmed) {
+                continue;
+            }
+            if (empty($fee->dataVencimentoBoleto)) {
+                continue;
+            }
+            try {
+                $dueDate = \Carbon\Carbon::createFromFormat('d/m/Y', $fee->dataVencimentoBoleto);
+                if ($dueDate->isPast()) {
+                    return true;
+                }
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+        return false;
+    }
+
+    public function sendOverdueReminders(\Illuminate\Http\Request $request)
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'application_ids' => 'required|array',
+            'application_ids.*' => 'integer|exists:applications,id',
+        ]);
+
+        $mailtemplate = MailTemplate::where([
+            "mail_class" => "NotifyOverdueBankSlip",
+            "active" => true,
+        ])->first();
+
+        if (!$mailtemplate) {
+            Session::flash("alert-danger", "Nenhum template de e-mail ativo encontrado para cobrança manual.");
+            return back();
+        }
+
+        $applications = Application::whereIn('id', $validated['application_ids'])->get();
+
+        foreach ($applications as $application) {
+            Mail::to($application->email)->queue(new NotifyOverdueBankSlip($application, $mailtemplate));
+
+            Event::create([
+                'applicationID' => $application->id,
+                'name' => 'Cobrança Manual',
+                'description' => 'E-mail de cobrança manual enviado por ' . Auth::user()->name,
+                'event_date' => now(),
+            ]);
+        }
+
+        Session::flash("alert-success", "E-mails de cobrança enviados com sucesso para " . $applications->count() . " inscrição(ões).");
+
+        return back();
+    }
+
+    public function confirmManualPayment(\Illuminate\Http\Request $request, BankSlip $bankSlip)
+    {
+        if(!Auth::check()){
+            return redirect("/login");
+        }elseif(!Auth::user()->hasRole(["Administrador", "Secretaria"])){
+            abort(403);
+        }
+
+        if (str_contains($bankSlip->relativoA, '(Substituído)')) {
+            Session::flash("alert-danger", "Este boleto foi substituído e não pode ter pagamento confirmado.");
+            return back();
+        }
+
+        if ($bankSlip->statusBoletoBancario == 'P') {
+            Session::flash("alert-warning", "Este boleto já está pago no sistema bancário.");
+            return back();
+        }
+
+        if ($bankSlip->manual_payment_confirmed) {
+            Session::flash("alert-warning", "O pagamento manual deste boleto já foi confirmado anteriormente.");
+            return back();
+        }
+
+        if (!empty($bankSlip->dataVencimentoBoleto)) {
+            try {
+                $dueDate = \Carbon\Carbon::createFromFormat('d/m/Y', $bankSlip->dataVencimentoBoleto);
+                if (!$dueDate->isPast() && !$dueDate->isToday()) {
+                    Session::flash("alert-warning", "Este boleto ainda não está vencido.");
+                    return back();
+                }
+            } catch (\Exception $e) {
+                // If date is invalid, allow manual confirmation as fallback
+            }
+        }
+
+        $bankSlip->update([
+            'manual_payment_confirmed' => true,
+            'manual_payment_confirmed_at' => now(),
+            'manual_payment_confirmed_by' => Auth::user()->name,
+        ]);
+
+        Event::create([
+            'applicationID' => $bankSlip->applicationID,
+            'name' => 'Pagamento Manual Confirmado',
+            'description' => 'Pagamento manual via depósito confirmado por ' . Auth::user()->name,
+            'event_date' => now(),
+        ]);
+
+        Session::flash("alert-success", "Pagamento manual confirmado com sucesso. O status do boleto bancário permanece inalterado.");
+
+        return back();
     }
 }

@@ -26,6 +26,7 @@
                         "E-mail enviado ao inscrito quando sobre o resultado da triagem"=>"NotifyAboutTriageDecision",
                         "E-mail enviado ao inscrito quando a reunião de consulta é agendada"=>"NotifyAboutConsultationMeetingSchedule",
                         "E-mail enviado ao inscrito quando sobre o resultado da reunião de consulta"=>"NotifyAboutConsultationMeetingDecision",
+                        "E-mail de cobrança por depósito para boletos vencidos"=>"NotifyOverdueBankSlip",
                      ] as $key=>$value)
                 <option value='{"description":"{{$key}}","mail_class":"{{$value}}"}' {{ ( $mailtemplate->mail_class === $value) ? 'selected' : ''}}>{{ $key }}</option>
             @endforeach
