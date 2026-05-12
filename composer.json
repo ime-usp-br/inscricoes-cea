@@ -16,6 +16,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "neitanod/forceutf8": "^2.0",
+        "maennchen/zipstream-php": "2.2.6",
         "phpoffice/phpspreadsheet": "1.25.2",
         "ricorocks-digital-agency/soap": "^1.6",
         "tijsverkoyen/css-to-inline-styles": "^2.2",
