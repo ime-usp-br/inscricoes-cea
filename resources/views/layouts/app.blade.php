@@ -73,6 +73,9 @@
               <li>
                   <a href="{{ route('applications.overdue_index') }}">Cobranças Manuais</a>
               </li>
+              <li>
+                  <a href="{{ route('financial-reports.index') }}">Relatório Financeiro</a>
+              </li>
           @endhasanyrole
           @can("visualizar triagens")
               <li>
