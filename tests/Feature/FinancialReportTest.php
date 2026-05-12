@@ -67,6 +67,8 @@ class FinancialReportTest extends TestCase
         $response = $this->actingAs($admin)->get(route('financial-reports.index'));
         $response->assertStatus(200);
         $response->assertSee($app->protocol);
+        $response->assertSee($app->CPFCNPJ);
+        $response->assertSee($app->bdName);
     }
 
     public function test_secretaria_can_access_financial_report_index()
@@ -78,6 +80,8 @@ class FinancialReportTest extends TestCase
         $response = $this->actingAs($sec)->get(route('financial-reports.index'));
         $response->assertStatus(200);
         $response->assertSee($app->protocol);
+        $response->assertSee($app->CPFCNPJ);
+        $response->assertSee($app->bdName);
     }
 
     public function test_docente_cannot_access_financial_report_index()
@@ -170,14 +174,4 @@ class FinancialReportTest extends TestCase
         $response->assertHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     }
 
-    public function test_financial_report_exports_pdf()
-    {
-        $admin = $this->createAdminUser();
-        $semester = Semester::factory()->create(['year' => date('Y'), 'period' => '1º Semestre']);
-        Application::factory()->create(['semesterID' => $semester->id, 'serviceType' => 'Consulta']);
-
-        $response = $this->actingAs($admin)->get(route('financial-reports.index', ['format' => 'pdf']));
-        $response->assertStatus(200);
-        $response->assertHeader('Content-Type', 'application/pdf');
-    }
 }

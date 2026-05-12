@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class FinancialReportController extends Controller
 {
@@ -96,9 +95,6 @@ class FinancialReportController extends Controller
         $filename = 'relatorio_financeiro_' . $semester->year . '_' . str_replace(' ', '_', $semester->period);
 
         switch (strtolower($format)) {
-            case 'pdf':
-                $pdf = Pdf::loadView('financial_reports.pdf', compact('data', 'semester'));
-                return $pdf->download($filename . '.pdf');
             case 'csv':
                 return $this->exportCsv($data, $filename);
             case 'excel':
@@ -116,7 +112,16 @@ class FinancialReportController extends Controller
                 'Protocolo' => $app->protocol,
                 'Modalidade' => $app->serviceType,
                 'Pesquisador' => $app->projectResponsible,
+                'CPF' => $app->CPFCNPJ,
                 'E-mail' => $app->email,
+                'Nome (Boleto)' => $app->bdName,
+                'CPF/CNPJ (Boleto)' => $app->bdCpfCnpj,
+                'Banco' => $app->bdBankName,
+                'Agência' => $app->bdAgency,
+                'Conta' => $app->bdAccount,
+                'Tipo' => $app->bdType,
+                'Recibo Reembolso' => $app->refundReceipt ?? '—',
+                'Dados Reembolso' => $app->refundReceiptData ?? '—',
                 'Taxa de Inscrição' => $app->getAggregatedInscriptionFeeStatus(),
                 'Taxa de Projeto' => $app->getAggregatedProjectFeeStatus(),
                 'Complemento' => $app->complementaryFee ? $app->complementaryFee->getStatus() : '—',
