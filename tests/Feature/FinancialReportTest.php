@@ -174,4 +174,19 @@ class FinancialReportTest extends TestCase
         $response->assertHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     }
 
+    public function test_financial_report_with_semester_id_filter()
+    {
+        $admin = $this->createAdminUser();
+        $semester1 = Semester::factory()->create(['year' => date('Y'), 'period' => '1º Semestre']);
+        $semester2 = Semester::factory()->create(['year' => date('Y') - 1, 'period' => '2º Semestre']);
+
+        $app1 = Application::factory()->create(['semesterID' => $semester1->id, 'serviceType' => 'Consulta', 'protocol' => 'PROTOCOLO-1']);
+        $app2 = Application::factory()->create(['semesterID' => $semester2->id, 'serviceType' => 'Projeto', 'protocol' => 'PROTOCOLO-2']);
+
+        $response = $this->actingAs($admin)->get(route('financial-reports.index', ['semester_id' => $semester2->id]));
+        $response->assertStatus(200);
+        $response->assertSee($app2->protocol);
+        $response->assertDontSee($app1->protocol);
+    }
+
 }

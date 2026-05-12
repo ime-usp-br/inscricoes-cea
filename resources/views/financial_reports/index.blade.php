@@ -8,9 +8,19 @@
             <h1 class="text-center mt-4">Relatório Financeiro</h1>
             <h4 class="text-center pb-4">{{ $semester->period }} de {{ $semester->year }}</h4>
 
+            @include('financial_reports.modals.chooseSemester')
+
             <p class="text-right">
-                <a href="{{ route('financial-reports.index', ['format' => 'excel']) }}" class="btn btn-outline-success btn-export" id="btn-export-excel">Exportar Excel</a>
-                <a href="{{ route('financial-reports.index', ['format' => 'csv']) }}" class="btn btn-outline-secondary btn-export" id="btn-export-csv">Exportar CSV</a>
+                <a id="btn-chooseSemesterModal"
+                    class="btn btn-outline-primary"
+                    data-toggle="modal"
+                    data-target="#chooseSemesterModal"
+                    title="Escolher Semestre"
+                >
+                    Escolher Semestre
+                </a>
+                <a href="{{ route('financial-reports.index', array_merge(request()->all(), ['format' => 'excel'])) }}" class="btn btn-outline-success btn-export" id="btn-export-excel">Exportar Excel</a>
+                <a href="{{ route('financial-reports.index', array_merge(request()->all(), ['format' => 'csv'])) }}" class="btn btn-outline-secondary btn-export" id="btn-export-csv">Exportar CSV</a>
             </p>
 
             @if (count($applications) > 0)
