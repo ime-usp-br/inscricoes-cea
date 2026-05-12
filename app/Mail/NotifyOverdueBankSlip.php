@@ -9,22 +9,24 @@ use Illuminate\Queue\SerializesModels;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 use Illuminate\Support\Facades\Blade;
 use App\Models\Application;
+use App\Models\BankSlip;
 use App\Models\MailTemplate;
 
 class NotifyOverdueBankSlip extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $application, $mailtemplate;
+    public $application, $bankSlip, $mailtemplate;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Application $application, MailTemplate $mailtemplate)
+    public function __construct(Application $application, BankSlip $bankSlip, MailTemplate $mailtemplate)
     {
         $this->application = $application;
+        $this->bankSlip = $bankSlip;
         $this->mailtemplate = $mailtemplate;
         $this->afterCommit();
     }
@@ -42,6 +44,7 @@ class NotifyOverdueBankSlip extends Mailable
             html_entity_decode($this->mailtemplate->subject),
             [
                 "application" => $this->application,
+                "bankSlip" => $this->bankSlip,
             ]
         );
 
@@ -49,6 +52,7 @@ class NotifyOverdueBankSlip extends Mailable
             html_entity_decode($this->mailtemplate->body),
             [
                 "application" => $this->application,
+                "bankSlip" => $this->bankSlip,
             ]
         );
 

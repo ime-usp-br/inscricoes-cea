@@ -649,21 +649,75 @@ class ApplicationController extends Controller
         }
 
         $applications = Application::whereIn('id', $validated['application_ids'])->get();
+        $sentCount = 0;
 
         foreach ($applications as $application) {
-            Mail::to($application->email)->queue(new NotifyOverdueBankSlip($application, $mailtemplate));
+            $overdueFees = $this->getOverdueBankSlips($application);
 
-            Event::create([
-                'applicationID' => $application->id,
-                'name' => 'Cobrança Manual',
-                'description' => 'E-mail de cobrança manual enviado por ' . Auth::user()->name,
-                'event_date' => now(),
-            ]);
+            foreach ($overdueFees as $bankSlip) {
+                Mail::to($application->email)->queue(new NotifyOverdueBankSlip($application, $bankSlip, $mailtemplate));
+
+                Event::create([
+                    'applicationID' => $application->id,
+                    'name' => 'Cobrança Manual',
+                    'description' => 'E-mail de cobrança manual enviado por ' . Auth::user()->name . ' para o boleto ' . $bankSlip->relativoA . ' (vencimento: ' . $bankSlip->dataVencimentoBoleto . ')',
+                    'event_date' => now(),
+                ]);
+
+                $sentCount++;
+            }
         }
 
-        Session::flash("alert-success", "E-mails de cobrança enviados com sucesso para " . $applications->count() . " inscrição(ões).");
+        Session::flash("alert-success", "E-mails de cobrança enviados com sucesso: " . $sentCount . " boleto(s) de " . $applications->count() . " inscrição(ões).");
 
         return back();
+    }
+
+    private function getOverdueBankSlips(Application $app)
+    {
+        $overdue = collect();
+
+        foreach ($app->allApplicationFees as $fee) {
+            if (str_contains($fee->relativoA, '(Substituído)')) {
+                continue;
+            }
+            if ($fee->statusBoletoBancario == 'P' || $fee->manual_payment_confirmed) {
+                continue;
+            }
+            if (empty($fee->dataVencimentoBoleto)) {
+                continue;
+            }
+            try {
+                $dueDate = \Carbon\Carbon::createFromFormat('d/m/Y', $fee->dataVencimentoBoleto);
+                if ($dueDate->isPast()) {
+                    $overdue->push($fee);
+                }
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        foreach ($app->allProjectFees as $fee) {
+            if (str_contains($fee->relativoA, '(Substituído)')) {
+                continue;
+            }
+            if ($fee->statusBoletoBancario == 'P' || $fee->manual_payment_confirmed) {
+                continue;
+            }
+            if (empty($fee->dataVencimentoBoleto)) {
+                continue;
+            }
+            try {
+                $dueDate = \Carbon\Carbon::createFromFormat('d/m/Y', $fee->dataVencimentoBoleto);
+                if ($dueDate->isPast()) {
+                    $overdue->push($fee);
+                }
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return $overdue;
     }
 
     public function confirmManualPayment(\Illuminate\Http\Request $request, BankSlip $bankSlip)

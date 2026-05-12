@@ -123,7 +123,7 @@ class OverdueBillingTest extends TestCase
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
-    public function test_send_overdue_reminders_sends_mails_and_creates_events()
+    public function test_send_overdue_reminders_sends_one_mail_per_overdue_bankslip()
     {
         Mail::fake();
         \nusoap_client::$mockStatus = 'E';
@@ -135,19 +135,28 @@ class OverdueBillingTest extends TestCase
         ]);
 
         $app1 = Application::factory()->create(['semesterID' => $semester->id, 'serviceType' => 'Consulta']);
-        BankSlip::factory()->create([
+        $boleto1 = BankSlip::factory()->create([
             'applicationID' => $app1->id,
             'relativoA' => 'Taxa de Inscrição',
             'statusBoletoBancario' => 'E',
             'dataVencimentoBoleto' => now()->subDays(5)->format('d/m/Y'),
+            'valorDocumento' => 140.00,
         ]);
 
-        $app2 = Application::factory()->create(['semesterID' => $semester->id, 'serviceType' => 'Consulta']);
-        BankSlip::factory()->create([
+        $app2 = Application::factory()->create(['semesterID' => $semester->id, 'serviceType' => 'Projeto']);
+        $boleto2 = BankSlip::factory()->create([
             'applicationID' => $app2->id,
             'relativoA' => 'Taxa de Inscrição',
             'statusBoletoBancario' => 'E',
             'dataVencimentoBoleto' => now()->subDays(5)->format('d/m/Y'),
+            'valorDocumento' => 140.00,
+        ]);
+        $boleto3 = BankSlip::factory()->create([
+            'applicationID' => $app2->id,
+            'relativoA' => 'Taxa de Projeto',
+            'statusBoletoBancario' => 'E',
+            'dataVencimentoBoleto' => now()->subDays(3)->format('d/m/Y'),
+            'valorDocumento' => 250.00,
         ]);
 
         MailTemplate::factory()->create([
@@ -166,12 +175,18 @@ class OverdueBillingTest extends TestCase
         $response->assertRedirect();
         $response->assertSessionHas('alert-success');
 
-        Mail::assertQueued(NotifyOverdueBankSlip::class, function ($mail) use ($app1) {
-            return $mail->application->id === $app1->id;
+        // app1 has 1 overdue fee -> 1 mail
+        // app2 has 2 overdue fees -> 2 mails
+        Mail::assertQueued(NotifyOverdueBankSlip::class, function ($mail) use ($app1, $boleto1) {
+            return $mail->application->id === $app1->id && $mail->bankSlip->id === $boleto1->id;
         });
 
-        Mail::assertQueued(NotifyOverdueBankSlip::class, function ($mail) use ($app2) {
-            return $mail->application->id === $app2->id;
+        Mail::assertQueued(NotifyOverdueBankSlip::class, function ($mail) use ($app2, $boleto2) {
+            return $mail->application->id === $app2->id && $mail->bankSlip->id === $boleto2->id;
+        });
+
+        Mail::assertQueued(NotifyOverdueBankSlip::class, function ($mail) use ($app2, $boleto3) {
+            return $mail->application->id === $app2->id && $mail->bankSlip->id === $boleto3->id;
         });
 
         $this->assertDatabaseHas('events', [
