@@ -21,7 +21,11 @@ class FinancialReportController extends Controller
             abort(403);
         }
 
-        $semester = Semester::getLatest();
+        if ($request->has('semester_id')) {
+            $semester = Semester::find($request->input('semester_id'));
+        } else {
+            $semester = Semester::getLatest();
+        }
 
         $applications = Application::whereBelongsTo($semester)
             ->where('deleted', false)
