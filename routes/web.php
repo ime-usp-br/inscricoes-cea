@@ -11,6 +11,7 @@ use App\Http\Controllers\MailTemplateController;
 use App\Http\Controllers\TriageController;
 use App\Http\Controllers\ConsultationMeetingController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\FinancialReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,3 +65,6 @@ Route::resource('consultationmeetings', ConsultationMeetingController::class);
 
 
 Route::get('/events', [EventController::class, 'index'])->name("events.index");
+
+Route::get('/financial-reports', [FinancialReportController::class, 'index'])->name('financial-reports.index');
+Route::post('/financial-reports/{application}/sync', [FinancialReportController::class, 'sync'])->name('financial-reports.sync');
