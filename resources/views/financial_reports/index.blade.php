@@ -9,79 +9,95 @@
             <h4 class="text-center pb-4">{{ $semester->period }} de {{ $semester->year }}</h4>
 
             <p class="text-right">
-                <a href="{{ route('financial-reports.index', ['format' => 'pdf']) }}" class="btn btn-outline-danger btn-export" id="btn-export-pdf">Exportar PDF</a>
                 <a href="{{ route('financial-reports.index', ['format' => 'excel']) }}" class="btn btn-outline-success btn-export" id="btn-export-excel">Exportar Excel</a>
                 <a href="{{ route('financial-reports.index', ['format' => 'csv']) }}" class="btn btn-outline-secondary btn-export" id="btn-export-csv">Exportar CSV</a>
             </p>
 
             @if (count($applications) > 0)
-                <table class="table table-bordered table-striped table-hover" style="font-size:15px;" id="financial-report-table">
-                    <thead>
-                        <tr>
-                            <th>Protocolo</th>
-                            <th>Modalidade</th>
-                            <th>Pesquisador</th>
-                            <th>E-mail</th>
-                            <th>Taxa de Inscrição</th>
-                            <th>Taxa de Projeto</th>
-                            <th>Complemento</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $badgeClasses = [
-                                'Pago' => 'badge-success',
-                                'Emitido' => 'badge-primary',
-                                'Não Emitido' => 'badge-secondary',
-                            ];
-                            $defaultBadge = 'badge-warning';
-                        @endphp
-                        @foreach($applications as $app)
-                            @php
-                                $inscStatus = $app->getAggregatedInscriptionFeeStatus();
-                                $projStatus = $app->getAggregatedProjectFeeStatus();
-                                $compStatus = $app->complementaryFee ? $app->complementaryFee->getStatus() : '—';
-
-                                $needsSync = ($inscStatus !== 'Pago' && $inscStatus !== 'Não Emitido')
-                                          || ($projStatus !== 'Pago' && $projStatus !== 'Não Emitido')
-                                          || ($compStatus !== '—' && $compStatus !== 'Pago' && $compStatus !== 'Não Emitido');
-                            @endphp
-                            <tr class="text-center" data-app-id="{{ $app->id }}" @if($needsSync) data-needs-sync="true" @endif>
-                                <td>{{ $app->protocol }}</td>
-                                <td>{{ $app->serviceType }}</td>
-                                <td>{{ $app->projectResponsible }}</td>
-                                <td>{{ $app->email }}</td>
-                                <td class="cell-inscription">
-                                    @if($needsSync && $inscStatus !== 'Pago' && $inscStatus !== 'Não Emitido')
-                                        <span class="badge badge-info sync-pending">
-                                            Atualizando <i class="fas fa-spinner fa-spin"></i>
-                                        </span>
-                                    @else
-                                        <span class="badge {{ $badgeClasses[$inscStatus] ?? $defaultBadge }}">{{ $inscStatus }}</span>
-                                    @endif
-                                </td>
-                                <td class="cell-project">
-                                    @if($needsSync && $projStatus !== 'Pago' && $projStatus !== 'Não Emitido')
-                                        <span class="badge badge-info sync-pending">
-                                            Atualizando <i class="fas fa-spinner fa-spin"></i>
-                                        </span>
-                                    @else
-                                        <span class="badge {{ $badgeClasses[$projStatus] ?? $defaultBadge }}">{{ $projStatus }}</span>
-                                    @endif
-                                </td>
-                                <td class="cell-complementary">
-                                    @if($needsSync && $compStatus !== '—' && $compStatus !== 'Pago' && $compStatus !== 'Não Emitido')
-                                        <span class="badge badge-info sync-pending">
-                                            Atualizando <i class="fas fa-spinner fa-spin"></i>
-                                        </span>
-                                    @else
-                                        <span class="badge {{ ($compStatus === '—') ? 'badge-secondary' : ($badgeClasses[$compStatus] ?? $defaultBadge) }}">{{ $compStatus }}</span>
-                                    @endif
-                                </td>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover" style="font-size:15px;" id="financial-report-table">
+                        <thead>
+                            <tr>
+                                <th>Protocolo</th>
+                                <th>Modalidade</th>
+                                <th>Pesquisador</th>
+                                <th>CPF</th>
+                                <th>E-mail</th>
+                                <th>Dados Bancários</th>
+                                <th>Recibo Reembolso</th>
+                                <th>Dados Reembolso</th>
+                                <th>Taxa de Inscrição</th>
+                                <th>Taxa de Projeto</th>
+                                <th>Complemento</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @php
+                                $badgeClasses = [
+                                    'Pago' => 'badge-success',
+                                    'Emitido' => 'badge-primary',
+                                    'Não Emitido' => 'badge-secondary',
+                                ];
+                                $defaultBadge = 'badge-warning';
+                            @endphp
+                            @foreach($applications as $app)
+                                @php
+                                    $inscStatus = $app->getAggregatedInscriptionFeeStatus();
+                                    $projStatus = $app->getAggregatedProjectFeeStatus();
+                                    $compStatus = $app->complementaryFee ? $app->complementaryFee->getStatus() : '—';
+
+                                    $needsSync = ($inscStatus !== 'Pago' && $inscStatus !== 'Não Emitido')
+                                              || ($projStatus !== 'Pago' && $projStatus !== 'Não Emitido')
+                                              || ($compStatus !== '—' && $compStatus !== 'Pago' && $compStatus !== 'Não Emitido');
+                                @endphp
+                                <tr class="text-center" data-app-id="{{ $app->id }}" @if($needsSync) data-needs-sync="true" @endif>
+                                    <td>{{ $app->protocol }}</td>
+                                    <td>{{ $app->serviceType }}</td>
+                                    <td>{{ $app->projectResponsible }}</td>
+                                    <td>{{ $app->CPFCNPJ }}</td>
+                                    <td>{{ $app->email }}</td>
+                                    <td class="text-left" style="white-space: nowrap;">
+                                        <strong>Nome:</strong> {{ $app->bdName }}<br>
+                                        <strong>CPF/CNPJ:</strong> {{ $app->bdCpfCnpj }}<br>
+                                        <strong>Banco:</strong> {{ $app->bdBankName }}<br>
+                                        <strong>Agência:</strong> {{ $app->bdAgency }}<br>
+                                        <strong>Conta:</strong> {{ $app->bdAccount }}<br>
+                                        <strong>Tipo:</strong> {{ $app->bdType }}
+                                    </td>
+                                    <td>{{ $app->refundReceipt ?? '—' }}</td>
+                                    <td>{{ $app->refundReceiptData ?? '—' }}</td>
+                                    <td class="cell-inscription">
+                                        @if($needsSync && $inscStatus !== 'Pago' && $inscStatus !== 'Não Emitido')
+                                            <span class="badge badge-info sync-pending">
+                                                Atualizando <i class="fas fa-spinner fa-spin"></i>
+                                            </span>
+                                        @else
+                                            <span class="badge {{ $badgeClasses[$inscStatus] ?? $defaultBadge }}">{{ $inscStatus }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="cell-project">
+                                        @if($needsSync && $projStatus !== 'Pago' && $projStatus !== 'Não Emitido')
+                                            <span class="badge badge-info sync-pending">
+                                                Atualizando <i class="fas fa-spinner fa-spin"></i>
+                                            </span>
+                                        @else
+                                            <span class="badge {{ $badgeClasses[$projStatus] ?? $defaultBadge }}">{{ $projStatus }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="cell-complementary">
+                                        @if($needsSync && $compStatus !== '—' && $compStatus !== 'Pago' && $compStatus !== 'Não Emitido')
+                                            <span class="badge badge-info sync-pending">
+                                                Atualizando <i class="fas fa-spinner fa-spin"></i>
+                                            </span>
+                                        @else
+                                            <span class="badge {{ ($compStatus === '—') ? 'badge-secondary' : ($badgeClasses[$compStatus] ?? $defaultBadge) }}">{{ $compStatus }}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             @else
                 <p class="text-center">Não há inscrições no semestre atual.</p>
             @endif

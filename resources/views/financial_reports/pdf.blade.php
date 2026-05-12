@@ -24,7 +24,16 @@
                 <th>Protocolo</th>
                 <th>Modalidade</th>
                 <th>Pesquisador</th>
+                <th>CPF</th>
                 <th>E-mail</th>
+                <th>Nome (Boleto)</th>
+                <th>CPF/CNPJ (Boleto)</th>
+                <th>Banco</th>
+                <th>Agência</th>
+                <th>Conta</th>
+                <th>Tipo</th>
+                <th>Recibo Reembolso</th>
+                <th>Dados Reembolso</th>
                 <th>Taxa de Inscrição</th>
                 <th>Taxa de Projeto</th>
                 <th>Complemento</th>
@@ -36,7 +45,16 @@
                     <td>{{ $row['Protocolo'] }}</td>
                     <td>{{ $row['Modalidade'] }}</td>
                     <td>{{ $row['Pesquisador'] }}</td>
+                    <td>{{ $row['CPF'] }}</td>
                     <td>{{ $row['E-mail'] }}</td>
+                    <td>{{ $row['Nome (Boleto)'] }}</td>
+                    <td>{{ $row['CPF/CNPJ (Boleto)'] }}</td>
+                    <td>{{ $row['Banco'] }}</td>
+                    <td>{{ $row['Agência'] }}</td>
+                    <td>{{ $row['Conta'] }}</td>
+                    <td>{{ $row['Tipo'] }}</td>
+                    <td>{{ $row['Recibo Reembolso'] }}</td>
+                    <td>{{ $row['Dados Reembolso'] }}</td>
                     <td>{{ $row['Taxa de Inscrição'] }}</td>
                     <td>{{ $row['Taxa de Projeto'] }}</td>
                     <td>{{ $row['Complemento'] }}</td>
